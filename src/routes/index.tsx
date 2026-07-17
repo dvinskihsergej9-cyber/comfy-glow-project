@@ -969,18 +969,20 @@ function PricingRow({
       target="_blank"
       rel="noreferrer"
       initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+      }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ delay: index * 0.07, duration: 0.6 }}
-      onMouseEnter={onFocus}
-      onFocus={onFocus}
       animate={{
         scale: isActive ? 1.015 : 1,
         boxShadow: isActive
           ? "0 40px 80px -30px rgba(60,40,140,0.28), 0 20px 40px -20px rgba(30,60,180,0.22)"
           : "0 0 0 rgba(0,0,0,0)",
       }}
-      transition={{ type: "spring", stiffness: 260, damping: 26 }}
+      transition={{ type: "spring", stiffness: 260, damping: 26, delay: index * 0.04 }}
+      onMouseEnter={onFocus}
+      onFocus={onFocus}
       data-cursor
       className={`group relative block overflow-hidden rounded-[24px] border bg-white transition ${
         isActive ? "border-ink/70" : "border-line hover:border-ink/40"
