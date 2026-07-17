@@ -1157,17 +1157,18 @@ function Final() {
   const scale = useTransform(scrollYProgress, [0, 0.7, 1], [0.55, 1.05, 1.15]);
   const y = useTransform(scrollYProgress, [0, 1], [80, -60]);
 
-  // seed the swarm of dots that gather into the logo
-  const dots = useMemo(
-    () =>
+  // seed the swarm of dots that gather into the logo — client-only to avoid SSR mismatch
+  const [dots, setDots] = useState<{ id: number; x: number; y: number; d: number }[]>([]);
+  useEffect(() => {
+    setDots(
       new Array(48).fill(0).map((_, i) => ({
         id: i,
         x: (Math.random() - 0.5) * 900,
         y: (Math.random() - 0.5) * 500,
         d: Math.random() * 0.5,
-      })),
-    []
-  );
+      }))
+    );
+  }, []);
 
   return (
     <section ref={ref} className="relative overflow-hidden bg-milk pt-32 pb-16">
