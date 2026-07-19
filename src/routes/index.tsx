@@ -75,11 +75,11 @@ function PhoneFrame({
 }) {
   return (
     <div
-      className={`relative aspect-[9/19.5] rounded-[14%/6.5%] p-[3.2%] bg-gradient-to-b from-white/25 via-white/[0.08] to-white/[0.04] ${
+      className={`relative aspect-[9/19.5] rounded-[14%/6.5%] p-[3px] sm:p-[5px] bg-gradient-to-b from-white/25 via-white/[0.08] to-white/[0.04] ${
         glow ? "shadow-[0_30px_90px_-30px_rgba(124,58,237,0.55)]" : ""
       } ${className}`}
     >
-      <div className="relative w-full h-full rounded-[12%/5.6%] overflow-hidden bg-black">
+      <div className="relative w-full h-full rounded-[13%/6%] overflow-hidden bg-black">
         {children}
         {notch && (
           <div className="absolute top-[1.6%] left-1/2 -translate-x-1/2 w-[32%] h-[3.2%] bg-black rounded-full z-20 ring-1 ring-white/5" />
@@ -572,7 +572,7 @@ function MiniAppScene() {
                 <div className="lg:col-span-6 xl:col-span-5 flex justify-center min-h-0">
                   <div className="relative">
                     <div className="absolute -inset-16 md:-inset-24 -z-10 bg-[radial-gradient(closest-side,rgba(124,58,237,0.4),transparent_70%)] blur-2xl" />
-                    <PhoneFrame className="w-[min(68vw,340px)] lg:w-[340px] xl:w-[380px] max-h-[calc(100svh-260px)]">
+                    <PhoneFrame className="w-[min(58vw,260px)] lg:w-[320px] xl:w-[360px] max-h-[calc(100svh-260px)]">
                       <img
                         src={s.img}
                         alt={s.title}
@@ -648,8 +648,8 @@ function MiniAppSceneMobile() {
             <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-cyan">{s.tag}</div>
             <h3 className="mt-2 font-display text-[24px] font-bold">{s.title}</h3>
             <p className="mt-2 text-[15px] text-text-mute leading-[1.6]">{s.text}</p>
-            <PhoneFrame className="mt-5 w-full max-w-[320px] mx-auto">
-              <img src={s.img} alt={s.title} className="w-full h-full object-cover object-top" />
+            <PhoneFrame className="mt-6 w-full max-w-[240px] mx-auto">
+              <img src={s.img} alt={s.title} className="absolute inset-0 w-full h-full object-cover object-top" />
             </PhoneFrame>
           </motion.div>
         ))}
@@ -726,7 +726,7 @@ function WebSection() {
               className="hidden md:block absolute -bottom-16 -right-4 w-[190px]"
             >
               <PhoneFrame>
-                <img src={A.miniappHome} alt="" className="w-full h-full object-cover object-top" />
+                <img src={A.miniappHome} alt="" className="absolute inset-0 w-full h-full object-cover object-top" />
               </PhoneFrame>
             </motion.div>
 
@@ -1136,10 +1136,10 @@ function Support() {
                       loop
                       playsInline
                       preload="metadata"
-                      className="w-full h-full object-cover object-top"
+                      className="absolute inset-0 w-full h-full object-cover object-top"
                     />
                   ) : (
-                    <img src={x.src} alt={x.alt} className="w-full h-full object-cover object-top" />
+                    <img src={x.src} alt={x.alt} className="absolute inset-0 w-full h-full object-cover object-top" />
                   )}
                 </PhoneFrame>
               </motion.div>
@@ -1261,7 +1261,7 @@ function Bonuses() {
             </div>
             <div className="shrink-0 w-[220px]">
               <PhoneFrame>
-                <img src={A.referral} alt="Реферальная программа" className="w-full h-full object-cover object-top" />
+                <img src={A.referral} alt="Реферальная программа" className="absolute inset-0 w-full h-full object-cover object-top" />
               </PhoneFrame>
             </div>
           </motion.div>
@@ -1287,7 +1287,7 @@ function Bonuses() {
             </div>
             <div className="shrink-0 w-[220px]">
               <PhoneFrame>
-                <img src={A.games1} alt="Ежедневные игры" className="w-full h-full object-cover object-top" />
+                <img src={A.games1} alt="Ежедневные игры" className="absolute inset-0 w-full h-full object-cover object-top" />
               </PhoneFrame>
             </div>
           </motion.div>
