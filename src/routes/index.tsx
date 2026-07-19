@@ -1479,7 +1479,7 @@ function FinalCTA() {
             href={TG("site_final")}
             target="_blank"
             rel="noreferrer"
-            className="btn-primary-glow inline-flex items-center justify-center gap-2 rounded-full px-7 py-4 text-[16px] font-semibold text-white"
+            className="btn-primary-glow btn-shine inline-flex items-center justify-center gap-2 rounded-full px-7 py-4 text-[16px] font-semibold text-white"
           >
             <Send className="w-4 h-4" /> Открыть в Telegram
             <ArrowUpRight className="w-4 h-4 opacity-70" />
