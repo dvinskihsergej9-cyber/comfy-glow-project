@@ -555,7 +555,7 @@ function MiniAppScene() {
               className="relative"
             >
               <div className="relative w-[300px] xl:w-[340px] aspect-[9/19.5] rounded-[44px] p-[8px] bg-gradient-to-b from-white/20 to-white/[0.03] glow-ring">
-                <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black">
+                <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black flex items-center justify-center">
                   <AnimatePresence mode="popLayout">
                     <motion.img
                       key={active}
@@ -565,7 +565,7 @@ function MiniAppScene() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.98 }}
                       transition={{ duration: 0.55 }}
-                      className="absolute inset-0 w-full h-full object-cover object-top"
+                      className="absolute inset-0 w-full h-full object-contain"
                     />
                   </AnimatePresence>
                 </div>
