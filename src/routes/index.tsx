@@ -465,6 +465,7 @@ function MiniAppScene() {
   const total = SCENES.length;
   const sectionRef = useRef<HTMLElement | null>(null);
   const [active, setActive] = useState(0);
+  const scrollDistance = `calc(100svh + ${(total - 1) * 82}svh)`;
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -496,21 +497,21 @@ function MiniAppScene() {
     <section
       id="miniapp"
       ref={sectionRef}
-      className="relative bg-[#080b16] hidden lg:block"
-      style={{ height: `${total * 100}vh` }}
+      className="relative bg-[#080b16] hidden sm:block"
+      style={{ height: scrollDistance }}
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-20 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)] pointer-events-none" />
 
-        <div className="absolute top-0 left-0 right-0 z-20 mx-auto max-w-[1400px] w-full px-5 md:px-10 pt-10 flex items-end justify-between gap-8">
+        <div className="absolute top-0 left-0 right-0 z-20 mx-auto max-w-[1400px] w-full px-5 md:px-10 pt-7 md:pt-10 flex items-end justify-between gap-8 pointer-events-none">
           <div className="max-w-[720px]">
             <SectionLabel>Mini App</SectionLabel>
-            <h2 className="mt-3 font-display font-extrabold tracking-[-0.03em] text-[clamp(32px,3.6vw,52px)] leading-[1.02] pb-[0.08em]">
+            <h2 className="mt-3 font-display font-extrabold tracking-[-0.03em] text-[clamp(28px,4vw,52px)] leading-[1.02] pb-[0.08em]">
               Один кабинет.{" "}
               <span className="text-gradient-accent italic font-medium">Все действия.</span>
             </h2>
           </div>
-          <div className="font-mono text-[11px] tracking-[0.25em] uppercase text-text-mute pb-2 hidden xl:block">
+          <div className="font-mono text-[11px] tracking-[0.25em] uppercase text-text-mute pb-2 hidden lg:block">
             Scroll ↓ · {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </div>
         </div>
@@ -520,27 +521,27 @@ function MiniAppScene() {
           className="absolute inset-0 flex will-change-transform"
         >
           {SCENES.map((s, i) => (
-            <div key={i} className="w-screen h-full flex-shrink-0 flex items-center">
-              <div className="mx-auto max-w-[1400px] w-full px-5 md:px-10 grid grid-cols-12 gap-10 items-center">
-                <div className="col-span-6 xl:col-span-7">
+            <div key={i} className="w-screen h-full flex-shrink-0">
+              <div className="mx-auto max-w-[1400px] h-full w-full px-5 md:px-10 pt-[clamp(176px,22svh,280px)] pb-24 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
+                <div className="lg:col-span-6 xl:col-span-7 text-center lg:text-left max-w-[620px] mx-auto lg:mx-0">
                   <div className="font-mono text-[11px] tracking-[0.3em] uppercase text-cyan">
                     {s.tag}
                   </div>
-                  <h3 className="mt-4 font-display text-[44px] xl:text-[64px] font-bold tracking-[-0.025em] leading-[1.02] pb-[0.06em]">
+                  <h3 className="mt-3 md:mt-4 font-display text-[clamp(30px,5vw,64px)] font-bold tracking-[-0.025em] leading-[1.02] pb-[0.08em]">
                     {s.title}
                   </h3>
-                  <p className="mt-6 text-[18px] xl:text-[20px] text-text-mute leading-[1.55] max-w-[560px]">
+                  <p className="mt-3 md:mt-6 text-[16px] xl:text-[20px] text-text-mute leading-[1.55] max-w-[560px] mx-auto lg:mx-0">
                     {s.text}
                   </p>
-                  <div className="mt-8 font-mono text-[64px] xl:text-[96px] font-black text-white/[0.04] leading-none select-none">
+                  <div className="hidden lg:block mt-8 font-mono text-[64px] xl:text-[96px] font-black text-white/[0.04] leading-none select-none">
                     {String(i + 1).padStart(2, "0")}
                   </div>
                 </div>
 
-                <div className="col-span-6 xl:col-span-5 flex justify-center">
+                <div className="lg:col-span-6 xl:col-span-5 flex justify-center min-h-0">
                   <div className="relative">
-                    <div className="absolute -inset-24 -z-10 bg-[radial-gradient(closest-side,rgba(124,58,237,0.4),transparent_70%)] blur-2xl" />
-                    <div className="relative w-[320px] xl:w-[380px] aspect-[9/19.5] rounded-[44px] p-[8px] bg-gradient-to-b from-white/25 to-white/[0.03] glow-ring">
+                    <div className="absolute -inset-16 md:-inset-24 -z-10 bg-[radial-gradient(closest-side,rgba(124,58,237,0.4),transparent_70%)] blur-2xl" />
+                    <div className="relative w-[min(68vw,340px)] lg:w-[340px] xl:w-[380px] max-h-[calc(100svh-260px)] aspect-[9/19.5] rounded-[38px] xl:rounded-[44px] p-[7px] xl:p-[8px] bg-gradient-to-b from-white/25 to-white/[0.03] glow-ring">
                       <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black">
                         <img
                           src={s.img}
@@ -581,7 +582,7 @@ function MiniAppScene() {
                   />
                 </div>
                 <span
-                  className={`text-[12px] font-medium hidden md:inline transition ${
+                  className={`text-[12px] font-medium hidden lg:inline transition ${
                     j === active ? "text-white" : "text-text-mute group-hover:text-white/70"
                   }`}
                 >
@@ -602,7 +603,7 @@ function MiniAppScene() {
 /* Mobile scenes - non-pinned */
 function MiniAppSceneMobile() {
   return (
-    <section id="miniapp-m" className="lg:hidden py-20 px-5 bg-[#080b16] relative">
+    <section id="miniapp-m" className="sm:hidden py-16 px-5 bg-[#080b16] relative">
       <SectionLabel>Mini App</SectionLabel>
       <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[38px] leading-[1.02]">
         Один кабинет. <span className="text-gradient-accent italic font-medium">Все действия.</span>
@@ -1567,13 +1568,13 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#050711] text-text antialiased overflow-x-hidden">
+    <div className="min-h-screen bg-[#050711] text-text antialiased overflow-x-clip">
       <Header />
       <main>
         <Hero />
         <HowItWorks />
         {/* Desktop pinned scene */}
-        <div className="hidden lg:block">
+        <div className="hidden sm:block">
           <MiniAppScene />
         </div>
         {/* Mobile stacked scenes */}
