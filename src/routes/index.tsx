@@ -629,8 +629,8 @@ function MiniAppSceneMobile() {
             <h3 className="mt-2 font-display text-[24px] font-bold">{s.title}</h3>
             <p className="mt-2 text-[15px] text-text-mute leading-[1.6]">{s.text}</p>
             <div className="mt-5 relative w-full max-w-[320px] mx-auto aspect-[9/19.5] rounded-[36px] p-[8px] bg-white/10 glow-ring">
-              <div className="w-full h-full rounded-[30px] overflow-hidden bg-black">
-                <img src={s.img} alt={s.title} className="w-full h-full object-cover object-top" />
+              <div className="w-full h-full rounded-[30px] overflow-hidden bg-black flex items-center justify-center">
+                <img src={s.img} alt={s.title} className="w-full h-full object-contain" />
               </div>
             </div>
           </motion.div>
