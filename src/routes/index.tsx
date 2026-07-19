@@ -468,154 +468,141 @@ function MiniAppScene() {
 
   useEffect(() => {
     const unsub = scrollYProgress.on("change", (v) => {
-      const idx = Math.min(SCENES.length - 1, Math.max(0, Math.floor(v * SCENES.length)));
+      const idx = Math.min(SCENES.length - 1, Math.max(0, Math.floor(v * SCENES.length * 0.999)));
       setActive(idx);
     });
     return () => unsub();
   }, [scrollYProgress]);
 
-  const phoneScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.94, 1.02, 0.98]);
-  const phoneRotate = useTransform(scrollYProgress, [0, 1], [-2, 2]);
-  const hueX = useTransform(scrollYProgress, [0, 1], ["10%", "80%"]);
+  const phoneY = useTransform(scrollYProgress, [0, 1], [-20, 20]);
+  const hueX = useTransform(scrollYProgress, [0, 1], ["15%", "75%"]);
 
   return (
-    <section id="miniapp" ref={ref} className="relative bg-[#080b16]" style={{ height: "320vh" }}>
+    <section id="miniapp" ref={ref} className="relative bg-[#080b16]" style={{ height: "240vh" }}>
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
-        {/* Background hue that shifts */}
         <motion.div
           style={{ left: hueX }}
-          className="absolute top-0 h-full w-[900px] -translate-x-1/2 bg-[radial-gradient(600px_500px_at_center,rgba(124,58,237,0.35),transparent_70%)] pointer-events-none"
+          className="absolute top-1/2 -translate-y-1/2 h-[900px] w-[900px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(124,58,237,0.35),transparent_70%)] pointer-events-none"
         />
-        <div className="absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
+        <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
 
-        <div className="relative z-10 mx-auto grid h-full max-w-[1400px] grid-cols-1 lg:grid-cols-12 items-center gap-8 px-5 md:px-10 pt-28 lg:pt-0">
-          {/* Text column */}
-          <div className="lg:col-span-5">
+        <div className="relative z-10 mx-auto grid h-full max-w-[1400px] grid-cols-12 items-center gap-6 px-5 md:px-10 pt-24">
+          {/* Left text */}
+          <div className="col-span-12 lg:col-span-4">
             <SectionLabel>Mini App</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,68px)] leading-[0.95]">
-              Один кабинет. <br />
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(32px,4vw,56px)] leading-[0.95]">
+              Один кабинет.<br />
               <span className="text-gradient-accent italic font-medium">Все действия.</span>
             </h2>
 
-            <div className="mt-10 relative min-h-[180px]">
+            <div className="mt-8 relative min-h-[160px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={active}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.4 }}
                 >
-                  <div className="font-mono text-[12px] tracking-[0.2em] uppercase text-cyan">
+                  <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-cyan">
                     {SCENES[active].tag}
                   </div>
-                  <h3 className="mt-3 font-display text-[28px] md:text-[36px] font-bold tracking-tight">
+                  <h3 className="mt-3 font-display text-[24px] md:text-[30px] font-bold tracking-tight">
                     {SCENES[active].title}
                   </h3>
-                  <p className="mt-3 text-[16px] md:text-[17px] text-text-mute leading-[1.6] max-w-[440px]">
+                  <p className="mt-3 text-[15px] text-text-mute leading-[1.6] max-w-[380px]">
                     {SCENES[active].text}
                   </p>
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Progress */}
-            <div className="mt-10 flex gap-2 max-w-[400px]">
-              {SCENES.map((_, i) => (
-                <div key={i} className="flex-1 h-[3px] rounded-full bg-white/10 overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-violet to-cyan origin-left"
-                    animate={{ scaleX: i < active ? 1 : i === active ? 1 : 0 }}
-                    transition={{ duration: 0.5 }}
-                    style={{ transformOrigin: "left" }}
-                  />
-                </div>
+            <div className="mt-8 space-y-2 max-w-[380px]">
+              {SCENES.map((s, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    const el = ref.current;
+                    if (!el) return;
+                    const start = el.offsetTop;
+                    const h = el.offsetHeight - window.innerHeight;
+                    window.scrollTo({ top: start + (i / SCENES.length) * h + 10, behavior: "smooth" });
+                  }}
+                  className={`w-full flex items-center gap-3 py-2 text-left transition ${
+                    i === active ? "opacity-100" : "opacity-40 hover:opacity-70"
+                  }`}
+                >
+                  <div className="flex-1 h-[2px] rounded-full bg-white/10 overflow-hidden">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-violet to-cyan origin-left"
+                      animate={{ scaleX: i === active ? 1 : i < active ? 1 : 0 }}
+                      transition={{ duration: 0.5 }}
+                      style={{ transformOrigin: "left" }}
+                    />
+                  </div>
+                  <span className="text-[12px] font-mono uppercase tracking-widest text-text-mute w-8 text-right">
+                    0{i + 1}
+                  </span>
+                </button>
               ))}
             </div>
           </div>
 
-          {/* Phone column */}
-          <div className="lg:col-span-7 flex items-center justify-center relative">
+          {/* Phone center */}
+          <div className="hidden lg:flex col-span-4 items-center justify-center relative">
             <motion.div
-              style={prm ? {} : { scale: phoneScale, rotate: phoneRotate }}
+              style={prm ? {} : { y: phoneY }}
               className="relative"
             >
-              {/* Phone frame */}
-              <div className="relative w-[280px] md:w-[340px] aspect-[9/19.5] rounded-[44px] p-[10px] bg-gradient-to-b from-white/15 to-white/[0.02] glow-ring">
-                <div className="relative w-full h-full rounded-[36px] overflow-hidden bg-black">
+              <div className="relative w-[360px] xl:w-[400px] aspect-[9/19.5] rounded-[48px] p-[10px] bg-gradient-to-b from-white/20 to-white/[0.03] glow-ring">
+                <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black">
                   <AnimatePresence mode="popLayout">
                     <motion.img
                       key={active}
                       src={SCENES[active].img}
                       alt={SCENES[active].title}
-                      initial={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
-                      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, scale: 0.98, filter: "blur(8px)" }}
-                      transition={{ duration: 0.6 }}
+                      initial={{ opacity: 0, scale: 1.04 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.55 }}
                       className="absolute inset-0 w-full h-full object-cover object-top"
                     />
                   </AnimatePresence>
                 </div>
-                {/* Notch */}
-                <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-b-2xl" />
+                <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl" />
               </div>
-
-              {/* Floating callout */}
-              <AnimatePresence>
-                <motion.div
-                  key={`cal-${active}`}
-                  initial={{ opacity: 0, x: 30, y: 10 }}
-                  animate={{ opacity: 1, x: 0, y: 0 }}
-                  exit={{ opacity: 0, x: 30 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="hidden md:block absolute -right-8 top-16 card-glass rounded-2xl p-4 max-w-[220px]"
-                >
-                  <div className="flex items-center gap-2 text-cyan text-[11px] font-mono uppercase tracking-widest">
-                    <Sparkles className="w-3 h-3" /> Активно
-                  </div>
-                  <div className="mt-2 text-[13px] text-text-mute leading-snug">
-                    {SCENES[active].text}
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Glow */}
-              <div className="absolute -inset-16 -z-10 bg-[radial-gradient(closest-side,rgba(91,92,246,0.35),transparent)] blur-2xl" />
+              <div className="absolute -inset-16 -z-10 bg-[radial-gradient(closest-side,rgba(91,92,246,0.4),transparent)] blur-2xl" />
             </motion.div>
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
-/* Mobile scenes - non-pinned */
-function MiniAppSceneMobile() {
-  return (
-    <section id="miniapp-m" className="lg:hidden py-24 px-5 bg-[#080b16] relative">
-      <SectionLabel>Mini App</SectionLabel>
-      <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[40px] leading-[0.95]">
-        Один кабинет. <span className="text-gradient-accent italic font-medium">Все действия.</span>
-      </h2>
-      <div className="mt-12 space-y-16">
-        {SCENES.map((s, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-cyan">{s.tag}</div>
-            <h3 className="mt-2 font-display text-[24px] font-bold">{s.title}</h3>
-            <p className="mt-2 text-[15px] text-text-mute leading-[1.6]">{s.text}</p>
-            <div className="mt-5 relative w-full max-w-[300px] mx-auto aspect-[9/19.5] rounded-[36px] p-[8px] bg-white/10 glow-ring">
-              <div className="w-full h-full rounded-[30px] overflow-hidden bg-black">
-                <img src={s.img} alt={s.title} className="w-full h-full object-cover object-top" />
-              </div>
-            </div>
-          </motion.div>
-        ))}
+          {/* Right preview strip - shows next screens */}
+          <div className="hidden lg:flex col-span-4 flex-col gap-3 items-end">
+            {SCENES.map((s, i) => (
+              <motion.button
+                key={i}
+                onClick={() => {
+                  const el = ref.current;
+                  if (!el) return;
+                  const start = el.offsetTop;
+                  const h = el.offsetHeight - window.innerHeight;
+                  window.scrollTo({ top: start + (i / SCENES.length) * h + 10, behavior: "smooth" });
+                }}
+                animate={{
+                  opacity: i === active ? 1 : 0.35,
+                  scale: i === active ? 1 : 0.92,
+                }}
+                transition={{ duration: 0.4 }}
+                className="relative w-[150px] aspect-[9/19.5] rounded-[22px] p-[4px] bg-white/10 shrink-0 overflow-hidden"
+              >
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  className="w-full h-full object-cover object-top rounded-[18px]"
+                />
+              </motion.button>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
