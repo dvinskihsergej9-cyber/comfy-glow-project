@@ -1369,7 +1369,7 @@ function FinalCTA() {
         </div>
 
         <div className="mt-8 text-[12px] uppercase tracking-[0.22em] text-text-dim">
-          3 дня · 1 устройство · 5 ГБ
+          3 дня · 1 устройство · безлимитный трафик
         </div>
       </div>
     </section>
