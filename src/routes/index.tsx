@@ -1111,7 +1111,7 @@ function Support() {
                   i === 1 ? "mt-6 md:mt-10" : ""
                 }`}
               >
-                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a]">
+                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a] flex items-center justify-center">
                   {x.video ? (
                     <video
                       src={x.src}
@@ -1120,10 +1120,10 @@ function Support() {
                       loop
                       playsInline
                       preload="metadata"
-                      className="w-full h-full object-cover object-top"
+                      className="w-full h-full object-contain"
                     />
                   ) : (
-                    <img src={x.src} alt={x.alt} className="w-full h-full object-cover object-top" />
+                    <img src={x.src} alt={x.alt} className="w-full h-full object-contain" />
                   )}
                 </div>
               </motion.div>
