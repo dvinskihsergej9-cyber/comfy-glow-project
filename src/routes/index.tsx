@@ -1210,34 +1210,28 @@ function Reviews() {
           </p>
         </div>
 
-        <div className="mt-16 grid lg:grid-cols-3 gap-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7 }}
-            className="lg:col-span-2 lg:row-span-2 card-glass rounded-3xl p-3 relative"
-          >
-            <img src={A.review1} alt="Отзыв 1" className="w-full h-full max-h-[560px] object-contain rounded-2xl bg-black/40" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="card-glass rounded-3xl p-3"
-          >
-            <img src={A.review2} alt="Отзыв 2" className="w-full max-h-[260px] object-contain rounded-2xl bg-black/40" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="card-glass rounded-3xl p-3"
-          >
-            <img src={A.review3} alt="Отзыв 3" className="w-full max-h-[260px] object-contain rounded-2xl bg-black/40" />
-          </motion.div>
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          {[A.review1, A.review2, A.review3].map((src, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              className="rounded-3xl p-3 bg-white/[0.03] border border-white/8 backdrop-blur"
+            >
+              <div className="rounded-2xl overflow-hidden bg-black/40 flex items-center justify-center">
+                <img
+                  src={src}
+                  alt={`Отзыв ${i + 1}`}
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+              <div className="mt-3 px-2 pb-1 text-[12px] font-mono uppercase tracking-widest text-text-dim">
+                Telegram · @DvinVPNchat
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         <div className="mt-12 text-center">
