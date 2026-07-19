@@ -342,7 +342,7 @@ function Hero() {
 
 function MaskLine({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
-    <span className="block overflow-hidden pb-[0.05em]">
+    <span className="block overflow-hidden pt-[0.12em] pb-[0.22em] -my-[0.12em]">
       <motion.span
         initial={{ y: "110%" }}
         animate={{ y: "0%" }}
