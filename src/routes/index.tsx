@@ -1078,10 +1078,10 @@ function Support() {
             </p>
             <div className="mt-8 grid grid-cols-2 gap-3 max-w-[420px]">
               {[
-                { icon: HeadphonesIcon, t: "Встроенная поддержка" },
+                { icon: HeadphonesIcon, t: "Обращения в поддержку" },
                 { icon: Sparkles, t: "FAQ и инструкции" },
-                { icon: Zap, t: "Платежи" },
-                { icon: Shield, t: "Документы" },
+                { icon: Globe, t: "Статус серверов" },
+                { icon: Shield, t: "Ответ внутри Mini App" },
               ].map((x, i) => (
                 <div
                   key={i}
@@ -1097,9 +1097,9 @@ function Support() {
           </div>
           <div className="lg:col-span-7 grid grid-cols-3 gap-3 md:gap-4">
             {[
-              { src: A.supportTicket, alt: "Обращение в поддержку" },
-              { src: A.faq, alt: "FAQ внутри Mini App" },
-              { src: A.payments, alt: "История платежей" },
+              { src: A.supportTicket, alt: "Обращение в поддержку", video: false },
+              { src: A.faq, alt: "FAQ внутри Mini App", video: false },
+              { src: A.serverMonVideo, alt: "Статус серверов", video: true },
             ].map((x, i) => (
               <motion.div
                 key={i}
@@ -1108,11 +1108,23 @@ function Support() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: i * 0.08 }}
                 className={`relative aspect-[9/19.5] rounded-[28px] p-[6px] bg-white/10 glow-ring ${
-                  i === 1 ? "mt-8 md:mt-12" : ""
+                  i === 1 ? "mt-6 md:mt-10" : ""
                 }`}
               >
-                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a] flex items-start justify-center">
-                  <img src={x.src} alt={x.alt} className="w-full h-auto" />
+                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a]">
+                  {x.video ? (
+                    <video
+                      src={x.src}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-cover object-top"
+                    />
+                  ) : (
+                    <img src={x.src} alt={x.alt} className="w-full h-full object-cover object-top" />
+                  )}
                 </div>
               </motion.div>
             ))}
