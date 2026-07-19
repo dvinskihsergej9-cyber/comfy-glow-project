@@ -766,53 +766,52 @@ function WebSection() {
 
 function Trial() {
   return (
-    <section className="relative py-28 md:py-40 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(800px_500px_at_50%_50%,rgba(34,211,238,0.15),transparent)]" />
+    <section className="relative py-20 md:py-28 overflow-hidden border-y border-white/5">
+      <div className="absolute inset-0 bg-[radial-gradient(700px_400px_at_50%_50%,rgba(34,211,238,0.12),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
-        <div className="text-center max-w-[900px] mx-auto">
-          <SectionLabel>Пробный период</SectionLabel>
-          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[0.95]">
-            Сначала проверьте.<br />
-            <span className="text-gradient-accent italic font-medium">Потом решайте.</span>
-          </h2>
-        </div>
-
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4">
-          {[
-            { big: "3", small: "дня", desc: "пробного доступа" },
-            { big: "1", small: "устройство", desc: "включено в trial" },
-            { big: "5", small: "ГБ", desc: "трафика на пробу" },
-          ].map((x, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, delay: i * 0.1 }}
-              className="text-center relative"
+        <div className="grid lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-6">
+            <SectionLabel>Пробный период</SectionLabel>
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,4.5vw,60px)] leading-[0.95]">
+              Сначала проверьте.{" "}
+              <span className="text-gradient-accent italic font-medium">Потом решайте.</span>
+            </h2>
+            <p className="mt-5 text-[16px] text-text-mute max-w-[460px] leading-[1.6]">
+              Получите пробный доступ и проверьте подключение до покупки подписки.
+            </p>
+            <a
+              href={TG("site_trial")}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-7 inline-flex items-center gap-2 btn-primary-glow rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
             >
-              <div className="font-display font-black text-[clamp(120px,18vw,220px)] leading-[0.85] tracking-[-0.05em] text-gradient">
-                {x.big}
-              </div>
-              <div className="mt-2 font-display text-[22px] md:text-[26px] font-bold">{x.small}</div>
-              <div className="mt-1 text-[14px] text-text-dim uppercase tracking-widest">{x.desc}</div>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="mt-16 text-center">
-          <p className="text-[17px] text-text-mute max-w-[520px] mx-auto leading-[1.6]">
-            Получите пробный доступ и проверьте подключение до покупки подписки.
-          </p>
-          <a
-            href={TG("site_trial")}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-8 inline-flex items-center gap-2 btn-primary-glow rounded-full px-7 py-4 text-[16px] font-semibold text-white"
-          >
-            <Send className="w-4 h-4" /> Получить 3 дня бесплатно
-            <ArrowUpRight className="w-4 h-4 opacity-70" />
-          </a>
+              <Send className="w-4 h-4" /> Получить 3 дня бесплатно
+              <ArrowUpRight className="w-4 h-4 opacity-70" />
+            </a>
+          </div>
+          <div className="lg:col-span-6 grid grid-cols-3 gap-3">
+            {[
+              { big: "3", small: "дня доступа" },
+              { big: "1", small: "устройство" },
+              { big: "5", small: "ГБ трафика" },
+            ].map((x, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="rounded-2xl border border-white/8 bg-white/[0.02] p-5 text-center"
+              >
+                <div className="font-display font-black text-[clamp(56px,7vw,88px)] leading-none tracking-[-0.04em] text-gradient">
+                  {x.big}
+                </div>
+                <div className="mt-2 text-[12px] uppercase tracking-widest text-text-dim">
+                  {x.small}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
