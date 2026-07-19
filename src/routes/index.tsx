@@ -1660,6 +1660,7 @@ function LandingPage() {
         <Trial />
         <Pricing />
         <Support />
+        <WheelGames />
         <Bonuses />
         <Reviews />
         <FaqSection />
