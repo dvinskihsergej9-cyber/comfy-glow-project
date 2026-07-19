@@ -1206,9 +1206,20 @@ function Bonuses() {
 /*  Reviews                                                  */
 /* -------------------------------------------------------- */
 
+const REVIEWS = [
+  { author: "Паша Кирпич", handle: "@pashak", text: "Отличный VPN, пользуюсь уже месяц. Скорость супер — видео в 4K грузятся без лагов, а пинг в играх почти не вырос. Приложение удобное, подключается за пару секунд. За свои деньги — просто топ." },
+  { author: "Anastasia", handle: "@anastasia", text: "В поисках стабильного VPN, который будет работать и с мобильным интернетом. Легко и быстро подключилась, всё работает, всё летает." },
+  { author: "Даниил", handle: "@daniil", text: "Отличный впн, работает без нареканий." },
+  { author: "Zetop", handle: "@zetop", text: "Хм, ну норм. Пользуюсь уже пару недель — стабильно, к скорости вопросов нет." },
+  { author: "Артём", handle: "@artem_k", text: "Настроил Happ за минуту по инструкции из бота. Пробный период дал спокойно проверить всё до оплаты." },
+  { author: "Марина", handle: "@marina", text: "Подключила себе и мужу с одной подписки, докупили второе устройство. Управлять из Telegram реально удобно." },
+];
+
 function Reviews() {
+  const row1 = REVIEWS;
+  const row2 = [...REVIEWS].reverse();
   return (
-    <section id="reviews" className="relative py-28 md:py-40 overflow-hidden">
+    <section id="reviews" className="relative py-24 md:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(600px_500px_at_20%_30%,rgba(124,58,237,0.15),transparent),radial-gradient(500px_400px_at_80%_60%,rgba(34,211,238,0.12),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="max-w-[900px]">
@@ -1217,47 +1228,68 @@ function Reviews() {
             Работает там, где это <span className="text-gradient-accent italic font-medium">действительно нужно.</span>
           </h2>
           <p className="mt-6 text-[16px] text-text-mute max-w-[520px]">
-            Отзывы пользователей DvinVPN из Telegram.
+            Реальные отзывы пользователей DvinVPN из Telegram-сообщества.
           </p>
         </div>
+      </div>
 
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          {[A.review1, A.review2, A.review3].map((src, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="rounded-3xl p-3 bg-white/[0.03] border border-white/8 backdrop-blur"
-            >
-              <div className="rounded-2xl overflow-hidden bg-black/40 flex items-center justify-center">
-                <img
-                  src={src}
-                  alt={`Отзыв ${i + 1}`}
-                  className="w-full h-auto object-contain"
-                />
-              </div>
-              <div className="mt-3 px-2 pb-1 text-[12px] font-mono uppercase tracking-widest text-text-dim">
-                Telegram · @DvinVPNchat
-              </div>
-            </motion.div>
-          ))}
-        </div>
+      <div className="relative mt-14 space-y-5 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
+        <Marquee items={row1} duration={55} />
+        <Marquee items={row2} duration={70} reverse />
+      </div>
 
-        <div className="mt-12 text-center">
-          <a
-            href="https://t.me/DvinVPNchat/190"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.02] px-6 py-3 text-[15px] font-medium hover:bg-white/[0.05] transition"
-          >
-            <Send className="w-4 h-4" /> Посмотреть отзывы в Telegram
-            <ArrowUpRight className="w-4 h-4 opacity-70" />
-          </a>
-        </div>
+      <div className="mt-12 text-center">
+        <a
+          href="https://t.me/DvinVPNchat/190"
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.02] px-6 py-3 text-[15px] font-medium hover:bg-white/[0.05] transition"
+        >
+          <Send className="w-4 h-4" /> Читать в Telegram
+          <ArrowUpRight className="w-4 h-4 opacity-70" />
+        </a>
       </div>
     </section>
+  );
+}
+
+function Marquee({
+  items,
+  duration = 60,
+  reverse = false,
+}: {
+  items: { author: string; handle: string; text: string }[];
+  duration?: number;
+  reverse?: boolean;
+}) {
+  const loop = [...items, ...items, ...items];
+  return (
+    <div className="overflow-hidden">
+      <motion.div
+        className="flex gap-5 w-max"
+        animate={{ x: reverse ? ["-33.333%", "0%"] : ["0%", "-33.333%"] }}
+        transition={{ duration, repeat: Infinity, ease: "linear" }}
+      >
+        {loop.map((r, i) => (
+          <article
+            key={i}
+            className="w-[340px] md:w-[400px] shrink-0 rounded-3xl p-6 md:p-7 bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 backdrop-blur-md"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet to-electric flex items-center justify-center font-display font-bold text-[15px] text-white">
+                {r.author[0]}
+              </div>
+              <div className="min-w-0">
+                <div className="text-[14px] font-semibold text-text truncate">{r.author}</div>
+                <div className="text-[12px] text-text-dim font-mono truncate">{r.handle}</div>
+              </div>
+              <div className="ml-auto text-cyan text-[14px]">★★★★★</div>
+            </div>
+            <p className="mt-4 text-[14.5px] leading-[1.6] text-text-mute">{r.text}</p>
+          </article>
+        ))}
+      </motion.div>
+    </div>
   );
 }
 
