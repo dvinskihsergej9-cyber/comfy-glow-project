@@ -1568,7 +1568,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#050711] text-text antialiased overflow-x-hidden">
+    <div className="min-h-screen bg-[#050711] text-text antialiased overflow-x-clip">
       <Header />
       <main>
         <Hero />
