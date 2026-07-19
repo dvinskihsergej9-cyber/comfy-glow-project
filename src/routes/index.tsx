@@ -388,70 +388,41 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="how" className="relative py-28 md:py-40 overflow-hidden">
-      <div className="absolute inset-0 bg-grid opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+    <section id="how" className="relative py-24 md:py-32 overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
-        <SectionLabel>Как это работает</SectionLabel>
-        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[0.95] max-w-[1100px]">
-          Откройте. Проверьте. <span className="text-gradient-accent italic font-medium">Подключитесь.</span>
-        </h2>
-
-        <div className="relative mt-20">
-          {/* Connecting line */}
-          <svg
-            className="absolute inset-0 w-full h-full pointer-events-none hidden md:block"
-            viewBox="0 0 1200 340"
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <linearGradient id="steps-line" x1="0" x2="1" y1="0" y2="0">
-                <stop offset="0%" stopColor="#22d3ee" />
-                <stop offset="50%" stopColor="#5b5cf6" />
-                <stop offset="100%" stopColor="#7c3aed" />
-              </linearGradient>
-            </defs>
-            <motion.path
-              d="M 60 80 C 300 20, 500 200, 700 100 S 1100 240, 1140 160"
-              stroke="url(#steps-line)"
-              strokeWidth="1.5"
-              fill="none"
-              strokeDasharray="4 6"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 2, ease: "easeInOut" }}
-            />
-          </svg>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-4">
-            {STEPS.map((s, i) => (
-              <motion.div
-                key={s.n}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.7, delay: i * 0.08 }}
-                className={`relative ${i % 2 === 1 ? "md:mt-16" : ""}`}
-              >
-                <div className="relative">
-                  <div className="font-display font-black text-[120px] leading-none text-white/[0.04] select-none">
-                    {s.n}
-                  </div>
-                  <div className="absolute top-4 left-0">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet to-electric flex items-center justify-center shadow-lg shadow-violet/30">
-                      <s.icon className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                </div>
-                <h3 className="mt-4 font-display text-[22px] font-bold tracking-tight">
-                  {s.title}
-                </h3>
-                <p className="mt-2 text-[15px] text-text-mute leading-[1.55] max-w-[260px]">
-                  {s.text}
-                </p>
-              </motion.div>
-            ))}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <SectionLabel>Как это работает</SectionLabel>
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5.5vw,76px)] leading-[0.95] max-w-[900px]">
+              Откройте. Проверьте. <span className="text-gradient-accent italic font-medium">Подключитесь.</span>
+            </h2>
           </div>
+          <p className="text-[15px] text-text-mute max-w-[320px] md:text-right">
+            Четыре шага от установки до защищённого соединения — всё внутри Telegram.
+          </p>
+        </div>
+
+        <div className="relative mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {STEPS.map((s, i) => (
+            <motion.div
+              key={s.n}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, delay: i * 0.06 }}
+              className="relative rounded-2xl border border-white/8 bg-white/[0.02] p-6 hover:border-white/15 transition"
+            >
+              <div className="flex items-center justify-between">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet to-electric flex items-center justify-center shadow-lg shadow-violet/30">
+                  <s.icon className="w-5 h-5 text-white" />
+                </div>
+                <div className="font-mono text-[12px] tracking-widest text-text-dim">{s.n}</div>
+              </div>
+              <h3 className="mt-6 font-display text-[20px] font-bold tracking-tight">{s.title}</h3>
+              <p className="mt-2 text-[14px] text-text-mute leading-[1.6]">{s.text}</p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
@@ -497,120 +468,139 @@ function MiniAppScene() {
 
   useEffect(() => {
     const unsub = scrollYProgress.on("change", (v) => {
-      const idx = Math.min(SCENES.length - 1, Math.max(0, Math.floor(v * SCENES.length)));
+      const idx = Math.min(SCENES.length - 1, Math.max(0, Math.floor(v * SCENES.length * 0.999)));
       setActive(idx);
     });
     return () => unsub();
   }, [scrollYProgress]);
 
-  const phoneScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.94, 1.02, 0.98]);
-  const phoneRotate = useTransform(scrollYProgress, [0, 1], [-2, 2]);
-  const hueX = useTransform(scrollYProgress, [0, 1], ["10%", "80%"]);
+  const phoneY = useTransform(scrollYProgress, [0, 1], [-20, 20]);
+  const hueX = useTransform(scrollYProgress, [0, 1], ["15%", "75%"]);
 
   return (
-    <section id="miniapp" ref={ref} className="relative bg-[#080b16]" style={{ height: "320vh" }}>
+    <section id="miniapp" ref={ref} className="relative bg-[#080b16]" style={{ height: "170vh" }}>
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
-        {/* Background hue that shifts */}
         <motion.div
           style={{ left: hueX }}
-          className="absolute top-0 h-full w-[900px] -translate-x-1/2 bg-[radial-gradient(600px_500px_at_center,rgba(124,58,237,0.35),transparent_70%)] pointer-events-none"
+          className="absolute top-1/2 -translate-y-1/2 h-[900px] w-[900px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(124,58,237,0.35),transparent_70%)] pointer-events-none"
         />
-        <div className="absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
+        <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
 
-        <div className="relative z-10 mx-auto grid h-full max-w-[1400px] grid-cols-1 lg:grid-cols-12 items-center gap-8 px-5 md:px-10 pt-28 lg:pt-0">
-          {/* Text column */}
-          <div className="lg:col-span-5">
+        <div className="relative z-10 mx-auto grid h-full max-w-[1400px] grid-cols-12 items-center gap-6 px-5 md:px-10">
+          {/* Left text */}
+          <div className="col-span-12 lg:col-span-4">
             <SectionLabel>Mini App</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,68px)] leading-[0.95]">
-              Один кабинет. <br />
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(32px,4vw,56px)] leading-[0.95]">
+              Один кабинет.<br />
               <span className="text-gradient-accent italic font-medium">Все действия.</span>
             </h2>
 
-            <div className="mt-10 relative min-h-[180px]">
+            <div className="mt-8 relative min-h-[160px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={active}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.4 }}
                 >
-                  <div className="font-mono text-[12px] tracking-[0.2em] uppercase text-cyan">
+                  <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-cyan">
                     {SCENES[active].tag}
                   </div>
-                  <h3 className="mt-3 font-display text-[28px] md:text-[36px] font-bold tracking-tight">
+                  <h3 className="mt-3 font-display text-[24px] md:text-[30px] font-bold tracking-tight">
                     {SCENES[active].title}
                   </h3>
-                  <p className="mt-3 text-[16px] md:text-[17px] text-text-mute leading-[1.6] max-w-[440px]">
+                  <p className="mt-3 text-[15px] text-text-mute leading-[1.6] max-w-[380px]">
                     {SCENES[active].text}
                   </p>
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Progress */}
-            <div className="mt-10 flex gap-2 max-w-[400px]">
-              {SCENES.map((_, i) => (
-                <div key={i} className="flex-1 h-[3px] rounded-full bg-white/10 overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-violet to-cyan origin-left"
-                    animate={{ scaleX: i < active ? 1 : i === active ? 1 : 0 }}
-                    transition={{ duration: 0.5 }}
-                    style={{ transformOrigin: "left" }}
-                  />
-                </div>
+            <div className="mt-8 space-y-2 max-w-[380px]">
+              {SCENES.map((s, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    const el = ref.current;
+                    if (!el) return;
+                    const start = el.offsetTop;
+                    const h = el.offsetHeight - window.innerHeight;
+                    window.scrollTo({ top: start + (i / SCENES.length) * h + 10, behavior: "smooth" });
+                  }}
+                  className={`w-full flex items-center gap-3 py-2 text-left transition ${
+                    i === active ? "opacity-100" : "opacity-40 hover:opacity-70"
+                  }`}
+                >
+                  <div className="flex-1 h-[2px] rounded-full bg-white/10 overflow-hidden">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-violet to-cyan origin-left"
+                      animate={{ scaleX: i === active ? 1 : i < active ? 1 : 0 }}
+                      transition={{ duration: 0.5 }}
+                      style={{ transformOrigin: "left" }}
+                    />
+                  </div>
+                  <span className="text-[12px] font-mono uppercase tracking-widest text-text-mute w-8 text-right">
+                    0{i + 1}
+                  </span>
+                </button>
               ))}
             </div>
           </div>
 
-          {/* Phone column */}
-          <div className="lg:col-span-7 flex items-center justify-center relative">
+          {/* Phone center */}
+          <div className="hidden lg:flex col-span-4 items-center justify-center relative">
             <motion.div
-              style={prm ? {} : { scale: phoneScale, rotate: phoneRotate }}
+              style={prm ? {} : { y: phoneY }}
               className="relative"
             >
-              {/* Phone frame */}
-              <div className="relative w-[280px] md:w-[340px] aspect-[9/19.5] rounded-[44px] p-[10px] bg-gradient-to-b from-white/15 to-white/[0.02] glow-ring">
-                <div className="relative w-full h-full rounded-[36px] overflow-hidden bg-black">
+              <div className="relative w-[300px] xl:w-[340px] aspect-[9/19.5] rounded-[44px] p-[8px] bg-gradient-to-b from-white/20 to-white/[0.03] glow-ring">
+                <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black">
                   <AnimatePresence mode="popLayout">
                     <motion.img
                       key={active}
                       src={SCENES[active].img}
                       alt={SCENES[active].title}
-                      initial={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
-                      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, scale: 0.98, filter: "blur(8px)" }}
-                      transition={{ duration: 0.6 }}
+                      initial={{ opacity: 0, scale: 1.04 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.55 }}
                       className="absolute inset-0 w-full h-full object-cover object-top"
                     />
                   </AnimatePresence>
                 </div>
-                {/* Notch */}
-                <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-b-2xl" />
+                <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl" />
               </div>
-
-              {/* Floating callout */}
-              <AnimatePresence>
-                <motion.div
-                  key={`cal-${active}`}
-                  initial={{ opacity: 0, x: 30, y: 10 }}
-                  animate={{ opacity: 1, x: 0, y: 0 }}
-                  exit={{ opacity: 0, x: 30 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="hidden md:block absolute -right-8 top-16 card-glass rounded-2xl p-4 max-w-[220px]"
-                >
-                  <div className="flex items-center gap-2 text-cyan text-[11px] font-mono uppercase tracking-widest">
-                    <Sparkles className="w-3 h-3" /> Активно
-                  </div>
-                  <div className="mt-2 text-[13px] text-text-mute leading-snug">
-                    {SCENES[active].text}
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Glow */}
-              <div className="absolute -inset-16 -z-10 bg-[radial-gradient(closest-side,rgba(91,92,246,0.35),transparent)] blur-2xl" />
+              <div className="absolute -inset-16 -z-10 bg-[radial-gradient(closest-side,rgba(91,92,246,0.4),transparent)] blur-2xl" />
             </motion.div>
+          </div>
+
+          {/* Right preview strip - shows next screens */}
+          <div className="hidden lg:flex col-span-4 flex-col gap-3 items-end">
+            {SCENES.map((s, i) => (
+              <motion.button
+                key={i}
+                onClick={() => {
+                  const el = ref.current;
+                  if (!el) return;
+                  const start = el.offsetTop;
+                  const h = el.offsetHeight - window.innerHeight;
+                  window.scrollTo({ top: start + (i / SCENES.length) * h + 10, behavior: "smooth" });
+                }}
+                animate={{
+                  opacity: i === active ? 1 : 0.35,
+                  scale: i === active ? 1 : 0.92,
+                }}
+                transition={{ duration: 0.4 }}
+                className="relative w-[150px] aspect-[9/19.5] rounded-[22px] p-[4px] bg-white/10 shrink-0 overflow-hidden"
+              >
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  className="w-full h-full object-cover object-top rounded-[18px]"
+                />
+              </motion.button>
+            ))}
           </div>
         </div>
       </div>
@@ -621,24 +611,24 @@ function MiniAppScene() {
 /* Mobile scenes - non-pinned */
 function MiniAppSceneMobile() {
   return (
-    <section id="miniapp-m" className="lg:hidden py-24 px-5 bg-[#080b16] relative">
+    <section id="miniapp-m" className="lg:hidden py-20 px-5 bg-[#080b16] relative">
       <SectionLabel>Mini App</SectionLabel>
-      <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[40px] leading-[0.95]">
+      <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[38px] leading-[0.95]">
         Один кабинет. <span className="text-gradient-accent italic font-medium">Все действия.</span>
       </h2>
-      <div className="mt-12 space-y-16">
+      <div className="mt-12 space-y-14">
         {SCENES.map((s, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.6 }}
           >
             <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-cyan">{s.tag}</div>
             <h3 className="mt-2 font-display text-[24px] font-bold">{s.title}</h3>
             <p className="mt-2 text-[15px] text-text-mute leading-[1.6]">{s.text}</p>
-            <div className="mt-5 relative w-full max-w-[300px] mx-auto aspect-[9/19.5] rounded-[36px] p-[8px] bg-white/10 glow-ring">
+            <div className="mt-5 relative w-full max-w-[320px] mx-auto aspect-[9/19.5] rounded-[36px] p-[8px] bg-white/10 glow-ring">
               <div className="w-full h-full rounded-[30px] overflow-hidden bg-black">
                 <img src={s.img} alt={s.title} className="w-full h-full object-cover object-top" />
               </div>
@@ -776,53 +766,52 @@ function WebSection() {
 
 function Trial() {
   return (
-    <section className="relative py-28 md:py-40 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(800px_500px_at_50%_50%,rgba(34,211,238,0.15),transparent)]" />
+    <section className="relative py-20 md:py-28 overflow-hidden border-y border-white/5">
+      <div className="absolute inset-0 bg-[radial-gradient(700px_400px_at_50%_50%,rgba(34,211,238,0.12),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
-        <div className="text-center max-w-[900px] mx-auto">
-          <SectionLabel>Пробный период</SectionLabel>
-          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[0.95]">
-            Сначала проверьте.<br />
-            <span className="text-gradient-accent italic font-medium">Потом решайте.</span>
-          </h2>
-        </div>
-
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4">
-          {[
-            { big: "3", small: "дня", desc: "пробного доступа" },
-            { big: "1", small: "устройство", desc: "включено в trial" },
-            { big: "5", small: "ГБ", desc: "трафика на пробу" },
-          ].map((x, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, delay: i * 0.1 }}
-              className="text-center relative"
+        <div className="grid lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-6">
+            <SectionLabel>Пробный период</SectionLabel>
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,4.5vw,60px)] leading-[0.95]">
+              Сначала проверьте.{" "}
+              <span className="text-gradient-accent italic font-medium">Потом решайте.</span>
+            </h2>
+            <p className="mt-5 text-[16px] text-text-mute max-w-[460px] leading-[1.6]">
+              Получите пробный доступ и проверьте подключение до покупки подписки.
+            </p>
+            <a
+              href={TG("site_trial")}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-7 inline-flex items-center gap-2 btn-primary-glow rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
             >
-              <div className="font-display font-black text-[clamp(120px,18vw,220px)] leading-[0.85] tracking-[-0.05em] text-gradient">
-                {x.big}
-              </div>
-              <div className="mt-2 font-display text-[22px] md:text-[26px] font-bold">{x.small}</div>
-              <div className="mt-1 text-[14px] text-text-dim uppercase tracking-widest">{x.desc}</div>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="mt-16 text-center">
-          <p className="text-[17px] text-text-mute max-w-[520px] mx-auto leading-[1.6]">
-            Получите пробный доступ и проверьте подключение до покупки подписки.
-          </p>
-          <a
-            href={TG("site_trial")}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-8 inline-flex items-center gap-2 btn-primary-glow rounded-full px-7 py-4 text-[16px] font-semibold text-white"
-          >
-            <Send className="w-4 h-4" /> Получить 3 дня бесплатно
-            <ArrowUpRight className="w-4 h-4 opacity-70" />
-          </a>
+              <Send className="w-4 h-4" /> Получить 3 дня бесплатно
+              <ArrowUpRight className="w-4 h-4 opacity-70" />
+            </a>
+          </div>
+          <div className="lg:col-span-6 grid grid-cols-3 gap-3">
+            {[
+              { big: "3", small: "дня доступа" },
+              { big: "1", small: "устройство" },
+              { big: "5", small: "ГБ трафика" },
+            ].map((x, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="rounded-2xl border border-white/8 bg-white/[0.02] p-5 text-center"
+              >
+                <div className="font-display font-black text-[clamp(56px,7vw,88px)] leading-none tracking-[-0.04em] text-gradient">
+                  {x.big}
+                </div>
+                <div className="mt-2 text-[12px] uppercase tracking-widest text-text-dim">
+                  {x.small}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -1107,16 +1096,27 @@ function Support() {
               ))}
             </div>
           </div>
-          <div className="lg:col-span-7 grid grid-cols-2 gap-4">
-            <div className="card-glass rounded-3xl p-2 col-span-2">
-              <img src={A.supportTicket} alt="Поддержка" className="w-full rounded-2xl object-cover" />
-            </div>
-            <div className="card-glass rounded-3xl p-2">
-              <img src={A.faq} alt="FAQ" className="w-full rounded-2xl object-cover" />
-            </div>
-            <div className="card-glass rounded-3xl p-2">
-              <img src={A.payments} alt="Платежи" className="w-full rounded-2xl object-cover" />
-            </div>
+          <div className="lg:col-span-7 grid grid-cols-3 gap-3 md:gap-4">
+            {[
+              { src: A.supportTicket, alt: "Обращение в поддержку" },
+              { src: A.faq, alt: "FAQ внутри Mini App" },
+              { src: A.payments, alt: "История платежей" },
+            ].map((x, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                className={`relative aspect-[9/19.5] rounded-[28px] p-[6px] bg-white/10 glow-ring ${
+                  i === 1 ? "mt-8 md:mt-12" : ""
+                }`}
+              >
+                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a] flex items-start justify-center">
+                  <img src={x.src} alt={x.alt} className="w-full h-auto" />
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
@@ -1210,34 +1210,28 @@ function Reviews() {
           </p>
         </div>
 
-        <div className="mt-16 grid lg:grid-cols-3 gap-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7 }}
-            className="lg:col-span-2 lg:row-span-2 card-glass rounded-3xl p-3 relative"
-          >
-            <img src={A.review1} alt="Отзыв 1" className="w-full h-full max-h-[560px] object-contain rounded-2xl bg-black/40" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="card-glass rounded-3xl p-3"
-          >
-            <img src={A.review2} alt="Отзыв 2" className="w-full max-h-[260px] object-contain rounded-2xl bg-black/40" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="card-glass rounded-3xl p-3"
-          >
-            <img src={A.review3} alt="Отзыв 3" className="w-full max-h-[260px] object-contain rounded-2xl bg-black/40" />
-          </motion.div>
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          {[A.review1, A.review2, A.review3].map((src, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              className="rounded-3xl p-3 bg-white/[0.03] border border-white/8 backdrop-blur"
+            >
+              <div className="rounded-2xl overflow-hidden bg-black/40 flex items-center justify-center">
+                <img
+                  src={src}
+                  alt={`Отзыв ${i + 1}`}
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+              <div className="mt-3 px-2 pb-1 text-[12px] font-mono uppercase tracking-widest text-text-dim">
+                Telegram · @DvinVPNchat
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         <div className="mt-12 text-center">
@@ -1324,50 +1318,37 @@ function FaqSection() {
 /* -------------------------------------------------------- */
 
 function FinalCTA() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1.15]);
-
   return (
-    <section ref={ref} className="relative py-40 md:py-52 overflow-hidden bg-[#050711]">
-      {/* Faded globe fragment */}
-      <motion.div style={{ scale }} className="absolute inset-0 opacity-40">
-        <video
-          src={A.heroVideo}
-          poster={A.heroPoster}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_10%,#050711_70%)]" />
-      </motion.div>
+    <section className="relative py-28 md:py-40 overflow-hidden bg-[#080b16]">
+      {/* Composed gradient — no globe repeat */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(900px_600px_at_50%_100%,rgba(124,58,237,0.35),transparent_70%),radial-gradient(700px_500px_at_20%_20%,rgba(37,99,235,0.22),transparent_65%),radial-gradient(600px_400px_at_80%_30%,rgba(34,211,238,0.18),transparent_65%)]" />
+        <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
+      </div>
 
       <div className="relative z-10 mx-auto max-w-[1200px] px-5 md:px-10 text-center">
         <motion.img
           src={A.logo}
           alt="DvinVPN"
-          initial={{ opacity: 0, scale: 0.6, rotate: -15 }}
-          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto w-28 h-28 md:w-36 md:h-36 rounded-3xl mb-10 glow-ring"
+          initial={{ opacity: 0, scale: 0.7 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto w-24 h-24 md:w-32 md:h-32 rounded-3xl mb-8 glow-ring"
         />
 
-        <h2 className="font-display font-extrabold tracking-[-0.035em] text-[clamp(44px,8vw,120px)] leading-[0.92]">
-          <MaskLine>Попробуйте DvinVPN</MaskLine>
+        <h2 className="font-display font-extrabold tracking-[-0.035em] text-[clamp(40px,7vw,104px)] leading-[0.92]">
+          <MaskLine>Готовы попробовать?</MaskLine>
           <MaskLine delay={0.15}>
-            <span className="text-gradient-accent italic font-medium">бесплатно.</span>
+            <span className="text-gradient-accent italic font-medium">3 дня бесплатно.</span>
           </MaskLine>
         </h2>
 
-        <p className="mt-8 text-[17px] md:text-[19px] text-text-mute max-w-[620px] mx-auto leading-[1.6]">
-          Откройте Telegram или веб-версию, получите пробный доступ на 3 дня и подключитесь по
-          инструкции.
+        <p className="mt-7 text-[16px] md:text-[18px] text-text-mute max-w-[560px] mx-auto leading-[1.6]">
+          Откройте Telegram или веб-версию и получите пробный доступ за минуту.
         </p>
 
-        <div className="mt-10 flex flex-col sm:flex-row items-stretch justify-center gap-3">
+        <div className="mt-9 flex flex-col sm:flex-row items-stretch justify-center gap-3">
           <a
             href={TG("site_final")}
             target="_blank"
@@ -1387,7 +1368,7 @@ function FinalCTA() {
           </a>
         </div>
 
-        <div className="mt-8 text-[13px] uppercase tracking-[0.2em] text-text-dim">
+        <div className="mt-8 text-[12px] uppercase tracking-[0.22em] text-text-dim">
           3 дня · 1 устройство · 5 ГБ
         </div>
       </div>
