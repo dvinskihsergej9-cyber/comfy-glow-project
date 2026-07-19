@@ -1027,7 +1027,7 @@ function Pricing() {
                       href={TG("site_pricing")}
                       target="_blank"
                       rel="noreferrer"
-                      className="btn-primary-glow inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 text-[15px] font-semibold text-white"
+                      className="btn-primary-glow btn-shine inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 text-[15px] font-semibold text-white"
                     >
                       <Send className="w-4 h-4" /> Выбрать в Telegram
                     </a>
