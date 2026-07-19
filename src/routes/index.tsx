@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   motion,
@@ -1532,9 +1532,9 @@ function Footer() {
         <FooterCol
           title="Юридическое"
           items={[
-            ["Политика", "https://shop.dvinconnect.store/privacy/"],
-            ["Оферта", "https://shop.dvinconnect.store/offer/"],
-            ["Условия", "https://shop.dvinconnect.store/terms/"],
+            ["Политика", "/privacy"],
+            ["Оферта", "/offer"],
+            ["Условия", "/terms"],
           ]}
         />
       </div>
@@ -1551,19 +1551,31 @@ function FooterCol({ title, items }: { title: string; items: [string, string][] 
     <div>
       <div className="text-[12px] uppercase tracking-widest text-text-dim font-mono">{title}</div>
       <ul className="mt-4 space-y-2.5">
-        {items.map(([label, href]) => (
-          <li key={href}>
-            <a
-              href={href}
-              target="_blank"
-              rel="noreferrer"
-              className="text-[15px] text-text hover:text-cyan transition inline-flex items-center gap-1.5"
-            >
-              {label}
-              <ArrowUpRight className="w-3.5 h-3.5 opacity-50" />
-            </a>
-          </li>
-        ))}
+        {items.map(([label, href]) => {
+          const internal = href.startsWith("/");
+          return (
+            <li key={href}>
+              {internal ? (
+                <Link
+                  to={href}
+                  className="text-[15px] text-text hover:text-cyan transition inline-flex items-center gap-1.5"
+                >
+                  {label}
+                </Link>
+              ) : (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[15px] text-text hover:text-cyan transition inline-flex items-center gap-1.5"
+                >
+                  {label}
+                  <ArrowUpRight className="w-3.5 h-3.5 opacity-50" />
+                </a>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
