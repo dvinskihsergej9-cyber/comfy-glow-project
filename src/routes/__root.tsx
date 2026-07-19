@@ -17,16 +17,16 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">Страница не найдена</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          Такой страницы не существует.
         </p>
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:brightness-110"
           >
-            Go home
+            На главную
           </Link>
         </div>
       </div>
@@ -45,10 +45,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          Страница не загрузилась
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          Что-то пошло не так. Попробуйте обновить или вернуться на главную.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -56,15 +56,15 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:brightness-110"
           >
-            Try again
+            Попробовать снова
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex items-center justify-center rounded-full border border-input bg-transparent px-5 py-2.5 text-sm font-medium text-foreground transition hover:bg-accent"
           >
-            Go home
+            На главную
           </a>
         </div>
       </div>
@@ -77,12 +77,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "DvinVPN — быстрый VPN в Telegram Mini App" },
-      { name: "description", content: "DvinVPN — премиальный VPN внутри Telegram. Пробный период 3 дня, безлимитный трафик, тарифы от 108 ₽ в месяц." },
+      { name: "theme-color", content: "#050711" },
+      { title: "DvinVPN — VPN в Telegram и браузере" },
+      {
+        name: "description",
+        content:
+          "Попробуйте DvinVPN бесплатно 3 дня. Управляйте подпиской, устройствами, оплатой и подключением через Telegram Mini App или веб-кабинет.",
+      },
       { name: "author", content: "DvinVPN" },
-      { property: "og:title", content: "DvinVPN — VPN нового поколения в Telegram" },
-      { property: "og:description", content: "Подключение за минуту, безлимит, до 5 устройств. Пробный период 3 дня." },
+      { property: "og:title", content: "DvinVPN — VPN в Telegram и браузере" },
+      {
+        property: "og:description",
+        content: "3 дня бесплатно, до 5 устройств, от 107,50 ₽/мес. Управление в одном кабинете.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "DvinVPN" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
@@ -92,7 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
       },
     ],
   }),
@@ -102,10 +111,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ru">
       <head>
         <HeadContent />
       </head>
@@ -122,7 +130,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );

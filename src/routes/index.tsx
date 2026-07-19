@@ -1,435 +1,491 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   motion,
   useScroll,
   useTransform,
   useSpring,
-  useMotionValueEvent,
-  useMotionValue,
-  useReducedMotion,
   AnimatePresence,
-  animate,
-  MotionValue,
+  useMotionValue,
+  useInView,
+  useReducedMotion,
 } from "framer-motion";
-import Lenis from "lenis";
 import {
-  appCapabilities,
-  ctaLinks,
-  faq,
-  featureCards,
-  gameModes,
-  legalLinks,
-  miniAppScreens,
-  pricingPlans,
-  productFacts,
-  reviews,
-  serviceFacts,
-} from "@/data/product";
+  ArrowUpRight,
+  Menu,
+  X,
+  Check,
+  ChevronDown,
+  Send,
+  Globe,
+  Sparkles,
+  Shield,
+  Zap,
+  Smartphone,
+  Monitor,
+  HeadphonesIcon,
+  Gift,
+} from "lucide-react";
+import { A } from "@/lib/assets";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { property: "og:image", content: "https://shop.dvinconnect.store/assets/miniapp-dashboard.jpg" },
+      { title: "DvinVPN — VPN в Telegram и браузере" },
+      {
+        name: "description",
+        content:
+          "Попробуйте DvinVPN бесплатно 3 дня. Управляйте подпиской, устройствами, оплатой и подключением через Telegram Mini App или веб-кабинет.",
+      },
+      { property: "og:title", content: "DvinVPN — VPN в Telegram и браузере" },
+      {
+        property: "og:description",
+        content: "3 дня бесплатно, до 5 устройств, от 107,50 ₽/мес.",
+      },
+      { property: "og:url", content: "https://comfy-glow-project.lovable.app/" },
     ],
+    links: [{ rel: "canonical", href: "https://comfy-glow-project.lovable.app/" }],
   }),
-  component: Landing,
+  component: LandingPage,
 });
 
-/* ============================================================
-   SMOOTH SCROLL — Lenis (respects reduced-motion)
-============================================================ */
-function useLenis() {
-  const reduced = useReducedMotion();
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (reduced) return;
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 0.95,
-    });
-    let f = 0;
-    const raf = (t: number) => {
-      lenis.raf(t);
-      f = requestAnimationFrame(raf);
-    };
-    f = requestAnimationFrame(raf);
-    return () => {
-      cancelAnimationFrame(f);
-      lenis.destroy();
-    };
-  }, [reduced]);
-}
+/* -------------------------------------------------------- */
+/*  Links                                                    */
+/* -------------------------------------------------------- */
 
-/* ============================================================
-   PERSISTENT GRADIENT ORB — lives across the whole page.
-   Its position/scale/hue mutate with global scroll, so Hero,
-   Mini App scene and Final share the same object.
-============================================================ */
-function AmbientStage({ scrollY }: { scrollY: MotionValue<number> }) {
-  // stage 0 → hero, 1 → miniapp, 2 → features, 3 → pricing, 4 → final
-  const y = useTransform(scrollY, [0, 1000, 2200, 3600, 5200], [-140, 260, 620, 1100, 1600]);
-  const x = useTransform(scrollY, [0, 1000, 2200, 3600, 5200], [-200, 120, -280, 200, 0]);
-  const scale = useTransform(scrollY, [0, 1000, 2200, 3600, 5200], [1.05, 1.6, 1.15, 1.35, 2.2]);
-  const rotate = useTransform(scrollY, [0, 5200], [0, 240]);
-  const hue = useTransform(
-    scrollY,
-    [0, 1200, 2400, 3600, 5200],
-    [
-      "conic-gradient(from 0deg, oklch(0.55 0.24 295), oklch(0.58 0.22 260), oklch(0.72 0.14 195), oklch(0.55 0.24 295))",
-      "conic-gradient(from 90deg, oklch(0.58 0.22 260), oklch(0.72 0.14 195), oklch(0.55 0.24 295), oklch(0.58 0.22 260))",
-      "conic-gradient(from 160deg, oklch(0.72 0.14 195), oklch(0.55 0.24 295), oklch(0.58 0.22 260), oklch(0.72 0.14 195))",
-      "conic-gradient(from 220deg, oklch(0.55 0.24 295), oklch(0.72 0.14 195), oklch(0.58 0.22 260), oklch(0.55 0.24 295))",
-      "conic-gradient(from 320deg, oklch(0.58 0.22 260), oklch(0.55 0.24 295), oklch(0.72 0.14 195), oklch(0.58 0.22 260))",
-    ] as unknown as string[]
-  );
-  return (
-    <motion.div
-      aria-hidden
-      style={{ x, y, scale, rotate, background: hue as unknown as string }}
-      className="pointer-events-none fixed left-1/2 top-0 z-0 h-[720px] w-[720px] -translate-x-1/2 rounded-full blur-[110px] opacity-[0.55] mix-blend-multiply"
-    />
-  );
-}
+const TG = (utm: string) => `https://t.me/DvinVPNBot?start=${utm}`;
+const WEB = (medium: string) =>
+  `https://shop.dvinconnect.store/?utm_source=landing&utm_medium=${medium}&utm_campaign=website`;
 
-/* ============================================================
-   CURSOR — soft aurora that trails the pointer.
-============================================================ */
-function CursorAurora() {
-  const reduced = useReducedMotion();
-  const x = useSpring(0, { stiffness: 110, damping: 22, mass: 0.7 });
-  const y = useSpring(0, { stiffness: 110, damping: 22, mass: 0.7 });
-  const s = useSpring(1, { stiffness: 140, damping: 18 });
-  useEffect(() => {
-    if (reduced) return;
-    const onMove = (e: MouseEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
-      const t = e.target as HTMLElement | null;
-      const inter = t?.closest("a,button,[data-cursor]");
-      s.set(inter ? 1.35 : 1);
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, [x, y, s, reduced]);
-  if (reduced) return null;
-  return (
-    <motion.div
-      aria-hidden
-      style={{ x, y, scale: s, translateX: "-50%", translateY: "-50%" }}
-      className="pointer-events-none fixed left-0 top-0 z-[60] hidden h-[380px] w-[380px] rounded-full md:block"
-    >
-      <div className="glow-orb h-full w-full grad-bg" />
-    </motion.div>
-  );
-}
+/* -------------------------------------------------------- */
+/*  Header                                                   */
+/* -------------------------------------------------------- */
 
-/* ============================================================
-   HEADER
-============================================================ */
 const NAV = [
+  { label: "Как работает", href: "#how" },
   { label: "Mini App", href: "#miniapp" },
+  { label: "Возможности", href: "#features" },
   { label: "Тарифы", href: "#pricing" },
-  { label: "Бонусы", href: "#bonus" },
   { label: "Отзывы", href: "#reviews" },
   { label: "FAQ", href: "#faq" },
 ];
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
+    const onScroll = () => setScrolled(window.scrollY > 32);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
   return (
-    <motion.header
-      initial={{ y: -30, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? "py-3" : "py-5"}`}
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+        scrolled ? "backdrop-blur-xl bg-[#050711]/70 border-b border-white/5" : ""
+      }`}
     >
-      <div className="mx-auto max-w-[1400px] px-6">
-        <div
-          className={`flex items-center justify-between rounded-full border transition-all duration-500 ${
-            scrolled
-              ? "border-line/70 bg-background/70 px-4 py-2 backdrop-blur-xl shadow-[0_10px_40px_-20px_oklch(0.12_0.025_265_/_0.15)]"
-              : "border-transparent px-2 py-1"
-          }`}
-        >
-          <a href="#top" className="flex items-center gap-2.5 pl-2" data-cursor>
-            <img src="/assets/dvinvpn-logo.png" width={34} height={34} alt="" className="rounded-lg" />
-            <span className="text-[15px] font-medium tracking-tight text-ink">DvinVPN</span>
-          </a>
-          <nav className="hidden items-center gap-1 md:flex">
-            {NAV.map((n) => (
-              <a
-                key={n.href}
-                href={n.href}
-                className="rounded-full px-4 py-2 text-[13.5px] text-ink-soft transition hover:bg-milk hover:text-ink"
-                data-cursor
-              >
-                {n.label}
-              </a>
-            ))}
-          </nav>
+      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-5 md:px-10 py-4">
+        <a href="#top" className="flex items-center gap-2.5 group">
+          <img src={A.logo} alt="DvinVPN" className="h-8 w-8 rounded-lg" />
+          <span className="font-display text-[17px] font-bold tracking-tight text-text">
+            DvinVPN
+          </span>
+        </a>
+
+        <nav className="hidden lg:flex items-center gap-1">
+          {NAV.map((n) => (
+            <a
+              key={n.href}
+              href={n.href}
+              className="px-3.5 py-2 text-[14px] text-text-mute hover:text-text transition rounded-full hover:bg-white/5"
+            >
+              {n.label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-2">
           <a
-            href={ctaLinks.hero}
+            href={WEB("header")}
             target="_blank"
             rel="noreferrer"
-            data-cursor
-            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-ink px-5 py-2.5 text-[13.5px] font-medium text-primary-foreground transition-transform hover:scale-[1.02]"
+            className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 text-[14px] text-text-mute hover:text-text transition rounded-full border border-white/10 hover:border-white/20"
           >
-            <span className="relative z-10">Открыть в Telegram</span>
-            <ArrowUpRight className="relative z-10 h-3.5 w-3.5" />
-            <span className="absolute inset-0 -translate-x-full grad-bg transition-transform duration-500 group-hover:translate-x-0" />
+            <Globe className="w-4 h-4" />
+            Веб-версия
           </a>
+          <a
+            href={TG("site_header")}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 btn-primary-glow rounded-full px-4 py-2 text-[14px] font-semibold text-white"
+          >
+            <Send className="w-4 h-4" />
+            Telegram
+          </a>
+          <button
+            className="lg:hidden ml-1 p-2 rounded-full border border-white/10"
+            onClick={() => setOpen(true)}
+            aria-label="Меню"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
         </div>
       </div>
-    </motion.header>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-[#050711]/95 backdrop-blur-2xl lg:hidden"
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
+              <div className="flex items-center gap-2.5">
+                <img src={A.logo} alt="" className="h-8 w-8 rounded-lg" />
+                <span className="font-display font-bold">DvinVPN</span>
+              </div>
+              <button
+                className="p-2 rounded-full border border-white/10"
+                onClick={() => setOpen(false)}
+                aria-label="Закрыть"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <nav className="flex flex-col p-6 gap-1">
+              {NAV.map((n) => (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setOpen(false)}
+                  className="py-4 border-b border-white/5 text-[20px] font-semibold text-text"
+                >
+                  {n.label}
+                </a>
+              ))}
+              <a
+                href={WEB("header_mobile")}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-6 inline-flex items-center justify-center gap-2 rounded-full border border-white/15 py-3.5 text-[15px]"
+              >
+                <Globe className="w-4 h-4" /> Веб-версия
+              </a>
+              <a
+                href={TG("site_header_mobile")}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2 inline-flex items-center justify-center gap-2 btn-primary-glow rounded-full py-3.5 text-[15px] font-semibold"
+              >
+                <Send className="w-4 h-4" /> Открыть в Telegram
+              </a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 }
 
-/* ============================================================
-   ICONS
-============================================================ */
-function ArrowUpRight({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M7 17L17 7M9 7h8v8" />
-    </svg>
-  );
-}
+/* -------------------------------------------------------- */
+/*  Hero                                                     */
+/* -------------------------------------------------------- */
 
-/* ============================================================
-   HERO — scroll-driven, headline separates & sinks under mask,
-   plate lifts down to become the stage of the next section.
-============================================================ */
-function Hero({ mx, my }: { mx: MotionValue<number>; my: MotionValue<number> }) {
+function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-
-  // Line-level moves — each line escapes at a different velocity.
-  const line1Y = useTransform(scrollYProgress, [0, 1], [0, -160]);
-  const line2Y = useTransform(scrollYProgress, [0, 1], [0, -320]);
-  const line1X = useTransform(scrollYProgress, [0, 1], [0, -80]);
-  const line2X = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const hLetterSp = useTransform(scrollYProgress, [0, 1], ["-0.03em", "0.01em"]);
-
-  // Plate: lifts DOWN as you scroll, growing & tilting into the Mini App stage.
-  const plateY = useTransform(scrollYProgress, [0, 1], [0, 220]);
-  const plateScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
-  const plateRotX = useTransform(scrollYProgress, [0, 1], [0, -6]);
-
-  // Cursor parallax (very subtle)
-  const cx = useTransform(mx, [-1, 1], [-14, 14]);
-  const cy = useTransform(my, [-1, 1], [-10, 10]);
-
-  const line1 = "Твой VPN живёт".split(" ");
-  const line2 = "в Telegram.".split(" ");
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.25]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section ref={ref} id="top" className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-40">
-      <motion.div className="relative mx-auto max-w-[1400px] px-6">
-        {/* Meta */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, duration: 0.8 }}
-          className="mb-10 flex items-center justify-between gap-4 text-[12px]"
-        >
-          <span className="mono-tag">— {productFacts.name} · index /01</span>
-          <span className="mono-tag hidden md:inline">Проверено {productFacts.verifiedAt}</span>
-        </motion.div>
+    <section
+      ref={ref}
+      id="top"
+      className="relative min-h-[100svh] w-full overflow-hidden bg-[#050711]"
+    >
+      {/* Video BG */}
+      <motion.div
+        style={{ scale: videoScale }}
+        className="absolute inset-0 will-change-transform"
+      >
+        <video
+          className="absolute inset-0 h-full w-full object-cover opacity-55"
+          src={A.heroVideo}
+          poster={A.heroPoster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+        />
+        {/* Globe sits to the right, text has room on the left */}
+        <div className="absolute inset-0 bg-[radial-gradient(1000px_800px_at_75%_55%,transparent,rgba(5,7,17,0.65)_55%,#050711_85%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,#050711_0%,rgba(5,7,17,0.85)_25%,rgba(5,7,17,0.35)_55%,transparent_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050711] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-[#050711] to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(500px_400px_at_15%_25%,rgba(124,58,237,0.22),transparent),radial-gradient(700px_500px_at_85%_40%,rgba(37,99,235,0.18),transparent)]" />
+      </motion.div>
 
-        {/* Headline — two lines, each in an overflow mask */}
-        <h1 className="display text-[clamp(3rem,10vw,10.5rem)] text-ink text-balance" style={{ letterSpacing: hLetterSp as unknown as string }}>
-          <span className="block overflow-hidden pb-[0.12em]">
-            <motion.span style={{ y: line1Y, x: line1X }} className="block will-change-transform">
-              {line1.map((w, i) => (
-                <StaggerWord key={i} delay={0.2 + i * 0.09}>
-                  {w}
-                </StaggerWord>
-              ))}
-            </motion.span>
-          </span>
-          <span className="block overflow-hidden pb-[0.12em]">
-            <motion.span style={{ y: line2Y, x: line2X }} className="block will-change-transform">
-              {line2.map((w, i) => (
-                <StaggerWord key={i} delay={0.45 + i * 0.09} accent={i === 0}>
-                  {w}
-                </StaggerWord>
-              ))}
-            </motion.span>
-          </span>
-        </h1>
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1400px] flex-col justify-center px-5 md:px-10 pt-28 pb-16">
+        <motion.div style={{ y: textY, opacity }} className="max-w-[1100px]">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[12px] font-medium text-text-mute backdrop-blur-md"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan animate-pulse" />
+            Доступ проверен · база Mini App
+          </motion.div>
 
-        {/* Sub */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.8 }}
-          className="mt-14 grid grid-cols-1 items-end gap-8 md:grid-cols-12"
-        >
-          <p className="md:col-span-5 text-[18px] leading-relaxed text-ink-soft text-pretty">
-            Никаких приложений и сайтов-ловушек. Открываешь Mini App — видишь тариф, пробный период, оплату и подключение в одном окне.
-          </p>
-          <div className="md:col-span-4 md:col-start-8 flex flex-col gap-3">
+          <h1 className="mt-6 font-display font-extrabold tracking-[-0.045em] text-[clamp(48px,9vw,148px)] leading-[0.92] text-text">
+            <MaskLine delay={0.05}>VPN, который</MaskLine>
+            <MaskLine delay={0.15}>всегда под рукой.</MaskLine>
+            <MaskLine delay={0.28}>
+              <span className="text-gradient-accent italic font-medium">В Telegram и браузере.</span>
+            </MaskLine>
+          </h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.7 }}
+            className="mt-8 max-w-[620px] text-[17px] md:text-[19px] leading-[1.55] text-text-mute"
+          >
+            Попробуйте DvinVPN бесплатно 3 дня. Управляйте подпиской, устройствами, оплатой и
+            подключением в одном личном кабинете.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65, duration: 0.7 }}
+            className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
+          >
             <a
-              href={ctaLinks.hero}
+              href={TG("site_hero")}
               target="_blank"
               rel="noreferrer"
-              data-cursor
-              className="group relative inline-flex items-center justify-between gap-4 overflow-hidden rounded-full bg-ink px-7 py-5 text-[15px] font-medium text-primary-foreground transition"
+              className="btn-primary-glow inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
             >
-              <span className="relative z-10">Забрать 3 дня бесплатно</span>
-              <span className="relative z-10 grid h-9 w-9 place-items-center rounded-full bg-primary-foreground text-ink transition-transform group-hover:rotate-45">
-                <ArrowUpRight className="h-4 w-4" />
-              </span>
-              <span className="absolute inset-0 -translate-x-full grad-bg transition-transform duration-500 group-hover:translate-x-0" />
+              <Send className="w-4 h-4" /> Открыть в Telegram
+              <ArrowUpRight className="w-4 h-4 opacity-70" />
             </a>
-            <span className="pl-2 text-[13.5px] text-ink-mute">{productFacts.trial}</span>
-          </div>
-        </motion.div>
+            <a
+              href={WEB("hero")}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.03] backdrop-blur-md px-6 py-3.5 text-[15px] font-semibold text-text hover:bg-white/[0.06] transition"
+            >
+              <Globe className="w-4 h-4" /> Открыть веб-версию
+            </a>
+          </motion.div>
 
-        {/* Plate — becomes the Mini App stage on scroll */}
-        <motion.div
-          style={{ y: plateY, scale: plateScale, rotateX: plateRotX, transformPerspective: 1400, x: cx, translateY: cy }}
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.05, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto mt-20 max-w-[1140px] will-change-transform"
-        >
-          <div className="relative overflow-hidden rounded-[32px] border border-line/70 bg-white p-2 shadow-[var(--shadow-plate)]">
-            <div className="relative aspect-[16/10] overflow-hidden rounded-[24px] grad-bg">
-              <div className="absolute inset-0 opacity-40 mix-blend-overlay" style={{ background: "radial-gradient(1200px 400px at 30% 20%, white, transparent)" }} />
-              <div className="absolute inset-0 grid place-items-center">
-                <motion.img
-                  src="/assets/miniapp-dashboard.jpg"
-                  alt="Mini App DvinVPN"
-                  initial={{ y: 40, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 1.4, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                  className="h-[85%] w-auto rounded-[22px] shadow-2xl ring-1 ring-white/40"
-                />
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.85, duration: 0.7 }}
+            className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6 max-w-[880px]"
+          >
+            {[
+              ["3 дня", "бесплатно"],
+              ["до 5", "устройств"],
+              ["от 107,50 ₽", "в месяц"],
+              ["5 ГБ", "в trial"],
+            ].map(([big, small]) => (
+              <div key={big as string} className="min-w-0">
+                <div className="font-display text-[26px] md:text-[32px] font-bold tracking-tight text-text">
+                  {big}
+                </div>
+                <div className="text-[13px] uppercase tracking-[0.14em] text-text-dim mt-1">
+                  {small}
+                </div>
               </div>
-              <FloatingLabel className="left-[6%] top-[16%]" delay={1.6}>Подключение · 12 сек</FloatingLabel>
-              <FloatingLabel className="right-[6%] top-[30%]" delay={1.8}>Безлимитный трафик</FloatingLabel>
-              <FloatingLabel className="left-[10%] bottom-[14%]" delay={2.0}>от 108 ₽ / мес</FloatingLabel>
-
-              {/* animated connector line */}
-              <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 62" preserveAspectRatio="none">
-                <motion.path
-                  d="M12 22 Q40 8 60 30 T90 40"
-                  fill="none"
-                  stroke="white"
-                  strokeOpacity="0.55"
-                  strokeWidth="0.25"
-                  strokeDasharray="0.6 0.8"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ delay: 1.7, duration: 1.6, ease: "easeOut" }}
-                />
-              </svg>
-            </div>
-          </div>
+            ))}
+          </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
+
+      {/* Sweeping connection line at bottom */}
+      <svg
+        className="absolute bottom-0 left-0 w-full h-40 pointer-events-none z-[5]"
+        viewBox="0 0 1400 160"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="hero-line" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stopColor="#22d3ee" stopOpacity="0" />
+            <stop offset="40%" stopColor="#5b5cf6" stopOpacity="0.8" />
+            <stop offset="60%" stopColor="#7c3aed" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <motion.path
+          d="M 0 120 C 350 30, 700 200, 1050 60 S 1400 100, 1400 100"
+          stroke="url(#hero-line)"
+          strokeWidth="1.5"
+          fill="none"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 2.2, delay: 0.4, ease: "easeInOut" }}
+        />
+      </svg>
     </section>
   );
 }
 
-function StaggerWord({ children, delay = 0, accent = false }: { children: React.ReactNode; delay?: number; accent?: boolean }) {
+function MaskLine({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
-    <span className="mr-[0.18em] inline-block overflow-hidden pb-[0.06em] align-top">
+    <span className="block overflow-hidden pb-[0.05em]">
       <motion.span
         initial={{ y: "110%" }}
-        animate={{ y: 0 }}
-        transition={{ delay, duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
-        className="inline-block"
+        animate={{ y: "0%" }}
+        transition={{ duration: 1, delay, ease: [0.22, 1, 0.36, 1] }}
+        className="block will-change-transform"
       >
-        {accent ? <em className="grad-text italic">{children}</em> : children}
+        {children}
       </motion.span>
     </span>
   );
 }
 
-function FloatingLabel({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.85, y: 10 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className={`absolute rounded-full border border-white/40 bg-white/85 px-4 py-2 text-[12.5px] font-medium text-ink shadow-lg backdrop-blur ${className}`}
-    >
-      <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-teal align-middle" />
-      {children}
-    </motion.div>
-  );
-}
+/* -------------------------------------------------------- */
+/*  How it works                                             */
+/* -------------------------------------------------------- */
 
-/* ============================================================
-   MARQUEE — bridge from Hero into the app scene.
-============================================================ */
-function Marquee() {
+const STEPS = [
+  {
+    n: "01",
+    title: "Откройте DvinVPN",
+    text: "Запустите Telegram-бот или откройте веб-версию.",
+    icon: Send,
+  },
+  {
+    n: "02",
+    title: "Получите 3 дня",
+    text: "Пробный доступ включает 1 устройство и 5 ГБ трафика.",
+    icon: Gift,
+  },
+  {
+    n: "03",
+    title: "Подключитесь по инструкции",
+    text: "Личный кабинет покажет необходимые шаги настройки.",
+    icon: Zap,
+  },
+  {
+    n: "04",
+    title: "Управляйте подпиской",
+    text: "Продлевайте доступ, добавляйте устройства и обращайтесь в поддержку.",
+    icon: Shield,
+  },
+];
+
+function HowItWorks() {
   return (
-    <section className="relative overflow-hidden border-y border-line/60 bg-milk py-6">
-      <div className="flex whitespace-nowrap">
-        <div className="marquee flex shrink-0 gap-12 pr-12">
-          {[...serviceFacts, ...serviceFacts].map((f, i) => (
-            <span key={i} className="flex items-center gap-4 text-[15px] text-ink-soft">
-              <span className="inline-block h-1.5 w-1.5 rounded-full grad-bg" />
-              {f}
-            </span>
-          ))}
-        </div>
-        <div className="marquee flex shrink-0 gap-12 pr-12" aria-hidden>
-          {[...serviceFacts, ...serviceFacts].map((f, i) => (
-            <span key={i} className="flex items-center gap-4 text-[15px] text-ink-soft">
-              <span className="inline-block h-1.5 w-1.5 rounded-full grad-bg" />
-              {f}
-            </span>
-          ))}
+    <section id="how" className="relative py-28 md:py-40 overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
+        <SectionLabel>Как это работает</SectionLabel>
+        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[0.95] max-w-[1100px]">
+          Откройте. Проверьте. <span className="text-gradient-accent italic font-medium">Подключитесь.</span>
+        </h2>
+
+        <div className="relative mt-20">
+          {/* Connecting line */}
+          <svg
+            className="absolute inset-0 w-full h-full pointer-events-none hidden md:block"
+            viewBox="0 0 1200 340"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="steps-line" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0%" stopColor="#22d3ee" />
+                <stop offset="50%" stopColor="#5b5cf6" />
+                <stop offset="100%" stopColor="#7c3aed" />
+              </linearGradient>
+            </defs>
+            <motion.path
+              d="M 60 80 C 300 20, 500 200, 700 100 S 1100 240, 1140 160"
+              stroke="url(#steps-line)"
+              strokeWidth="1.5"
+              fill="none"
+              strokeDasharray="4 6"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 2, ease: "easeInOut" }}
+            />
+          </svg>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-4">
+            {STEPS.map((s, i) => (
+              <motion.div
+                key={s.n}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.7, delay: i * 0.08 }}
+                className={`relative ${i % 2 === 1 ? "md:mt-16" : ""}`}
+              >
+                <div className="relative">
+                  <div className="font-display font-black text-[120px] leading-none text-white/[0.04] select-none">
+                    {s.n}
+                  </div>
+                  <div className="absolute top-4 left-0">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet to-electric flex items-center justify-center shadow-lg shadow-violet/30">
+                      <s.icon className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+                <h3 className="mt-4 font-display text-[22px] font-bold tracking-tight">
+                  {s.title}
+                </h3>
+                <p className="mt-2 text-[15px] text-text-mute leading-[1.55] max-w-[260px]">
+                  {s.text}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/* ============================================================
-   MINI APP SCENE — pinned, phone with real UI screens layered,
-   callouts fly out of the frame, progress dominant, background shifts.
-============================================================ */
-const SCENE_MARKS = [
+/* -------------------------------------------------------- */
+/*  MiniApp Scene (pinned scroll on desktop)                 */
+/* -------------------------------------------------------- */
+
+const SCENES = [
   {
-    // dashboard
-    callouts: [
-      { text: "Срок и устройства сразу видны", pos: "-left-[38%] top-[16%]", tail: "left" as const },
-      { text: "Инструкция → Happ в один тап", pos: "-right-[42%] top-[42%]", tail: "right" as const },
-      { text: "Продление тут же, без ухода из чата", pos: "-left-[36%] bottom-[18%]", tail: "left" as const },
-    ],
-    tint: "oklch(0.94 0.05 260)",
+    img: A.miniappHome,
+    title: "Всё важное перед глазами",
+    text: "Срок подписки, устройства и основные действия находятся в одном кабинете.",
+    tag: "01 · Главный",
   },
   {
-    // pricing
-    callouts: [
-      { text: "Период — цена — состав, до оплаты", pos: "-right-[44%] top-[18%]", tail: "right" as const },
-      { text: "Пересчёт устройств в реальном времени", pos: "-left-[40%] top-[46%]", tail: "left" as const },
-      { text: "YooKassa · T-pay", pos: "-right-[36%] bottom-[20%]", tail: "right" as const },
-    ],
-    tint: "oklch(0.93 0.06 295)",
+    img: A.payments,
+    title: "Платежи и продление",
+    text: "Выберите период подписки и удобный способ оплаты.",
+    tag: "02 · Оплата",
   },
   {
-    // cabinet
-    callouts: [
-      { text: "FAQ, отзывы, статус серверов", pos: "-left-[42%] top-[20%]", tail: "left" as const },
-      { text: "Промокоды и документы", pos: "-right-[36%] top-[44%]", tail: "right" as const },
-      { text: "Поддержка внутри Telegram", pos: "-left-[38%] bottom-[16%]", tail: "left" as const },
-    ],
-    tint: "oklch(0.94 0.05 195)",
+    img: A.devicesList,
+    title: "Устройства",
+    text: "Добавляйте устройства и управляйте подключениями в одном месте.",
+    tag: "03 · Устройства",
+  },
+  {
+    img: A.supportTicket,
+    title: "Поддержка и FAQ",
+    text: "Создайте обращение или найдите ответ, не покидая DvinVPN.",
+    tag: "04 · Поддержка",
   },
 ];
 
@@ -437,145 +493,123 @@ function MiniAppScene() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const [active, setActive] = useState(0);
+  const prm = useReducedMotion();
 
-  const N = miniAppScreens.length;
-  const spring = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: 0.6 });
+  useEffect(() => {
+    const unsub = scrollYProgress.on("change", (v) => {
+      const idx = Math.min(SCENES.length - 1, Math.max(0, Math.floor(v * SCENES.length)));
+      setActive(idx);
+    });
+    return () => unsub();
+  }, [scrollYProgress]);
 
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const idx = Math.min(N - 1, Math.max(0, Math.floor(v * N * 0.999)));
-    setActive(idx);
-  });
-
-  // Phone tilt / scale scripted over scroll
-  const phoneScale = useTransform(spring, [0, 0.5, 1], [0.92, 1.05, 0.95]);
-  const phoneRotY = useTransform(spring, [0, 0.5, 1], [-8, 0, 8]);
-  const phoneY = useTransform(spring, [0, 1], [40, -40]);
-
-  const progress = useTransform(spring, [0, 1], ["0%", "100%"]);
-  const tint = SCENE_MARKS[active]?.tint ?? "oklch(0.95 0.02 260)";
+  const phoneScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.94, 1.02, 0.98]);
+  const phoneRotate = useTransform(scrollYProgress, [0, 1], [-2, 2]);
+  const hueX = useTransform(scrollYProgress, [0, 1], ["10%", "80%"]);
 
   return (
-    <section id="miniapp" ref={ref} className="relative" style={{ height: `${N * 110}vh` }}>
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-        {/* animated background tint bound to the active screen */}
+    <section id="miniapp" ref={ref} className="relative bg-[#080b16]" style={{ height: "320vh" }}>
+      <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
+        {/* Background hue that shifts */}
         <motion.div
-          aria-hidden
-          animate={{ background: `radial-gradient(60% 60% at 50% 40%, ${tint} 0%, transparent 70%)` }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute inset-0 -z-10"
+          style={{ left: hueX }}
+          className="absolute top-0 h-full w-[900px] -translate-x-1/2 bg-[radial-gradient(600px_500px_at_center,rgba(124,58,237,0.35),transparent_70%)] pointer-events-none"
         />
+        <div className="absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
 
-        {/* prominent progress rail */}
-        <div className="absolute inset-x-0 top-[76px] z-20">
-          <div className="mx-auto flex max-w-[1400px] items-center gap-6 px-6">
-            <span className="mono-tag whitespace-nowrap">
-              Mini App · {String(active + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
-            </span>
-            <div className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-line/80">
-              <motion.div className="absolute inset-y-0 left-0 grad-bg" style={{ width: progress }} />
-            </div>
-            <div className="hidden gap-1 md:flex">
-              {miniAppScreens.map((_, i) => (
-                <span
-                  key={i}
-                  className={`h-1.5 w-1.5 rounded-full transition ${i === active ? "grad-bg" : "bg-line"}`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <div className="relative z-10 mx-auto grid h-full max-w-[1400px] grid-cols-1 lg:grid-cols-12 items-center gap-8 px-5 md:px-10 pt-28 lg:pt-0">
+          {/* Text column */}
+          <div className="lg:col-span-5">
+            <SectionLabel>Mini App</SectionLabel>
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,68px)] leading-[0.95]">
+              Один кабинет. <br />
+              <span className="text-gradient-accent italic font-medium">Все действия.</span>
+            </h2>
 
-        <div className="relative mx-auto grid w-full max-w-[1400px] grid-cols-1 items-center gap-16 px-6 pt-16 md:grid-cols-12">
-          {/* Text side — masked reveals */}
-          <div className="md:col-span-5">
-            <div className="mono-tag mb-6">— Сцена / {String(active + 1).padStart(2, "0")}</div>
-            <div className="relative h-[240px] md:h-[300px]">
+            <div className="mt-10 relative min-h-[180px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={active}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.35 }}
-                  className="absolute inset-0"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  <h2 className="display text-[clamp(2.5rem,5.2vw,4.8rem)] text-ink text-balance">
-                    {(miniAppScreens[active].title || "").split(" ").map((w, i) => (
-                      <span key={i} className="mr-[0.22em] inline-block overflow-hidden pb-[0.08em] align-top">
-                        <motion.span
-                          initial={{ y: "110%" }}
-                          animate={{ y: 0 }}
-                          transition={{ delay: 0.05 + i * 0.06, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                          className="inline-block"
-                        >
-                          {w}
-                        </motion.span>
-                      </span>
-                    ))}
-                  </h2>
-                  <div className="mt-6 overflow-hidden">
-                    <motion.p
-                      initial={{ y: "110%" }}
-                      animate={{ y: 0 }}
-                      transition={{ delay: 0.25, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                      className="max-w-md text-[17px] leading-relaxed text-ink-soft text-pretty"
-                    >
-                      {miniAppScreens[active].text}
-                    </motion.p>
+                  <div className="font-mono text-[12px] tracking-[0.2em] uppercase text-cyan">
+                    {SCENES[active].tag}
                   </div>
+                  <h3 className="mt-3 font-display text-[28px] md:text-[36px] font-bold tracking-tight">
+                    {SCENES[active].title}
+                  </h3>
+                  <p className="mt-3 text-[16px] md:text-[17px] text-text-mute leading-[1.6] max-w-[440px]">
+                    {SCENES[active].text}
+                  </p>
                 </motion.div>
               </AnimatePresence>
             </div>
+
+            {/* Progress */}
+            <div className="mt-10 flex gap-2 max-w-[400px]">
+              {SCENES.map((_, i) => (
+                <div key={i} className="flex-1 h-[3px] rounded-full bg-white/10 overflow-hidden">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-violet to-cyan origin-left"
+                    animate={{ scaleX: i < active ? 1 : i === active ? 1 : 0 }}
+                    transition={{ duration: 0.5 }}
+                    style={{ transformOrigin: "left" }}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Phone stage */}
-          <div className="md:col-span-7 relative flex justify-center">
+          {/* Phone column */}
+          <div className="lg:col-span-7 flex items-center justify-center relative">
             <motion.div
-              style={{ scale: phoneScale, rotateY: phoneRotY, y: phoneY, transformPerspective: 1500 }}
-              className="relative h-[560px] w-[290px] md:h-[660px] md:w-[340px] will-change-transform"
+              style={prm ? {} : { scale: phoneScale, rotate: phoneRotate }}
+              className="relative"
             >
-              {/* Phone bezel */}
-              <div className="absolute inset-0 rounded-[42px] border border-line/70 bg-white p-2 shadow-[var(--shadow-plate)]">
-                <div className="relative h-full w-full overflow-hidden rounded-[34px] bg-milk">
-                  {miniAppScreens.map((s, i) => {
-                    const offset = i - active;
-                    return (
-                      <motion.img
-                        key={s.src}
-                        src={s.src}
-                        alt={s.alt}
-                        animate={{
-                          y: offset === 0 ? 0 : offset < 0 ? -60 : 60,
-                          scale: offset === 0 ? 1 : 0.95,
-                          opacity: offset === 0 ? 1 : 0,
-                          filter: offset === 0 ? "blur(0px)" : "blur(6px)",
-                        }}
-                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute inset-0 h-full w-full object-cover"
-                      />
-                    );
-                  })}
-                  {/* notch */}
-                  <div className="absolute left-1/2 top-2 h-5 w-24 -translate-x-1/2 rounded-full bg-ink/85" />
+              {/* Phone frame */}
+              <div className="relative w-[280px] md:w-[340px] aspect-[9/19.5] rounded-[44px] p-[10px] bg-gradient-to-b from-white/15 to-white/[0.02] glow-ring">
+                <div className="relative w-full h-full rounded-[36px] overflow-hidden bg-black">
+                  <AnimatePresence mode="popLayout">
+                    <motion.img
+                      key={active}
+                      src={SCENES[active].img}
+                      alt={SCENES[active].title}
+                      initial={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
+                      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                      exit={{ opacity: 0, scale: 0.98, filter: "blur(8px)" }}
+                      transition={{ duration: 0.6 }}
+                      className="absolute inset-0 w-full h-full object-cover object-top"
+                    />
+                  </AnimatePresence>
                 </div>
+                {/* Notch */}
+                <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-b-2xl" />
               </div>
 
-              {/* Callouts — real UI fragments spilling out */}
+              {/* Floating callout */}
               <AnimatePresence>
-                {SCENE_MARKS[active]?.callouts.map((c, i) => (
-                  <Callout key={`${active}-${i}`} delay={0.15 + i * 0.12} pos={c.pos} tail={c.tail}>
-                    {c.text}
-                  </Callout>
-                ))}
+                <motion.div
+                  key={`cal-${active}`}
+                  initial={{ opacity: 0, x: 30, y: 10 }}
+                  animate={{ opacity: 1, x: 0, y: 0 }}
+                  exit={{ opacity: 0, x: 30 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="hidden md:block absolute -right-8 top-16 card-glass rounded-2xl p-4 max-w-[220px]"
+                >
+                  <div className="flex items-center gap-2 text-cyan text-[11px] font-mono uppercase tracking-widest">
+                    <Sparkles className="w-3 h-3" /> Активно
+                  </div>
+                  <div className="mt-2 text-[13px] text-text-mute leading-snug">
+                    {SCENES[active].text}
+                  </div>
+                </motion.div>
               </AnimatePresence>
 
-              {/* Orbit ring */}
-              <motion.div
-                aria-hidden
-                animate={{ rotate: 360 }}
-                transition={{ duration: 40, ease: "linear", repeat: Infinity }}
-                className="pointer-events-none absolute -inset-16 rounded-full border border-dashed border-line/60"
-              />
+              {/* Glow */}
+              <div className="absolute -inset-16 -z-10 bg-[radial-gradient(closest-side,rgba(91,92,246,0.35),transparent)] blur-2xl" />
             </motion.div>
           </div>
         </div>
@@ -584,726 +618,890 @@ function MiniAppScene() {
   );
 }
 
-function Callout({
-  children,
-  pos,
-  tail,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  pos: string;
-  tail: "left" | "right";
-  delay?: number;
-}) {
+/* Mobile scenes - non-pinned */
+function MiniAppSceneMobile() {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: tail === "left" ? -20 : 20, y: 8 }}
-      animate={{ opacity: 1, x: 0, y: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className={`absolute hidden md:block ${pos} z-30`}
-    >
-      <div className="relative max-w-[240px] rounded-2xl border border-line/70 bg-white/95 px-4 py-3 text-[13px] font-medium leading-snug text-ink shadow-[0_20px_50px_-20px_rgba(20,20,40,0.25)] backdrop-blur">
-        <div className="mono-tag mb-1 !text-[10px]">UI · fragment</div>
-        {children}
-        <span
-          aria-hidden
-          className={`absolute top-1/2 -translate-y-1/2 h-px w-16 grad-bg ${tail === "left" ? "left-full" : "right-full"}`}
-        />
-        <span
-          aria-hidden
-          className={`absolute top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full grad-bg ${tail === "left" ? "left-[calc(100%+3.5rem)]" : "right-[calc(100%+3.5rem)]"}`}
-        />
-      </div>
-    </motion.div>
-  );
-}
-
-/* ============================================================
-   FEATURE STORIES — each row is a different visual archetype.
-============================================================ */
-function FeatureStories() {
-  return (
-    <section className="relative py-32">
-      <div className="mx-auto max-w-[1400px] px-6">
-        <SectionIntro tag="/02 Преимущества" title="Каждое отличие — сцена, а не карточка." />
-        <div className="mt-24 space-y-40">
-          {featureCards.map((f, i) => (
-            <FeatureRow key={i} index={i} f={f} />
-          ))}
-        </div>
+    <section id="miniapp-m" className="lg:hidden py-24 px-5 bg-[#080b16] relative">
+      <SectionLabel>Mini App</SectionLabel>
+      <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[40px] leading-[0.95]">
+        Один кабинет. <span className="text-gradient-accent italic font-medium">Все действия.</span>
+      </h2>
+      <div className="mt-12 space-y-16">
+        {SCENES.map((s, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-cyan">{s.tag}</div>
+            <h3 className="mt-2 font-display text-[24px] font-bold">{s.title}</h3>
+            <p className="mt-2 text-[15px] text-text-mute leading-[1.6]">{s.text}</p>
+            <div className="mt-5 relative w-full max-w-[300px] mx-auto aspect-[9/19.5] rounded-[36px] p-[8px] bg-white/10 glow-ring">
+              <div className="w-full h-full rounded-[30px] overflow-hidden bg-black">
+                <img src={s.img} alt={s.title} className="w-full h-full object-cover object-top" />
+              </div>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
 }
 
-function FeatureRow({ index, f }: { index: number; f: (typeof featureCards)[number] }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [90, -90]);
-  const yBg = useTransform(scrollYProgress, [0, 1], [40, -40]);
-  const rot = useTransform(scrollYProgress, [0, 1], [-3, 3]);
-  const reverse = index % 2 === 1;
+/* -------------------------------------------------------- */
+/*  Web + Devices                                            */
+/* -------------------------------------------------------- */
 
-  const visuals: React.ReactNode[] = [
-    // 0 — enormous 01 with orbiting satellites
-    <div className="relative grid aspect-square place-items-center overflow-hidden rounded-[32px] bg-milk">
-      <motion.div style={{ y: yBg }} aria-hidden className="glow-orb absolute -top-24 -left-16 h-[360px] w-[360px] grad-bg" />
-      <motion.span style={{ rotate: rot }} className="display grad-text text-[clamp(9rem,22vw,20rem)] leading-none">
-        01
-      </motion.span>
-      <span className="absolute bottom-8 left-8 mono-tag">Один шаг в Telegram</span>
-      <motion.div
-        aria-hidden
-        animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        className="pointer-events-none absolute inset-8 rounded-full border border-dashed border-line/70"
-      >
-        <span className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full grad-bg" />
-        <span className="absolute top-1/2 -right-1.5 h-2 w-2 -translate-y-1/2 rounded-full bg-teal" />
-      </motion.div>
-    </div>,
-    // 1 — animated price plate
-    <div className="relative aspect-square overflow-hidden rounded-[32px] grad-bg p-10 text-primary-foreground">
-      <div className="mono-tag !text-white/70">от / месяц</div>
-      <div className="display mt-4 text-[clamp(5rem,15vw,10rem)] leading-none">
-        <AnimatedNumber value={108} />
-        <span className="text-[3rem] align-top"> ₽</span>
-      </div>
-      <div className="absolute bottom-8 left-10 right-10 flex justify-between text-[13.5px] text-white/85">
-        <span>Безлимит трафика</span>
-        <span>до 5 устройств</span>
-      </div>
-      {/* pulse grid */}
-      <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
-    </div>,
-    // 2 — Happ setup + connection line
-    <div className="relative aspect-square overflow-hidden rounded-[32px] border border-line bg-white">
-      <motion.img
-        src="/assets/dvinvpn-client-connect.jpg"
-        alt=""
-        style={{ scale: useTransform(scrollYProgress, [0, 1], [1.15, 1]) }}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <motion.path
-          d="M8 82 Q30 50 55 55 T92 22"
-          fill="none"
-          stroke="white"
-          strokeOpacity="0.85"
-          strokeWidth="0.4"
-          initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
-        />
-      </svg>
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-8 text-white">
-        <div className="mono-tag !text-white/70">Happ · рекомендуемый клиент</div>
-        <div className="mt-2 text-2xl font-medium">Один тап — и ты подключён</div>
-      </div>
-    </div>,
-    // 3 — bonuses
-    <div className="relative aspect-square overflow-hidden rounded-[32px] bg-ink text-primary-foreground">
-      <motion.div
-        aria-hidden
-        animate={{ rotate: 360 }}
-        transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-0 opacity-70"
-        style={{ background: "conic-gradient(from 0deg, oklch(0.55 0.24 295), oklch(0.58 0.22 260), oklch(0.72 0.14 195), oklch(0.55 0.24 295))" }}
-      />
-      <div className="absolute inset-6 grid place-items-center rounded-[24px] bg-ink/70 backdrop-blur">
-        <div className="text-center">
-          <div className="mono-tag !text-white/70">Каждый день</div>
-          <div className="display mt-3 text-[clamp(2rem,4vw,3.5rem)]">Спин · Игры · Промокоды</div>
-        </div>
-      </div>
-    </div>,
-  ];
-
+function WebSection() {
   return (
-    <div ref={ref} className={`grid grid-cols-1 items-center gap-16 md:grid-cols-12 ${reverse ? "md:[direction:rtl]" : ""}`}>
-      <motion.div style={{ y }} className="md:col-span-6 [direction:ltr]">
-        {visuals[index] ?? visuals[0]}
-      </motion.div>
-      <div className="md:col-span-5 md:col-start-8 [direction:ltr]">
-        <div className="mono-tag">/ 0{index + 1}</div>
-        <h3 className="display mt-4 text-[clamp(2rem,4.5vw,4rem)] text-ink text-balance">{f.title}</h3>
-        <p className="mt-6 max-w-md text-[17px] leading-relaxed text-ink-soft text-pretty">{f.text}</p>
-      </div>
-    </div>
-  );
-}
-
-/* ============================================================
-   ANIMATED NUMBER
-============================================================ */
-function AnimatedNumber({ value, duration = 1.2 }: { value: number; duration?: number }) {
-  const mv = useMotionValue(0);
-  const [display, setDisplay] = useState(0);
-  const seen = useRef(false);
-  const ref = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const controls = animate(mv, value, {
-      duration,
-      ease: [0.22, 1, 0.36, 1],
-    });
-    const un = mv.on("change", (v) => setDisplay(Math.round(v)));
-    return () => {
-      controls.stop();
-      un();
-    };
-  }, [value, duration, mv]);
-
-  useEffect(() => {
-    const io = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !seen.current) {
-        seen.current = true;
-      }
-    });
-    if (ref.current) io.observe(ref.current);
-    return () => io.disconnect();
-  }, []);
-
-  return <span ref={ref}>{display.toLocaleString("ru")}</span>;
-}
-
-/* ============================================================
-   SECTION INTRO
-============================================================ */
-function SectionIntro({ tag, title, kicker }: { tag: string; title: string; kicker?: string }) {
-  return (
-    <div className="grid grid-cols-1 items-end gap-8 md:grid-cols-12">
-      <div className="md:col-span-7">
-        <div className="mono-tag">— {tag}</div>
-        <h2 className="display mt-6 text-[clamp(2.5rem,7vw,6.5rem)] text-ink text-balance">
-          {title.split(" ").map((w, i) => (
-            <span key={i} className="mr-[0.22em] inline-block overflow-hidden pb-[0.08em] align-top">
-              <motion.span
-                initial={{ y: "110%" }}
-                whileInView={{ y: 0 }}
-                viewport={{ once: true, amount: 0.6 }}
-                transition={{ delay: i * 0.06, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="inline-block"
-              >
-                {w}
-              </motion.span>
-            </span>
-          ))}
-        </h2>
-      </div>
-      {kicker && (
-        <p className="md:col-span-4 md:col-start-9 text-[16.5px] leading-relaxed text-ink-soft text-pretty">
-          {kicker}
-        </p>
-      )}
-    </div>
-  );
-}
-
-/* ============================================================
-   CAPABILITIES
-============================================================ */
-function Capabilities() {
-  return (
-    <section className="relative py-32 bg-milk">
-      <div className="mx-auto max-w-[1400px] px-6">
-        <SectionIntro tag="/03 Что внутри" title="Восемь сценариев Mini App." kicker="Всё, что нужно клиенту DvinVPN, живёт в одном окне Telegram." />
-        <div className="mt-20 grid grid-cols-1 gap-px overflow-hidden rounded-[28px] border border-line bg-line md:grid-cols-2 lg:grid-cols-4">
-          {appCapabilities.map((c, i) => (
-            <motion.div
-              key={c.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ delay: (i % 4) * 0.08, duration: 0.6 }}
-              className="group relative bg-background p-8 transition hover:bg-white"
+    <section className="relative py-28 md:py-40 overflow-hidden bg-[#050711]">
+      <div className="absolute inset-0 bg-aurora opacity-40" />
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
+        <div className="grid lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-5">
+            <SectionLabel>Веб-версия</SectionLabel>
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[0.95]">
+              Telegram — не единственный <span className="text-gradient-accent italic font-medium">вариант.</span>
+            </h2>
+            <p className="mt-6 text-[17px] text-text-mute leading-[1.6] max-w-[460px]">
+              Откройте веб-версию DvinVPN в браузере и войдите через Telegram. Управляйте подпиской с
+              компьютера или телефона.
+            </p>
+            <p className="mt-4 text-[14px] text-text-dim leading-[1.6]">
+              Для полноценной работы веб-версии требуется вход через Telegram.
+            </p>
+            <a
+              href={WEB("web_section")}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-8 inline-flex items-center gap-2 btn-primary-glow rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
             >
-              <div className="mono-tag">/{String(i + 1).padStart(2, "0")}</div>
-              <div className="mt-6 text-[20px] font-medium tracking-tight text-ink">{c.title}</div>
-              <div className="mt-3 text-[15px] leading-relaxed text-ink-soft">{c.text}</div>
-              <div className="absolute inset-x-0 bottom-0 h-[2px] w-0 grad-bg transition-all duration-500 group-hover:w-full" />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+              <Globe className="w-4 h-4" /> Открыть веб-версию
+              <ArrowUpRight className="w-4 h-4 opacity-70" />
+            </a>
+          </div>
 
-/* ============================================================
-   BONUSES
-============================================================ */
-function Bonuses() {
-  return (
-    <section id="bonus" className="relative overflow-hidden py-32">
-      <motion.div
-        aria-hidden
-        animate={{ x: [0, 40, -20, 0], y: [0, -30, 20, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-        className="glow-orb absolute -top-20 right-1/3 h-[520px] w-[520px]"
-        style={{ background: "oklch(0.55 0.24 295)" }}
-      />
-      <div className="relative mx-auto max-w-[1400px] px-6">
-        <SectionIntro tag="/04 Бонусы" title="Игры возвращают деньги." kicker="Ежедневный спин, мини-игры и промокоды продлевают подписку каждый день." />
-        <div className="mt-20 grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-6">
-          {gameModes.map((g, i) => (
+          <div className="lg:col-span-7 relative">
+            {/* Browser mock */}
             <motion.div
-              key={g.title}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ delay: i * 0.06, duration: 0.7 }}
-              className={`group relative flex flex-col justify-between overflow-hidden rounded-[24px] p-6 ${
-                i === 0 ? "col-span-1 md:col-span-2 lg:col-span-3 lg:row-span-2 grad-bg text-primary-foreground min-h-[400px]" : "border border-line bg-white text-ink min-h-[220px]"
-              }`}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.9 }}
+              className="relative rounded-2xl overflow-hidden card-glass glow-ring"
             >
-              <div className={`mono-tag ${i === 0 ? "!text-white/70" : ""}`}>/{String(i + 1).padStart(2, "0")}</div>
-              <div>
-                <div className={`display text-[clamp(1.6rem,2.5vw,2.5rem)] ${i === 0 ? "text-white" : "text-ink"}`}>{g.title}</div>
-                <p className={`mt-3 text-[15px] leading-relaxed ${i === 0 ? "text-white/85" : "text-ink-soft"}`}>{g.text}</p>
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-white/[0.02]">
+                <div className="flex gap-1.5">
+                  <span className="w-3 h-3 rounded-full bg-white/10" />
+                  <span className="w-3 h-3 rounded-full bg-white/10" />
+                  <span className="w-3 h-3 rounded-full bg-white/10" />
+                </div>
+                <div className="ml-4 flex-1 max-w-md rounded-md bg-black/40 px-3 py-1 text-[11px] font-mono text-text-dim">
+                  shop.dvinconnect.store
+                </div>
               </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   PRICING — animated numbers, recommended plan scales up,
-   selection changes device count and period smoothly.
-============================================================ */
-function Pricing() {
-  const [devices, setDevices] = useState(1);
-  const [activeId, setActiveId] = useState<string>("12m");
-
-  return (
-    <section id="pricing" className="relative py-40">
-      <div className="mx-auto max-w-[1400px] px-6">
-        <SectionIntro tag="/05 Тарифы" title="Один тариф. Четыре периода." kicker={productFacts.trial} />
-
-        {/* Devices selector */}
-        <div className="mt-16 flex flex-wrap items-center gap-6">
-          <span className="mono-tag">Устройств: {devices}</span>
-          <div className="inline-flex items-center gap-1 rounded-full border border-line bg-white p-1">
-            {[1, 2, 3, 4, 5].map((n) => (
-              <button
-                key={n}
-                onClick={() => setDevices(n)}
-                data-cursor
-                className={`relative h-10 w-10 rounded-full text-[14px] transition ${
-                  devices === n ? "text-primary-foreground" : "text-ink-soft hover:bg-milk"
-                }`}
-              >
-                {devices === n && (
-                  <motion.span
-                    layoutId="dev-pill"
-                    className="absolute inset-0 rounded-full bg-ink"
-                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                  />
-                )}
-                <span className="relative z-10">{n}</span>
-              </button>
-            ))}
-          </div>
-          <span className="text-[13.5px] text-ink-mute">
-            +50–390 ₽ за каждое дополнительное устройство в зависимости от периода
-          </span>
-        </div>
-
-        {/* Plans */}
-        <div className="mt-14 space-y-4">
-          {pricingPlans.map((p, i) => {
-            const extra = (devices - 1) * p.extraDevicePrice;
-            const total = p.price + extra;
-            const isActive = activeId === p.id;
-            const isRecommended = !!p.badge;
-            return (
-              <PricingRow
-                key={p.id}
-                index={i}
-                plan={p}
-                total={total}
-                extra={extra}
-                devices={devices}
-                isActive={isActive}
-                isRecommended={isRecommended}
-                onFocus={() => setActiveId(p.id)}
+              <img
+                src={A.web}
+                alt="DvinVPN веб-версия"
+                className="w-full h-auto block object-cover"
               />
-            );
-          })}
-        </div>
-        <p className="mt-8 max-w-2xl text-[14px] leading-relaxed text-ink-mute">
-          Финальная цена, доступность оплаты и применимость промокодов подтверждаются внутри DvinVPN перед оплатой. Оплата через YooKassa и T-pay.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function PricingRow({
-  index,
-  plan,
-  total,
-  extra,
-  devices,
-  isActive,
-  isRecommended,
-  onFocus,
-}: {
-  index: number;
-  plan: (typeof pricingPlans)[number];
-  total: number;
-  extra: number;
-  devices: number;
-  isActive: boolean;
-  isRecommended: boolean;
-  onFocus: () => void;
-}) {
-  return (
-    <motion.a
-      href={ctaLinks.pricing}
-      target="_blank"
-      rel="noreferrer"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-      }}
-      viewport={{ once: true, amount: 0.3 }}
-      animate={{
-        scale: isActive ? 1.015 : 1,
-        boxShadow: isActive
-          ? "0 40px 80px -30px rgba(60,40,140,0.28), 0 20px 40px -20px rgba(30,60,180,0.22)"
-          : "0 0 0 rgba(0,0,0,0)",
-      }}
-      transition={{ type: "spring", stiffness: 260, damping: 26, delay: index * 0.04 }}
-      onMouseEnter={onFocus}
-      onFocus={onFocus}
-      data-cursor
-      className={`group relative block overflow-hidden rounded-[24px] border bg-white transition ${
-        isActive ? "border-ink/70" : "border-line hover:border-ink/40"
-      }`}
-    >
-      {/* recommended shimmer */}
-      {isRecommended && (
-        <motion.span
-          aria-hidden
-          animate={{ x: ["-100%", "200%"] }}
-          transition={{ duration: 3.4, repeat: Infinity, ease: "linear" }}
-          className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent"
-        />
-      )}
-      <div className="relative grid grid-cols-6 items-center gap-4 px-6 py-8 md:grid-cols-12 md:px-10 md:py-10">
-        <div className="col-span-2 md:col-span-1 mono-tag">/0{index + 1}</div>
-        <div className="col-span-4 md:col-span-3">
-          <div className="display text-[clamp(1.8rem,3vw,2.6rem)] text-ink">{plan.label}</div>
-          {isRecommended && (
-            <div className="mt-2 inline-block rounded-full grad-bg px-2.5 py-1 text-[10.5px] font-medium uppercase tracking-widest text-white">
-              {plan.badge} · экономия {Math.round((1 - plan.perMonth / pricingPlans[0].perMonth) * 100)}%
-            </div>
-          )}
-        </div>
-        <div className="col-span-3 md:col-span-3 text-[14px] text-ink-soft">
-          <div>
-            <span className="font-medium text-ink">{plan.perMonth}</span> ₽ / мес
-          </div>
-          <div className="mt-1 text-[13px] text-ink-mute">
-            {devices} {devices === 1 ? "устройство" : devices < 5 ? "устройства" : "устройств"}
-            {extra > 0 ? ` · +${extra} ₽ доплата` : " · включено"}
-          </div>
-        </div>
-        <div className="col-span-3 md:col-span-3 text-right md:text-left">
-          <div className="display text-[clamp(2.2rem,4.4vw,3.8rem)] text-ink leading-none">
-            <AnimatedNumber value={total} />{" "}
-            <span className="text-[0.36em] align-middle text-ink-mute">₽</span>
-          </div>
-          <div className="mt-1 text-[12px] text-ink-mute">итого за {plan.months} мес</div>
-        </div>
-        <div className="col-span-6 md:col-span-2 flex justify-end">
-          <motion.span
-            animate={{ scale: isActive ? 1.15 : 1 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className={`inline-flex h-14 w-14 items-center justify-center rounded-full transition ${
-              isActive ? "bg-ink text-primary-foreground" : "border border-line text-ink group-hover:bg-ink group-hover:text-primary-foreground"
-            } group-hover:rotate-45`}
-          >
-            <ArrowUpRight className="h-5 w-5" />
-          </motion.span>
-        </div>
-      </div>
-      {/* underline */}
-      <span className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 grad-bg transition-transform duration-500 group-hover:scale-x-100" />
-    </motion.a>
-  );
-}
-
-/* ============================================================
-   REVIEWS
-============================================================ */
-function Reviews() {
-  return (
-    <section id="reviews" className="relative overflow-hidden bg-ink py-32 text-primary-foreground">
-      <motion.div
-        aria-hidden
-        animate={{ rotate: 360 }}
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-        className="glow-orb absolute -top-40 -right-40 h-[600px] w-[600px] grad-bg"
-      />
-      <div className="relative mx-auto max-w-[1400px] px-6">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
-          <div className="md:col-span-5">
-            <div className="mono-tag !text-white/60">— /06 Отзывы</div>
-            <h2 className="display mt-6 text-[clamp(2.5rem,6vw,5.5rem)] text-white text-balance">
-              Из чата <em className="grad-text italic">DvinVPN</em>.
-            </h2>
-            <motion.div
-              initial={{ opacity: 0, y: 40, rotate: -1.5 }}
-              whileInView={{ opacity: 1, y: 0, rotate: -1.5 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-10 overflow-hidden rounded-[28px] border border-white/15 bg-white/5 p-2 shadow-2xl"
-            >
-              <img src="/assets/telegram-reviews.jpg" alt="Отзывы в Telegram" className="w-full rounded-[22px]" />
             </motion.div>
-          </div>
-          <div className="md:col-span-6 md:col-start-7 space-y-6">
-            {reviews.map((r, i) => (
-              <motion.blockquote
-                key={i}
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ delay: i * 0.1, duration: 0.7 }}
-                className="rounded-[24px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur"
-              >
-                <p className="text-[17px] leading-relaxed text-white/90">{r.text}</p>
-                <footer className="mt-5 flex items-center gap-3 text-[13.5px] text-white/60">
-                  <span className="grid h-9 w-9 place-items-center rounded-full grad-bg text-white text-[14px] font-medium">
-                    {r.author[0]}
-                  </span>
-                  {r.author}
-                </footer>
-              </motion.blockquote>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
-/* ============================================================
-   FAQ
-============================================================ */
-function Faq() {
-  const [open, setOpen] = useState<number | null>(0);
-  return (
-    <section id="faq" className="relative py-32">
-      <div className="mx-auto max-w-[1400px] px-6">
-        <SectionIntro tag="/07 Вопросы" title="Коротко и по делу." />
-        <div className="mt-16 divide-y divide-line border-y border-line">
-          {faq.map((item, i) => {
-            const isOpen = open === i;
-            return (
-              <div key={i}>
-                <button
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  data-cursor
-                  className="flex w-full items-center justify-between gap-6 py-6 text-left"
-                >
-                  <span className="text-[clamp(1.15rem,2vw,1.75rem)] font-medium tracking-tight text-ink">
-                    {item.q}
-                  </span>
-                  <motion.span
-                    animate={{ rotate: isOpen ? 45 : 0 }}
-                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line text-ink"
-                  >
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M12 5v14M5 12h14" /></svg>
-                  </motion.span>
-                </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <p className="max-w-3xl pb-8 text-[16px] leading-relaxed text-ink-soft">{item.a}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+            {/* Phone overlay */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.9, delay: 0.2 }}
+              className="hidden md:block absolute -bottom-16 -right-4 w-[190px] aspect-[9/19.5] rounded-[32px] p-[7px] bg-white/10 glow-ring"
+            >
+              <div className="w-full h-full rounded-[26px] overflow-hidden bg-black">
+                <img src={A.miniappHome} alt="" className="w-full h-full object-cover object-top" />
               </div>
-            );
-          })}
+            </motion.div>
+
+            {/* Connection line */}
+            <svg
+              className="hidden md:block absolute -bottom-20 left-0 w-full h-32 pointer-events-none"
+              viewBox="0 0 800 100"
+            >
+              <motion.path
+                d="M 100 20 Q 400 90 700 40"
+                stroke="url(#hero-line)"
+                strokeWidth="1.5"
+                fill="none"
+                strokeDasharray="4 6"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5 }}
+              />
+            </svg>
+          </div>
+        </div>
+
+        {/* Devices statement */}
+        <div className="mt-40 md:mt-56 grid lg:grid-cols-12 gap-10 items-end">
+          <div className="lg:col-span-7">
+            <SectionLabel>Устройства</SectionLabel>
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,84px)] leading-[0.92]">
+              Одна подписка.<br />
+              <span className="text-gradient-accent italic font-medium">До пяти устройств.</span>
+            </h2>
+            <p className="mt-6 text-[17px] text-text-mute leading-[1.6] max-w-[520px]">
+              Начните с одного устройства и добавляйте новые прямо в личном кабинете. Итоговая цена
+              зависит от срока и количества устройств.
+            </p>
+          </div>
+          <div className="lg:col-span-5">
+            <div className="rounded-3xl card-glass p-2">
+              <img
+                src={A.devicesAdd}
+                alt="Добавление устройства"
+                className="w-full rounded-2xl object-cover"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/* ============================================================
-   FINAL — logo assembled from a swarm of dots, CTA as climax.
-============================================================ */
-function Final() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 0.7, 1], [0.55, 1.05, 1.15]);
-  const y = useTransform(scrollYProgress, [0, 1], [80, -60]);
+/* -------------------------------------------------------- */
+/*  Trial                                                    */
+/* -------------------------------------------------------- */
 
-  // seed the swarm of dots that gather into the logo — client-only to avoid SSR mismatch
-  const [dots, setDots] = useState<{ id: number; x: number; y: number; d: number }[]>([]);
-  useEffect(() => {
-    setDots(
-      new Array(48).fill(0).map((_, i) => ({
-        id: i,
-        x: (Math.random() - 0.5) * 900,
-        y: (Math.random() - 0.5) * 500,
-        d: Math.random() * 0.5,
-      }))
-    );
-  }, []);
-
+function Trial() {
   return (
-    <section ref={ref} className="relative overflow-hidden bg-milk pt-32 pb-16">
-      <div className="mx-auto max-w-[1400px] px-6 text-center">
-        <div className="mono-tag">— /08 Финал</div>
+    <section className="relative py-28 md:py-40 overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(800px_500px_at_50%_50%,rgba(34,211,238,0.15),transparent)]" />
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
+        <div className="text-center max-w-[900px] mx-auto">
+          <SectionLabel>Пробный период</SectionLabel>
+          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[0.95]">
+            Сначала проверьте.<br />
+            <span className="text-gradient-accent italic font-medium">Потом решайте.</span>
+          </h2>
+        </div>
 
-        {/* Assembled headline — words reveal from a mask */}
-        <h2 className="display mt-6 text-[clamp(3rem,12vw,12rem)] text-ink text-balance leading-[0.9]">
-          {["Просто", "открой", "Telegram."].map((w, i) => (
-            <span key={i} className="mr-[0.18em] inline-block overflow-hidden pb-[0.08em] align-top">
-              <motion.span
-                initial={{ y: "110%" }}
-                whileInView={{ y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ delay: i * 0.12, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                className="inline-block"
-              >
-                {i === 1 ? <em className="grad-text italic">{w}</em> : w}
-              </motion.span>
-              {i === 0 && <br />}
-            </span>
+        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4">
+          {[
+            { big: "3", small: "дня", desc: "пробного доступа" },
+            { big: "1", small: "устройство", desc: "включено в trial" },
+            { big: "5", small: "ГБ", desc: "трафика на пробу" },
+          ].map((x, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, delay: i * 0.1 }}
+              className="text-center relative"
+            >
+              <div className="font-display font-black text-[clamp(120px,18vw,220px)] leading-[0.85] tracking-[-0.05em] text-gradient">
+                {x.big}
+              </div>
+              <div className="mt-2 font-display text-[22px] md:text-[26px] font-bold">{x.small}</div>
+              <div className="mt-1 text-[14px] text-text-dim uppercase tracking-widest">{x.desc}</div>
+            </motion.div>
           ))}
-        </h2>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ delay: 0.5, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-14 flex flex-col items-center gap-4"
-        >
+        <div className="mt-16 text-center">
+          <p className="text-[17px] text-text-mute max-w-[520px] mx-auto leading-[1.6]">
+            Получите пробный доступ и проверьте подключение до покупки подписки.
+          </p>
           <a
-            href={ctaLinks.final}
+            href={TG("site_trial")}
             target="_blank"
             rel="noreferrer"
-            data-cursor
-            className="group relative inline-flex items-center gap-4 overflow-hidden rounded-full bg-ink px-9 py-6 text-[16.5px] font-medium text-primary-foreground transition"
+            className="mt-8 inline-flex items-center gap-2 btn-primary-glow rounded-full px-7 py-4 text-[16px] font-semibold text-white"
           >
-            <span className="relative z-10">Забрать 3 дня бесплатно</span>
-            <span className="relative z-10 grid h-11 w-11 place-items-center rounded-full bg-primary-foreground text-ink transition-transform group-hover:rotate-45">
-              <ArrowUpRight className="h-4 w-4" />
-            </span>
-            <span className="absolute inset-0 -translate-x-full grad-bg transition-transform duration-500 group-hover:translate-x-0" />
-            <motion.span
-              aria-hidden
-              animate={{ opacity: [0.4, 0.9, 0.4] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -inset-2 -z-10 rounded-full grad-bg opacity-40 blur-2xl"
-            />
+            <Send className="w-4 h-4" /> Получить 3 дня бесплатно
+            <ArrowUpRight className="w-4 h-4 opacity-70" />
           </a>
-          <span className="text-[13.5px] text-ink-mute">{productFacts.telegramBot} · {productFacts.trial}</span>
-        </motion.div>
-
-        {/* Assembled logotype */}
-        <motion.div style={{ scale, y }} className="relative mt-24 flex items-center justify-center">
-          {/* swarm dots that fly into the wordmark */}
-          <div className="pointer-events-none absolute inset-0">
-            {dots.map((d) => (
-              <motion.span
-                key={d.id}
-                initial={{ x: d.x, y: d.y, opacity: 0 }}
-                whileInView={{ x: 0, y: 0, opacity: [0, 0.8, 0] }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ delay: 0.2 + d.d, duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full grad-bg"
-              />
-            ))}
-          </div>
-          <div className="display grad-text text-[clamp(6rem,22vw,22rem)] leading-none">
-            DvinVPN
-          </div>
-        </motion.div>
+        </div>
       </div>
-
-      <footer className="mx-auto mt-12 flex max-w-[1400px] flex-col items-start justify-between gap-6 px-6 pt-10 text-[13.5px] text-ink-mute md:flex-row md:items-center">
-        <div className="flex items-center gap-3">
-          <img src="/assets/dvinvpn-logo.png" width={28} height={28} alt="" className="rounded-md" />
-          <span>© {new Date().getFullYear()} DvinVPN. Все права защищены.</span>
-        </div>
-        <div className="flex gap-6">
-          {legalLinks.map((l) => (
-            <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="hover:text-ink" data-cursor>
-              {l.label}
-            </a>
-          ))}
-        </div>
-      </footer>
     </section>
   );
 }
 
-/* ============================================================
-   PAGE
-============================================================ */
-function Landing() {
-  useLenis();
+/* -------------------------------------------------------- */
+/*  Pricing calculator                                       */
+/* -------------------------------------------------------- */
 
-  // shared mouse motion values for cursor parallax
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      const nx = (e.clientX / window.innerWidth) * 2 - 1;
-      const ny = (e.clientY / window.innerHeight) * 2 - 1;
-      mx.set(nx);
-      my.set(ny);
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, [mx, my]);
+const PERIODS = [
+  { id: 1, label: "1 месяц", months: 1, price: 149, extra: 50 },
+  { id: 3, label: "3 месяца", months: 3, price: 399, extra: 120 },
+  { id: 6, label: "6 месяцев", months: 6, price: 749, extra: 220 },
+  { id: 12, label: "12 месяцев", months: 12, price: 1290, extra: 390, badge: "Выгодно" },
+];
 
-  // global scroll for the persistent orb
-  const scrollY = useMotionValue(0);
-  useEffect(() => {
-    const onScroll = () => scrollY.set(window.scrollY);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [scrollY]);
+function Pricing() {
+  const [periodId, setPeriodId] = useState(12);
+  const [devices, setDevices] = useState(1);
+  const period = PERIODS.find((p) => p.id === periodId)!;
+
+  const total = period.price + period.extra * (devices - 1);
+  const perMonth = total / period.months;
+  const baseMonthly = 149 * devices;
+  const savingsPct = Math.max(
+    0,
+    Math.round((1 - perMonth / (baseMonthly / 1)) * 100),
+  );
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
-      <AmbientStage scrollY={scrollY} />
-      <CursorAurora />
+    <section id="pricing" className="relative py-28 md:py-40 overflow-hidden bg-[#080b16]">
+      <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
+        <SectionLabel>Тарифы</SectionLabel>
+        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[0.95] max-w-[1100px]">
+          Соберите подписку <span className="text-gradient-accent italic font-medium">под себя.</span>
+        </h2>
+
+        <div className="mt-16 grid lg:grid-cols-12 gap-8">
+          {/* Controls */}
+          <div className="lg:col-span-7 space-y-10">
+            {/* Period */}
+            <div>
+              <div className="text-[13px] uppercase tracking-[0.18em] text-text-dim font-mono">
+                Срок подписки
+              </div>
+              <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+                {PERIODS.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => setPeriodId(p.id)}
+                    className={`relative rounded-2xl border px-4 py-4 text-left transition ${
+                      p.id === periodId
+                        ? "border-transparent bg-gradient-to-br from-violet/25 to-electric/20"
+                        : "border-white/10 bg-white/[0.02] hover:border-white/20"
+                    }`}
+                  >
+                    {p.id === periodId && (
+                      <motion.div
+                        layoutId="pricing-active"
+                        className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/25"
+                        transition={{ type: "spring", stiffness: 260, damping: 26 }}
+                      />
+                    )}
+                    <div className="relative">
+                      {p.badge && (
+                        <div className="inline-block mb-1 text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-full bg-cyan/20 text-cyan">
+                          {p.badge}
+                        </div>
+                      )}
+                      <div className="font-display text-[18px] font-bold">{p.label}</div>
+                      <div className="mt-1 text-[13px] text-text-mute">
+                        {p.price.toLocaleString("ru")} ₽
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Devices */}
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="text-[13px] uppercase tracking-[0.18em] text-text-dim font-mono">
+                  Устройства
+                </div>
+                <div className="font-display text-[26px] font-bold">
+                  <AnimatedNumber value={devices} /> из 5
+                </div>
+              </div>
+              <div className="mt-4 flex items-center gap-3">
+                <button
+                  onClick={() => setDevices((d) => Math.max(1, d - 1))}
+                  className="w-11 h-11 rounded-full border border-white/10 hover:border-white/20 flex items-center justify-center text-[20px] leading-none"
+                  aria-label="Меньше устройств"
+                >
+                  −
+                </button>
+                <div className="flex-1 h-11 rounded-full bg-white/[0.03] border border-white/10 relative overflow-hidden">
+                  <motion.div
+                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-violet to-electric"
+                    animate={{ width: `${((devices - 1) / 4) * 100}%` }}
+                    transition={{ type: "spring", stiffness: 220, damping: 26 }}
+                  />
+                  <div className="relative flex h-full items-center justify-between px-4">
+                    {[1, 2, 3, 4, 5].map((d) => (
+                      <button
+                        key={d}
+                        onClick={() => setDevices(d)}
+                        className={`w-8 h-8 rounded-full text-[13px] font-semibold transition ${
+                          d <= devices ? "text-white" : "text-text-dim"
+                        }`}
+                      >
+                        {d}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <button
+                  onClick={() => setDevices((d) => Math.min(5, d + 1))}
+                  className="w-11 h-11 rounded-full border border-white/10 hover:border-white/20 flex items-center justify-center text-[20px] leading-none"
+                  aria-label="Больше устройств"
+                >
+                  +
+                </button>
+              </div>
+              <div className="mt-3 text-[13px] text-text-dim">
+                Первое устройство включено. Каждое дополнительное — +{period.extra} ₽ за {period.label.toLowerCase()}.
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 p-6 bg-white/[0.02]">
+              <div className="text-[13px] uppercase tracking-[0.18em] text-text-dim font-mono">
+                Тариф «Базовый» включает
+              </div>
+              <ul className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-[15px] text-text">
+                {[
+                  "Безлимитный трафик",
+                  "Серверы VPN",
+                  "1–5 устройств",
+                  "Поддержка при подключении",
+                  "Продление в кабинете",
+                  "YooKassa и T-pay",
+                ].map((x) => (
+                  <li key={x} className="flex items-start gap-2">
+                    <Check className="w-4 h-4 mt-1 shrink-0 text-cyan" />
+                    <span>{x}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Result card */}
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-24">
+              <motion.div
+                layout
+                className="rounded-3xl card-glass p-8 glow-ring relative overflow-hidden"
+              >
+                <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-violet/25 blur-3xl" />
+                <div className="relative">
+                  <div className="flex items-center justify-between">
+                    <div className="font-mono text-[12px] uppercase tracking-widest text-cyan">
+                      Итог
+                    </div>
+                    {savingsPct > 0 && (
+                      <div className="text-[12px] font-semibold px-2.5 py-1 rounded-full bg-cyan/15 text-cyan">
+                        −{savingsPct}% выгода
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-6 flex items-baseline gap-3">
+                    <div className="font-display font-black text-[64px] md:text-[80px] leading-none tracking-[-0.04em]">
+                      <AnimatedNumber value={Math.round(total)} />
+                      <span className="text-[36px] md:text-[44px] text-text-mute ml-2 font-bold">₽</span>
+                    </div>
+                  </div>
+                  <div className="mt-2 text-[15px] text-text-mute">
+                    За весь срок · <AnimatedNumber value={Math.round(perMonth * 100) / 100} decimals={perMonth % 1 !== 0 ? 2 : 0} /> ₽ в месяц
+                  </div>
+
+                  <div className="mt-6 space-y-2 text-[14px] text-text-mute">
+                    <Row k="Срок" v={period.label} />
+                    <Row k="Устройства" v={`${devices} из 5`} />
+                    <Row k="Базовая цена" v={`${period.price} ₽`} />
+                    {devices > 1 && (
+                      <Row k="Доп. устройства" v={`+${period.extra * (devices - 1)} ₽`} />
+                    )}
+                  </div>
+
+                  <div className="mt-8 flex flex-col gap-2">
+                    <a
+                      href={TG("site_pricing")}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn-primary-glow inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 text-[15px] font-semibold text-white"
+                    >
+                      <Send className="w-4 h-4" /> Выбрать в Telegram
+                    </a>
+                    <a
+                      href={WEB("pricing")}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.02] px-6 py-4 text-[15px] font-semibold text-text hover:bg-white/[0.05] transition"
+                    >
+                      <Globe className="w-4 h-4" /> Открыть веб-кабинет
+                    </a>
+                  </div>
+
+                  <div className="mt-6 text-[12px] text-text-dim leading-[1.5]">
+                    Доступны YooKassa и T-pay. Финальная цена и способы оплаты подтверждаются в
+                    личном кабинете перед оплатой.
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Row({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="flex items-baseline justify-between border-b border-white/5 pb-1.5">
+      <span>{k}</span>
+      <span className="text-text font-medium">{v}</span>
+    </div>
+  );
+}
+
+function AnimatedNumber({ value, decimals = 0 }: { value: number; decimals?: number }) {
+  const spring = useSpring(value, { stiffness: 140, damping: 22 });
+  const [display, setDisplay] = useState(value);
+  useEffect(() => {
+    spring.set(value);
+  }, [spring, value]);
+  useEffect(() => {
+    return spring.on("change", (v) => setDisplay(v));
+  }, [spring]);
+  return <span>{display.toLocaleString("ru", { maximumFractionDigits: decimals, minimumFractionDigits: decimals })}</span>;
+}
+
+/* -------------------------------------------------------- */
+/*  Support                                                  */
+/* -------------------------------------------------------- */
+
+function Support() {
+  return (
+    <section id="features" className="relative py-28 md:py-40 overflow-hidden">
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10">
+        <div className="grid lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-5">
+            <SectionLabel>Поддержка</SectionLabel>
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[0.95]">
+              Помощь находится там же, где <span className="text-gradient-accent italic font-medium">подписка.</span>
+            </h2>
+            <p className="mt-6 text-[17px] text-text-mute leading-[1.6] max-w-[460px]">
+              Создайте обращение в личном кабинете, приложите скриншот и получите ответ внутри
+              DvinVPN.
+            </p>
+            <div className="mt-8 grid grid-cols-2 gap-3 max-w-[420px]">
+              {[
+                { icon: HeadphonesIcon, t: "Встроенная поддержка" },
+                { icon: Sparkles, t: "FAQ и инструкции" },
+                { icon: Zap, t: "Платежи" },
+                { icon: Shield, t: "Документы" },
+              ].map((x, i) => (
+                <div
+                  key={i}
+                  className="card-glass rounded-2xl p-4 flex items-center gap-3"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet/40 to-electric/40 flex items-center justify-center">
+                    <x.icon className="w-4 h-4" />
+                  </div>
+                  <div className="text-[13px] font-medium">{x.t}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="lg:col-span-7 grid grid-cols-2 gap-4">
+            <div className="card-glass rounded-3xl p-2 col-span-2">
+              <img src={A.supportTicket} alt="Поддержка" className="w-full rounded-2xl object-cover" />
+            </div>
+            <div className="card-glass rounded-3xl p-2">
+              <img src={A.faq} alt="FAQ" className="w-full rounded-2xl object-cover" />
+            </div>
+            <div className="card-glass rounded-3xl p-2">
+              <img src={A.payments} alt="Платежи" className="w-full rounded-2xl object-cover" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------- */
+/*  Bonuses                                                  */
+/* -------------------------------------------------------- */
+
+function Bonuses() {
+  return (
+    <section className="relative py-24 md:py-36 overflow-hidden bg-[#080b16]">
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10">
+        <SectionLabel>Бонусы</SectionLabel>
+        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,64px)] leading-[0.95] max-w-[900px]">
+          Больше пользы <span className="text-gradient-accent italic font-medium">внутри DvinVPN.</span>
+        </h2>
+
+        <div className="mt-14 grid lg:grid-cols-2 gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7 }}
+            className="card-glass rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6"
+          >
+            <div className="flex-1">
+              <div className="font-mono text-[12px] uppercase tracking-widest text-cyan">
+                Реферальная программа
+              </div>
+              <h3 className="mt-3 font-display text-[26px] font-bold tracking-tight">
+                +7 дней за приглашение
+              </h3>
+              <p className="mt-3 text-[15px] text-text-mute leading-[1.6]">
+                Пригласивший получает +7 дней после первой оплаты друга. Новый пользователь получает
+                +3 дня.
+              </p>
+            </div>
+            <div className="w-full md:w-56 shrink-0 rounded-2xl overflow-hidden">
+              <img src={A.referral} alt="Реферальная программа" className="w-full object-cover" />
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="card-glass rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6"
+          >
+            <div className="flex-1">
+              <div className="font-mono text-[12px] uppercase tracking-widest text-cyan">
+                Игры и колесо
+              </div>
+              <h3 className="mt-3 font-display text-[26px] font-bold tracking-tight">
+                Ежедневные бонусы
+              </h3>
+              <p className="mt-3 text-[15px] text-text-mute leading-[1.6]">
+                Ежедневные игры и колесо позволяют получать дни подписки, скидки, спины и оформление
+                профиля.
+              </p>
+            </div>
+            <div className="w-full md:w-56 shrink-0 rounded-2xl overflow-hidden">
+              <img src={A.games1} alt="Ежедневные игры" className="w-full object-cover" />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------- */
+/*  Reviews                                                  */
+/* -------------------------------------------------------- */
+
+function Reviews() {
+  return (
+    <section id="reviews" className="relative py-28 md:py-40 overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(600px_500px_at_20%_30%,rgba(124,58,237,0.15),transparent),radial-gradient(500px_400px_at_80%_60%,rgba(34,211,238,0.12),transparent)]" />
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
+        <div className="max-w-[900px]">
+          <SectionLabel>Отзывы</SectionLabel>
+          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,76px)] leading-[0.95]">
+            Работает там, где это <span className="text-gradient-accent italic font-medium">действительно нужно.</span>
+          </h2>
+          <p className="mt-6 text-[16px] text-text-mute max-w-[520px]">
+            Отзывы пользователей DvinVPN из Telegram.
+          </p>
+        </div>
+
+        <div className="mt-16 grid lg:grid-cols-3 gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7 }}
+            className="lg:col-span-2 lg:row-span-2 card-glass rounded-3xl p-3 relative"
+          >
+            <img src={A.review1} alt="Отзыв 1" className="w-full h-full max-h-[560px] object-contain rounded-2xl bg-black/40" />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="card-glass rounded-3xl p-3"
+          >
+            <img src={A.review2} alt="Отзыв 2" className="w-full max-h-[260px] object-contain rounded-2xl bg-black/40" />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="card-glass rounded-3xl p-3"
+          >
+            <img src={A.review3} alt="Отзыв 3" className="w-full max-h-[260px] object-contain rounded-2xl bg-black/40" />
+          </motion.div>
+        </div>
+
+        <div className="mt-12 text-center">
+          <a
+            href="https://t.me/DvinVPNchat/190"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.02] px-6 py-3 text-[15px] font-medium hover:bg-white/[0.05] transition"
+          >
+            <Send className="w-4 h-4" /> Посмотреть отзывы в Telegram
+            <ArrowUpRight className="w-4 h-4 opacity-70" />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------- */
+/*  FAQ                                                      */
+/* -------------------------------------------------------- */
+
+const FAQ = [
+  { q: "Как получить пробный период?", a: "Нажмите «Пробный период» в меню Mini App. Доступ выдаётся на 3 дня, 1 устройство и 5 ГБ трафика." },
+  { q: "Сколько стоит подписка?", a: "1 месяц — 149 ₽. При оплате за 12 месяцев стоимость 1290 ₽, около 107,50 ₽ в месяц." },
+  { q: "Сколько устройств можно подключить?", a: "От 1 до 5 устройств. Первое включено в тариф, каждое дополнительное — с доплатой за выбранный период." },
+  { q: "Как подключиться?", a: "Откройте личный кабинет, нажмите «Установить и настроить» и следуйте инструкции. Рекомендуемое приложение — Happ." },
+  { q: "Как оплатить?", a: "Выберите тариф и период в кабинете, оплатите через YooKassa или T-pay. Подписка активируется автоматически." },
+  { q: "Можно ли пользоваться через браузер?", a: "Да. Откройте shop.dvinconnect.store и войдите через Telegram, чтобы управлять подпиской с компьютера." },
+  { q: "Где находится поддержка?", a: "В меню Mini App есть раздел «Поддержка». Создайте обращение — ответ придёт внутри DvinVPN." },
+  { q: "Как добавить устройство?", a: "В личном кабинете нажмите докупить устройство. После оплаты лимит увеличится автоматически." },
+  { q: "Как продлить подписку?", a: "В кабинете нажмите «Продлить подписку», выберите период и оплатите. Срок обновится автоматически." },
+];
+
+function FaqSection() {
+  const [open, setOpen] = useState<number | null>(0);
+  return (
+    <section id="faq" className="relative py-28 md:py-40">
+      <div className="mx-auto max-w-[1000px] px-5 md:px-10">
+        <SectionLabel>FAQ</SectionLabel>
+        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[0.95]">
+          Вопросы и <span className="text-gradient-accent italic font-medium">ответы.</span>
+        </h2>
+
+        <div className="mt-14 border-t border-white/8">
+          {FAQ.map((f, i) => (
+            <div key={i} className="border-b border-white/8">
+              <button
+                onClick={() => setOpen(open === i ? null : i)}
+                className="w-full flex items-center justify-between gap-6 py-6 text-left group"
+              >
+                <span className="text-[18px] md:text-[20px] font-semibold text-text pr-4">{f.q}</span>
+                <span
+                  className={`shrink-0 w-9 h-9 rounded-full border border-white/15 flex items-center justify-center transition-all ${
+                    open === i ? "bg-white/10 rotate-45" : "group-hover:bg-white/5"
+                  }`}
+                >
+                  <span className="text-[18px] leading-none">+</span>
+                </span>
+              </button>
+              <AnimatePresence initial={false}>
+                {open === i && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                    className="overflow-hidden"
+                  >
+                    <p className="pb-6 pr-12 text-[16px] text-text-mute leading-[1.65]">{f.a}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------- */
+/*  Final CTA                                                */
+/* -------------------------------------------------------- */
+
+function FinalCTA() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1.15]);
+
+  return (
+    <section ref={ref} className="relative py-40 md:py-52 overflow-hidden bg-[#050711]">
+      {/* Faded globe fragment */}
+      <motion.div style={{ scale }} className="absolute inset-0 opacity-40">
+        <video
+          src={A.heroVideo}
+          poster={A.heroPoster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_10%,#050711_70%)]" />
+      </motion.div>
+
+      <div className="relative z-10 mx-auto max-w-[1200px] px-5 md:px-10 text-center">
+        <motion.img
+          src={A.logo}
+          alt="DvinVPN"
+          initial={{ opacity: 0, scale: 0.6, rotate: -15 }}
+          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto w-28 h-28 md:w-36 md:h-36 rounded-3xl mb-10 glow-ring"
+        />
+
+        <h2 className="font-display font-extrabold tracking-[-0.035em] text-[clamp(44px,8vw,120px)] leading-[0.92]">
+          <MaskLine>Попробуйте DvinVPN</MaskLine>
+          <MaskLine delay={0.15}>
+            <span className="text-gradient-accent italic font-medium">бесплатно.</span>
+          </MaskLine>
+        </h2>
+
+        <p className="mt-8 text-[17px] md:text-[19px] text-text-mute max-w-[620px] mx-auto leading-[1.6]">
+          Откройте Telegram или веб-версию, получите пробный доступ на 3 дня и подключитесь по
+          инструкции.
+        </p>
+
+        <div className="mt-10 flex flex-col sm:flex-row items-stretch justify-center gap-3">
+          <a
+            href={TG("site_final")}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-primary-glow inline-flex items-center justify-center gap-2 rounded-full px-7 py-4 text-[16px] font-semibold text-white"
+          >
+            <Send className="w-4 h-4" /> Открыть в Telegram
+            <ArrowUpRight className="w-4 h-4 opacity-70" />
+          </a>
+          <a
+            href={WEB("final")}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.03] backdrop-blur-md px-7 py-4 text-[16px] font-semibold hover:bg-white/[0.06] transition"
+          >
+            <Globe className="w-4 h-4" /> Открыть веб-версию
+          </a>
+        </div>
+
+        <div className="mt-8 text-[13px] uppercase tracking-[0.2em] text-text-dim">
+          3 дня · 1 устройство · 5 ГБ
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------- */
+/*  Footer                                                   */
+/* -------------------------------------------------------- */
+
+function Footer() {
+  return (
+    <footer className="relative border-t border-white/5 bg-[#050711] py-16 px-5 md:px-10">
+      <div className="mx-auto max-w-[1400px] grid gap-12 md:grid-cols-4">
+        <div className="md:col-span-2">
+          <div className="flex items-center gap-2.5">
+            <img src={A.logo} alt="DvinVPN" className="h-9 w-9 rounded-lg" />
+            <span className="font-display text-[18px] font-bold">DvinVPN</span>
+          </div>
+          <p className="mt-4 text-[14px] text-text-mute max-w-[380px] leading-[1.6]">
+            VPN, который работает через Telegram и браузер. Одна подписка — до 5 устройств.
+          </p>
+        </div>
+
+        <FooterCol
+          title="Продукт"
+          items={[
+            ["Telegram-бот", "https://t.me/DvinVPNBot"],
+            ["Веб-версия", "https://shop.dvinconnect.store/"],
+            ["Сообщество", "https://t.me/DvinVPNchat"],
+            ["Отзывы", "https://t.me/DvinVPNchat/190"],
+          ]}
+        />
+        <FooterCol
+          title="Юридическое"
+          items={[
+            ["Политика", "https://shop.dvinconnect.store/privacy/"],
+            ["Оферта", "https://shop.dvinconnect.store/offer/"],
+            ["Условия", "https://shop.dvinconnect.store/terms/"],
+          ]}
+        />
+      </div>
+      <div className="mx-auto max-w-[1400px] mt-12 pt-6 border-t border-white/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-[13px] text-text-dim">
+        <div>© {new Date().getFullYear()} DvinVPN</div>
+        <div>Финальная цена и способы оплаты подтверждаются в личном кабинете.</div>
+      </div>
+    </footer>
+  );
+}
+
+function FooterCol({ title, items }: { title: string; items: [string, string][] }) {
+  return (
+    <div>
+      <div className="text-[12px] uppercase tracking-widest text-text-dim font-mono">{title}</div>
+      <ul className="mt-4 space-y-2.5">
+        {items.map(([label, href]) => (
+          <li key={href}>
+            <a
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[15px] text-text hover:text-cyan transition inline-flex items-center gap-1.5"
+            >
+              {label}
+              <ArrowUpRight className="w-3.5 h-3.5 opacity-50" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------- */
+/*  Reusable                                                 */
+/* -------------------------------------------------------- */
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="inline-flex items-center gap-2 text-[12px] font-mono uppercase tracking-[0.22em] text-cyan">
+      <span className="w-8 h-px bg-cyan/60" />
+      {children}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------- */
+/*  Page                                                     */
+/* -------------------------------------------------------- */
+
+function LandingPage() {
+  return (
+    <div className="min-h-screen bg-[#050711] text-text antialiased overflow-x-hidden">
       <Header />
-      <Hero mx={mx} my={my} />
-      <Marquee />
-      <MiniAppScene />
-      <FeatureStories />
-      <Capabilities />
-      <Bonuses />
-      <Pricing />
-      <Reviews />
-      <Faq />
-      <Final />
-    </main>
+      <main>
+        <Hero />
+        <HowItWorks />
+        {/* Desktop pinned scene */}
+        <div className="hidden lg:block">
+          <MiniAppScene />
+        </div>
+        {/* Mobile stacked scenes */}
+        <MiniAppSceneMobile />
+        <WebSection />
+        <Trial />
+        <Pricing />
+        <Support />
+        <Bonuses />
+        <Reviews />
+        <FaqSection />
+        <FinalCTA />
+      </main>
+      <Footer />
+    </div>
   );
 }
