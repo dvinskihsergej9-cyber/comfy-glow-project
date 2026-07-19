@@ -59,6 +59,37 @@ const WEB = (medium: string) =>
   `https://shop.dvinconnect.store/?utm_source=landing&utm_medium=${medium}&utm_campaign=website`;
 
 /* -------------------------------------------------------- */
+/*  PhoneFrame — единая iPhone-рамка на всём сайте           */
+/* -------------------------------------------------------- */
+
+function PhoneFrame({
+  children,
+  className = "",
+  notch = true,
+  glow = true,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  notch?: boolean;
+  glow?: boolean;
+}) {
+  return (
+    <div
+      className={`relative aspect-[9/19.5] rounded-[14%/6.5%] p-[3.2%] bg-gradient-to-b from-white/25 via-white/[0.08] to-white/[0.04] ${
+        glow ? "shadow-[0_30px_90px_-30px_rgba(124,58,237,0.55)]" : ""
+      } ${className}`}
+    >
+      <div className="relative w-full h-full rounded-[12%/5.6%] overflow-hidden bg-black">
+        {children}
+        {notch && (
+          <div className="absolute top-[1.6%] left-1/2 -translate-x-1/2 w-[32%] h-[3.2%] bg-black rounded-full z-20 ring-1 ring-white/5" />
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------- */
 /*  Header                                                   */
 /* -------------------------------------------------------- */
 
