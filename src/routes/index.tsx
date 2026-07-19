@@ -115,8 +115,8 @@ function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? "backdrop-blur-xl bg-[#050711]/70 border-b border-white/5" : ""
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 backdrop-blur-xl bg-[#050711]/85 border-b border-white/5 lg:bg-transparent lg:border-transparent lg:backdrop-blur-0 ${
+        scrolled ? "lg:backdrop-blur-xl lg:bg-[#050711]/70 lg:border-white/5" : ""
       }`}
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-5 md:px-10 py-4">
