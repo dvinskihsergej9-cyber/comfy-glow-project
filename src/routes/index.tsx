@@ -1219,16 +1219,16 @@ function Reviews() {
   const row1 = REVIEWS;
   const row2 = [...REVIEWS].reverse();
   return (
-    <section id="reviews" className="relative py-24 md:py-32 overflow-hidden">
+    <section id="reviews" className="relative py-16 md:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(600px_500px_at_20%_30%,rgba(124,58,237,0.15),transparent),radial-gradient(500px_400px_at_80%_60%,rgba(34,211,238,0.12),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="max-w-[900px]">
           <SectionLabel>Отзывы</SectionLabel>
-          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,76px)] leading-[1.02]">
+          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,76px)] leading-[1.05] pb-[0.08em]">
             Работает там, где это <span className="text-gradient-accent italic font-medium">действительно нужно.</span>
           </h2>
           <p className="mt-6 text-[16px] text-text-mute max-w-[520px]">
-            Реальные отзывы пользователей DvinVPN из Telegram-сообщества.
+            Реальные отзывы пользователей DvinVPN.
           </p>
         </div>
       </div>
@@ -1236,18 +1236,6 @@ function Reviews() {
       <div className="relative mt-14 space-y-5 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
         <Marquee items={row1} duration={55} />
         <Marquee items={row2} duration={70} reverse />
-      </div>
-
-      <div className="mt-12 text-center">
-        <a
-          href="https://t.me/DvinVPNchat/190"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.02] px-6 py-3 text-[15px] font-medium hover:bg-white/[0.05] transition"
-        >
-          <Send className="w-4 h-4" /> Читать в Telegram
-          <ArrowUpRight className="w-4 h-4 opacity-70" />
-        </a>
       </div>
     </section>
   );
