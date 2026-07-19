@@ -388,7 +388,7 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="how" className="relative py-24 md:py-32 overflow-hidden">
+    <section id="how" className="relative py-16 md:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
@@ -646,7 +646,7 @@ function MiniAppSceneMobile() {
 
 function WebSection() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden bg-[#050711]">
+    <section className="relative py-14 md:py-20 overflow-hidden bg-[#050711]">
       <div className="absolute inset-0 bg-aurora opacity-40" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
@@ -766,7 +766,7 @@ function WebSection() {
 
 function Trial() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden border-y border-white/5">
+    <section className="relative py-14 md:py-20 overflow-hidden border-y border-white/5">
       <div className="absolute inset-0 bg-[radial-gradient(700px_400px_at_50%_50%,rgba(34,211,238,0.12),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
@@ -842,7 +842,7 @@ function Pricing() {
   );
 
   return (
-    <section id="pricing" className="relative py-20 md:py-28 overflow-hidden bg-[#080b16]">
+    <section id="pricing" className="relative py-14 md:py-20 overflow-hidden bg-[#080b16]">
       <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <SectionLabel>Тарифы</SectionLabel>
@@ -1064,7 +1064,7 @@ function AnimatedNumber({ value, decimals = 0 }: { value: number; decimals?: num
 
 function Support() {
   return (
-    <section id="features" className="relative py-20 md:py-28 overflow-hidden">
+    <section id="features" className="relative py-14 md:py-20 overflow-hidden">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
@@ -1141,7 +1141,7 @@ function Support() {
 
 function Bonuses() {
   return (
-    <section className="relative py-24 md:py-36 overflow-hidden bg-[#080b16]">
+    <section className="relative py-16 md:py-24 overflow-hidden bg-[#080b16]">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <SectionLabel>Бонусы</SectionLabel>
         <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,64px)] leading-[1.02] max-w-[900px]">
@@ -1300,7 +1300,7 @@ const FAQ = [
 function FaqSection() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section id="faq" className="relative py-20 md:py-28">
+    <section id="faq" className="relative py-14 md:py-20">
       <div className="mx-auto max-w-[1000px] px-5 md:px-10">
         <SectionLabel>FAQ</SectionLabel>
         <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.02]">
@@ -1350,7 +1350,7 @@ function FaqSection() {
 
 function FinalCTA() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden bg-[#080b16]">
+    <section className="relative py-14 md:py-20 overflow-hidden bg-[#080b16]">
       {/* Composed gradient — no globe repeat */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(900px_600px_at_50%_100%,rgba(124,58,237,0.35),transparent_70%),radial-gradient(700px_500px_at_20%_20%,rgba(37,99,235,0.22),transparent_65%),radial-gradient(600px_400px_at_80%_30%,rgba(34,211,238,0.18),transparent_65%)]" />
