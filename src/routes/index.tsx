@@ -572,11 +572,11 @@ function MiniAppScene() {
                 <div className="lg:col-span-6 xl:col-span-5 flex justify-center min-h-0">
                   <div className="relative">
                     <div className="absolute -inset-16 md:-inset-24 -z-10 bg-[radial-gradient(closest-side,rgba(124,58,237,0.4),transparent_70%)] blur-2xl" />
-                    <PhoneFrame className="w-[min(72vw,320px)] lg:w-auto lg:h-[min(72svh,720px)] lg:aspect-[9/19.5]">
+                    <PhoneFrame className="w-[min(58vw,260px)] lg:w-[320px] xl:w-[360px] max-h-[calc(100svh-260px)]">
                       <img
                         src={s.img}
                         alt={s.title}
-                        className="block w-full h-full object-cover object-top"
+                        className="absolute inset-0 w-full h-full object-cover object-top"
                       />
                     </PhoneFrame>
                   </div>
