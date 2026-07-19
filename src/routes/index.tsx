@@ -1243,8 +1243,10 @@ function Bonuses() {
                 +3 дня.
               </p>
             </div>
-            <div className="w-full md:w-56 shrink-0 rounded-2xl overflow-hidden">
-              <img src={A.referral} alt="Реферальная программа" className="w-full object-cover" />
+            <div className="shrink-0 w-[220px] aspect-[9/19.5] rounded-[32px] p-[7px] bg-gradient-to-b from-white/25 to-white/[0.03] glow-ring">
+              <div className="w-full h-full rounded-[26px] overflow-hidden bg-black">
+                <img src={A.referral} alt="Реферальная программа" className="w-full h-full object-contain" />
+              </div>
             </div>
           </motion.div>
 
