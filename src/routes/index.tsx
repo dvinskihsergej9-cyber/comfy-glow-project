@@ -723,11 +723,11 @@ function WebSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.9, delay: 0.2 }}
-              className="hidden md:block absolute -bottom-16 -right-4 w-[190px] aspect-[9/19.5] rounded-[32px] p-[7px] bg-white/10 glow-ring"
+              className="hidden md:block absolute -bottom-16 -right-4 w-[190px]"
             >
-              <div className="w-full h-full rounded-[26px] overflow-hidden bg-black">
+              <PhoneFrame>
                 <img src={A.miniappHome} alt="" className="w-full h-full object-cover object-top" />
-              </div>
+              </PhoneFrame>
             </motion.div>
 
             {/* Connection line */}
