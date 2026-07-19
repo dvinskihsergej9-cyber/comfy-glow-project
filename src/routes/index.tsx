@@ -649,7 +649,7 @@ function MiniAppSceneMobile() {
             <h3 className="mt-2 font-display text-[24px] font-bold">{s.title}</h3>
             <p className="mt-2 text-[15px] text-text-mute leading-[1.6]">{s.text}</p>
             <PhoneFrame className="mt-5 w-full max-w-[320px] mx-auto">
-              <img src={s.img} alt={s.title} className="block w-full h-auto" />
+              <img src={s.img} alt={s.title} className="absolute inset-0 w-full h-full object-cover object-top" />
             </PhoneFrame>
           </motion.div>
         ))}
@@ -726,7 +726,7 @@ function WebSection() {
               className="hidden md:block absolute -bottom-16 -right-4 w-[190px]"
             >
               <PhoneFrame>
-                <img src={A.miniappHome} alt="" className="block w-full h-auto" />
+                <img src={A.miniappHome} alt="" className="absolute inset-0 w-full h-full object-cover object-top" />
               </PhoneFrame>
             </motion.div>
 
@@ -1136,10 +1136,10 @@ function Support() {
                       loop
                       playsInline
                       preload="metadata"
-                      className="block w-full h-auto"
+                      className="absolute inset-0 w-full h-full object-cover object-top"
                     />
                   ) : (
-                    <img src={x.src} alt={x.alt} className="block w-full h-auto" />
+                    <img src={x.src} alt={x.alt} className="absolute inset-0 w-full h-full object-cover object-top" />
                   )}
                 </PhoneFrame>
               </motion.div>
@@ -1261,7 +1261,7 @@ function Bonuses() {
             </div>
             <div className="shrink-0 w-[220px]">
               <PhoneFrame>
-                <img src={A.referral} alt="Реферальная программа" className="block w-full h-auto" />
+                <img src={A.referral} alt="Реферальная программа" className="absolute inset-0 w-full h-full object-cover object-top" />
               </PhoneFrame>
             </div>
           </motion.div>
@@ -1287,7 +1287,7 @@ function Bonuses() {
             </div>
             <div className="shrink-0 w-[220px]">
               <PhoneFrame>
-                <img src={A.games1} alt="Ежедневные игры" className="block w-full h-auto" />
+                <img src={A.games1} alt="Ежедневные игры" className="absolute inset-0 w-full h-full object-cover object-top" />
               </PhoneFrame>
             </div>
           </motion.div>
