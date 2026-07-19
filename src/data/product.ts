@@ -15,7 +15,7 @@ export const productFacts = {
   telegramBot: "@DvinVPNBot",
   publicMiniAppHeadline: "Быстрый и удобный VPN для ваших устройств",
   publicMiniAppSubline: "Подключение за пару минут",
-  trial: "3 дня бесплатно: 1 устройство и 5 ГБ трафика.",
+  trial: "3 дня бесплатно: 1 устройство.",
   deviceRange: "от 1 до 5 устройств",
   planName: "Базовый",
   traffic: "безлимитный трафик",
