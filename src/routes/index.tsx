@@ -597,7 +597,7 @@ function MiniAppScene() {
                 <img
                   src={s.img}
                   alt={s.title}
-                  className="w-full h-full object-cover object-top rounded-[18px]"
+                  className="w-full h-full object-contain rounded-[18px] bg-black"
                 />
               </motion.button>
             ))}
