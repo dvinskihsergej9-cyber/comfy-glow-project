@@ -140,6 +140,19 @@ body {
   letter-spacing: -0.03em;
 }
 
+/* Guard large Cyrillic display text from glyph clipping.
+   Manrope's italic Cyrillic forms (notably «И» and «Д») can extend outside
+   tight line boxes, especially when gradient text is background-clipped. */
+.font-display :where(.text-gradient, .text-gradient-accent),
+.text-gradient,
+.text-gradient-accent {
+  display: inline-block;
+  line-height: 1.14;
+  padding: 0.08em 0.08em 0.18em;
+  margin: -0.08em -0.08em -0.18em;
+  overflow: visible;
+}
+
 .font-mono {
   font-family: var(--font-mono);
 }
