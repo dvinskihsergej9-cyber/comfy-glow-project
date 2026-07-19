@@ -992,7 +992,7 @@ function Pricing() {
                     </div>
                   </div>
                   <div className="mt-2 text-[15px] text-text-mute">
-                    За весь срок · <AnimatedNumber value={Math.round(perMonth * 100) / 100} decimals={perMonth % 1 !== 0 ? 2 : 0} /> ₽ в месяц
+                    За весь срок · <AnimatedNumber value={Math.round(perMonth)} /> ₽ в месяц
                   </div>
 
                   <div className="mt-6 space-y-2 text-[14px] text-text-mute">
