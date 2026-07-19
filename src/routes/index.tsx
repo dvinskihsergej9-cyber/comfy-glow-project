@@ -7,6 +7,7 @@ import {
   useSpring,
   AnimatePresence,
   useMotionValue,
+  useMotionValueEvent,
   useInView,
   useReducedMotion,
 } from "framer-motion";
