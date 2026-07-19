@@ -789,11 +789,10 @@ function Trial() {
               <ArrowUpRight className="w-4 h-4 opacity-70" />
             </a>
           </div>
-          <div className="lg:col-span-6 grid grid-cols-3 gap-3">
+          <div className="lg:col-span-6 grid grid-cols-2 gap-3">
             {[
               { big: "3", small: "дня доступа" },
               { big: "1", small: "устройство" },
-              { big: "5", small: "ГБ трафика" },
             ].map((x, i) => (
               <motion.div
                 key={i}
@@ -801,9 +800,9 @@ function Trial() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="rounded-2xl border border-white/8 bg-white/[0.02] p-5 text-center"
+                className="rounded-2xl border border-white/8 bg-white/[0.02] p-6 text-center"
               >
-                <div className="font-display font-black text-[clamp(56px,7vw,88px)] leading-none tracking-[-0.04em] text-gradient">
+                <div className="font-display font-black text-[clamp(64px,8vw,104px)] leading-[1] tracking-[-0.04em] text-gradient">
                   {x.big}
                 </div>
                 <div className="mt-2 text-[12px] uppercase tracking-widest text-text-dim">
