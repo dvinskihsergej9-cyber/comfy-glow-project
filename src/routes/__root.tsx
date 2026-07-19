@@ -88,7 +88,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "DvinVPN — VPN в Telegram и браузере" },
       {
         property: "og:description",
-        content: "3 дня бесплатно, до 5 устройств, от 107,50 ₽/мес. Управление в одном кабинете.",
+        content: "3 дня бесплатно, до 5 устройств, от 108 ₽/мес. Управление в одном кабинете.",
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "DvinVPN" },

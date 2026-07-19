@@ -40,7 +40,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "DvinVPN — VPN в Telegram и браузере" },
       {
         property: "og:description",
-        content: "3 дня бесплатно, до 5 устройств, от 107,50 ₽/мес.",
+        content: "3 дня бесплатно, до 5 устройств, от 108 ₽/мес.",
       },
       { property: "og:url", content: "https://comfy-glow-project.lovable.app/" },
     ],
@@ -244,7 +244,7 @@ function Hero() {
             Доступ проверен · база Mini App
           </motion.div>
 
-          <h1 className="mt-6 font-display font-extrabold tracking-[-0.045em] text-[clamp(48px,9vw,148px)] leading-[0.92] text-text">
+          <h1 className="mt-6 font-display font-extrabold tracking-[-0.045em] text-[clamp(46px,8.5vw,140px)] leading-[1.02] text-text">
             <MaskLine delay={0.05}>VPN, который</MaskLine>
             <MaskLine delay={0.15}>всегда под рукой.</MaskLine>
             <MaskLine delay={0.28}>
@@ -296,8 +296,8 @@ function Hero() {
             {[
               ["3 дня", "бесплатно"],
               ["до 5", "устройств"],
-              ["от 107,50 ₽", "в месяц"],
-              ["5 ГБ", "в trial"],
+              ["от 108 ₽", "в месяц"],
+              ["∞", "трафика"],
             ].map(([big, small]) => (
               <div key={big as string} className="min-w-0">
                 <div className="font-display text-[26px] md:text-[32px] font-bold tracking-tight text-text">
@@ -342,7 +342,7 @@ function Hero() {
 
 function MaskLine({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
-    <span className="block overflow-hidden pb-[0.05em]">
+    <span className="block overflow-hidden pt-[0.12em] pb-[0.22em] -my-[0.12em]">
       <motion.span
         initial={{ y: "110%" }}
         animate={{ y: "0%" }}
@@ -369,7 +369,7 @@ const STEPS = [
   {
     n: "02",
     title: "Получите 3 дня",
-    text: "Пробный доступ включает 1 устройство и 5 ГБ трафика.",
+    text: "Пробный доступ включает 1 устройство без оплаты.",
     icon: Gift,
   },
   {
@@ -394,7 +394,7 @@ function HowItWorks() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
             <SectionLabel>Как это работает</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5.5vw,76px)] leading-[0.95] max-w-[900px]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5.5vw,76px)] leading-[1.02] max-w-[900px]">
               Откройте. Проверьте. <span className="text-gradient-accent italic font-medium">Подключитесь.</span>
             </h2>
           </div>
@@ -490,7 +490,7 @@ function MiniAppScene() {
           {/* Left text */}
           <div className="col-span-12 lg:col-span-4">
             <SectionLabel>Mini App</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(32px,4vw,56px)] leading-[0.95]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(32px,4vw,56px)] leading-[1.02]">
               Один кабинет.<br />
               <span className="text-gradient-accent italic font-medium">Все действия.</span>
             </h2>
@@ -613,7 +613,7 @@ function MiniAppSceneMobile() {
   return (
     <section id="miniapp-m" className="lg:hidden py-20 px-5 bg-[#080b16] relative">
       <SectionLabel>Mini App</SectionLabel>
-      <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[38px] leading-[0.95]">
+      <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[38px] leading-[1.02]">
         Один кабинет. <span className="text-gradient-accent italic font-medium">Все действия.</span>
       </h2>
       <div className="mt-12 space-y-14">
@@ -646,13 +646,13 @@ function MiniAppSceneMobile() {
 
 function WebSection() {
   return (
-    <section className="relative py-28 md:py-40 overflow-hidden bg-[#050711]">
+    <section className="relative py-20 md:py-28 overflow-hidden bg-[#050711]">
       <div className="absolute inset-0 bg-aurora opacity-40" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
             <SectionLabel>Веб-версия</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[0.95]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.02]">
               Telegram — не единственный <span className="text-gradient-accent italic font-medium">вариант.</span>
             </h2>
             <p className="mt-6 text-[17px] text-text-mute leading-[1.6] max-w-[460px]">
@@ -736,7 +736,7 @@ function WebSection() {
         <div className="mt-40 md:mt-56 grid lg:grid-cols-12 gap-10 items-end">
           <div className="lg:col-span-7">
             <SectionLabel>Устройства</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,84px)] leading-[0.92]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,84px)] leading-[1.0]">
               Одна подписка.<br />
               <span className="text-gradient-accent italic font-medium">До пяти устройств.</span>
             </h2>
@@ -772,7 +772,7 @@ function Trial() {
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-6">
             <SectionLabel>Пробный период</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,4.5vw,60px)] leading-[0.95]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,4.5vw,60px)] leading-[1.02]">
               Сначала проверьте.{" "}
               <span className="text-gradient-accent italic font-medium">Потом решайте.</span>
             </h2>
@@ -789,11 +789,10 @@ function Trial() {
               <ArrowUpRight className="w-4 h-4 opacity-70" />
             </a>
           </div>
-          <div className="lg:col-span-6 grid grid-cols-3 gap-3">
+          <div className="lg:col-span-6 grid grid-cols-2 gap-3">
             {[
               { big: "3", small: "дня доступа" },
               { big: "1", small: "устройство" },
-              { big: "5", small: "ГБ трафика" },
             ].map((x, i) => (
               <motion.div
                 key={i}
@@ -801,9 +800,9 @@ function Trial() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="rounded-2xl border border-white/8 bg-white/[0.02] p-5 text-center"
+                className="rounded-2xl border border-white/8 bg-white/[0.02] p-6 text-center"
               >
-                <div className="font-display font-black text-[clamp(56px,7vw,88px)] leading-none tracking-[-0.04em] text-gradient">
+                <div className="font-display font-black text-[clamp(64px,8vw,104px)] leading-[1] tracking-[-0.04em] text-gradient">
                   {x.big}
                 </div>
                 <div className="mt-2 text-[12px] uppercase tracking-widest text-text-dim">
@@ -843,11 +842,11 @@ function Pricing() {
   );
 
   return (
-    <section id="pricing" className="relative py-28 md:py-40 overflow-hidden bg-[#080b16]">
+    <section id="pricing" className="relative py-20 md:py-28 overflow-hidden bg-[#080b16]">
       <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <SectionLabel>Тарифы</SectionLabel>
-        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[0.95] max-w-[1100px]">
+        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[1.02] max-w-[1100px]">
           Соберите подписку <span className="text-gradient-accent italic font-medium">под себя.</span>
         </h2>
 
@@ -993,7 +992,7 @@ function Pricing() {
                     </div>
                   </div>
                   <div className="mt-2 text-[15px] text-text-mute">
-                    За весь срок · <AnimatedNumber value={Math.round(perMonth * 100) / 100} decimals={perMonth % 1 !== 0 ? 2 : 0} /> ₽ в месяц
+                    За весь срок · <AnimatedNumber value={Math.round(perMonth)} /> ₽ в месяц
                   </div>
 
                   <div className="mt-6 space-y-2 text-[14px] text-text-mute">
@@ -1065,12 +1064,12 @@ function AnimatedNumber({ value, decimals = 0 }: { value: number; decimals?: num
 
 function Support() {
   return (
-    <section id="features" className="relative py-28 md:py-40 overflow-hidden">
+    <section id="features" className="relative py-20 md:py-28 overflow-hidden">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
             <SectionLabel>Поддержка</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[0.95]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.02]">
               Помощь находится там же, где <span className="text-gradient-accent italic font-medium">подписка.</span>
             </h2>
             <p className="mt-6 text-[17px] text-text-mute leading-[1.6] max-w-[460px]">
@@ -1079,10 +1078,10 @@ function Support() {
             </p>
             <div className="mt-8 grid grid-cols-2 gap-3 max-w-[420px]">
               {[
-                { icon: HeadphonesIcon, t: "Встроенная поддержка" },
+                { icon: HeadphonesIcon, t: "Обращения в поддержку" },
                 { icon: Sparkles, t: "FAQ и инструкции" },
-                { icon: Zap, t: "Платежи" },
-                { icon: Shield, t: "Документы" },
+                { icon: Globe, t: "Статус серверов" },
+                { icon: Shield, t: "Ответ внутри Mini App" },
               ].map((x, i) => (
                 <div
                   key={i}
@@ -1098,9 +1097,9 @@ function Support() {
           </div>
           <div className="lg:col-span-7 grid grid-cols-3 gap-3 md:gap-4">
             {[
-              { src: A.supportTicket, alt: "Обращение в поддержку" },
-              { src: A.faq, alt: "FAQ внутри Mini App" },
-              { src: A.payments, alt: "История платежей" },
+              { src: A.supportTicket, alt: "Обращение в поддержку", video: false },
+              { src: A.faq, alt: "FAQ внутри Mini App", video: false },
+              { src: A.serverMonVideo, alt: "Статус серверов", video: true },
             ].map((x, i) => (
               <motion.div
                 key={i}
@@ -1109,11 +1108,23 @@ function Support() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: i * 0.08 }}
                 className={`relative aspect-[9/19.5] rounded-[28px] p-[6px] bg-white/10 glow-ring ${
-                  i === 1 ? "mt-8 md:mt-12" : ""
+                  i === 1 ? "mt-6 md:mt-10" : ""
                 }`}
               >
-                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a] flex items-start justify-center">
-                  <img src={x.src} alt={x.alt} className="w-full h-auto" />
+                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a]">
+                  {x.video ? (
+                    <video
+                      src={x.src}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-cover object-top"
+                    />
+                  ) : (
+                    <img src={x.src} alt={x.alt} className="w-full h-full object-cover object-top" />
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -1133,7 +1144,7 @@ function Bonuses() {
     <section className="relative py-24 md:py-36 overflow-hidden bg-[#080b16]">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <SectionLabel>Бонусы</SectionLabel>
-        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,64px)] leading-[0.95] max-w-[900px]">
+        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,64px)] leading-[1.02] max-w-[900px]">
           Больше пользы <span className="text-gradient-accent italic font-medium">внутри DvinVPN.</span>
         </h2>
 
@@ -1195,58 +1206,90 @@ function Bonuses() {
 /*  Reviews                                                  */
 /* -------------------------------------------------------- */
 
+const REVIEWS = [
+  { author: "Паша Кирпич", handle: "@pashak", text: "Отличный VPN, пользуюсь уже месяц. Скорость супер — видео в 4K грузятся без лагов, а пинг в играх почти не вырос. Приложение удобное, подключается за пару секунд. За свои деньги — просто топ." },
+  { author: "Anastasia", handle: "@anastasia", text: "В поисках стабильного VPN, который будет работать и с мобильным интернетом. Легко и быстро подключилась, всё работает, всё летает." },
+  { author: "Даниил", handle: "@daniil", text: "Отличный впн, работает без нареканий." },
+  { author: "Zetop", handle: "@zetop", text: "Хм, ну норм. Пользуюсь уже пару недель — стабильно, к скорости вопросов нет." },
+  { author: "Артём", handle: "@artem_k", text: "Настроил Happ за минуту по инструкции из бота. Пробный период дал спокойно проверить всё до оплаты." },
+  { author: "Марина", handle: "@marina", text: "Подключила себе и мужу с одной подписки, докупили второе устройство. Управлять из Telegram реально удобно." },
+];
+
 function Reviews() {
+  const row1 = REVIEWS;
+  const row2 = [...REVIEWS].reverse();
   return (
-    <section id="reviews" className="relative py-28 md:py-40 overflow-hidden">
+    <section id="reviews" className="relative py-24 md:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(600px_500px_at_20%_30%,rgba(124,58,237,0.15),transparent),radial-gradient(500px_400px_at_80%_60%,rgba(34,211,238,0.12),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="max-w-[900px]">
           <SectionLabel>Отзывы</SectionLabel>
-          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,76px)] leading-[0.95]">
+          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,76px)] leading-[1.02]">
             Работает там, где это <span className="text-gradient-accent italic font-medium">действительно нужно.</span>
           </h2>
           <p className="mt-6 text-[16px] text-text-mute max-w-[520px]">
-            Отзывы пользователей DvinVPN из Telegram.
+            Реальные отзывы пользователей DvinVPN из Telegram-сообщества.
           </p>
         </div>
+      </div>
 
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          {[A.review1, A.review2, A.review3].map((src, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="rounded-3xl p-3 bg-white/[0.03] border border-white/8 backdrop-blur"
-            >
-              <div className="rounded-2xl overflow-hidden bg-black/40 flex items-center justify-center">
-                <img
-                  src={src}
-                  alt={`Отзыв ${i + 1}`}
-                  className="w-full h-auto object-contain"
-                />
-              </div>
-              <div className="mt-3 px-2 pb-1 text-[12px] font-mono uppercase tracking-widest text-text-dim">
-                Telegram · @DvinVPNchat
-              </div>
-            </motion.div>
-          ))}
-        </div>
+      <div className="relative mt-14 space-y-5 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
+        <Marquee items={row1} duration={55} />
+        <Marquee items={row2} duration={70} reverse />
+      </div>
 
-        <div className="mt-12 text-center">
-          <a
-            href="https://t.me/DvinVPNchat/190"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.02] px-6 py-3 text-[15px] font-medium hover:bg-white/[0.05] transition"
-          >
-            <Send className="w-4 h-4" /> Посмотреть отзывы в Telegram
-            <ArrowUpRight className="w-4 h-4 opacity-70" />
-          </a>
-        </div>
+      <div className="mt-12 text-center">
+        <a
+          href="https://t.me/DvinVPNchat/190"
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.02] px-6 py-3 text-[15px] font-medium hover:bg-white/[0.05] transition"
+        >
+          <Send className="w-4 h-4" /> Читать в Telegram
+          <ArrowUpRight className="w-4 h-4 opacity-70" />
+        </a>
       </div>
     </section>
+  );
+}
+
+function Marquee({
+  items,
+  duration = 60,
+  reverse = false,
+}: {
+  items: { author: string; handle: string; text: string }[];
+  duration?: number;
+  reverse?: boolean;
+}) {
+  const loop = [...items, ...items, ...items];
+  return (
+    <div className="overflow-hidden">
+      <motion.div
+        className="flex gap-5 w-max"
+        animate={{ x: reverse ? ["-33.333%", "0%"] : ["0%", "-33.333%"] }}
+        transition={{ duration, repeat: Infinity, ease: "linear" }}
+      >
+        {loop.map((r, i) => (
+          <article
+            key={i}
+            className="w-[340px] md:w-[400px] shrink-0 rounded-3xl p-6 md:p-7 bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 backdrop-blur-md"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet to-electric flex items-center justify-center font-display font-bold text-[15px] text-white">
+                {r.author[0]}
+              </div>
+              <div className="min-w-0">
+                <div className="text-[14px] font-semibold text-text truncate">{r.author}</div>
+                <div className="text-[12px] text-text-dim font-mono truncate">{r.handle}</div>
+              </div>
+              <div className="ml-auto text-cyan text-[14px]">★★★★★</div>
+            </div>
+            <p className="mt-4 text-[14.5px] leading-[1.6] text-text-mute">{r.text}</p>
+          </article>
+        ))}
+      </motion.div>
+    </div>
   );
 }
 
@@ -1255,8 +1298,8 @@ function Reviews() {
 /* -------------------------------------------------------- */
 
 const FAQ = [
-  { q: "Как получить пробный период?", a: "Нажмите «Пробный период» в меню Mini App. Доступ выдаётся на 3 дня, 1 устройство и 5 ГБ трафика." },
-  { q: "Сколько стоит подписка?", a: "1 месяц — 149 ₽. При оплате за 12 месяцев стоимость 1290 ₽, около 107,50 ₽ в месяц." },
+  { q: "Как получить пробный период?", a: "Нажмите «Пробный период» в меню Mini App. Доступ выдаётся на 3 дня и 1 устройство." },
+  { q: "Сколько стоит подписка?", a: "1 месяц — 149 ₽. При оплате за 12 месяцев стоимость 1290 ₽, около 108 ₽ в месяц." },
   { q: "Сколько устройств можно подключить?", a: "От 1 до 5 устройств. Первое включено в тариф, каждое дополнительное — с доплатой за выбранный период." },
   { q: "Как подключиться?", a: "Откройте личный кабинет, нажмите «Установить и настроить» и следуйте инструкции. Рекомендуемое приложение — Happ." },
   { q: "Как оплатить?", a: "Выберите тариф и период в кабинете, оплатите через YooKassa или T-pay. Подписка активируется автоматически." },
@@ -1269,10 +1312,10 @@ const FAQ = [
 function FaqSection() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section id="faq" className="relative py-28 md:py-40">
+    <section id="faq" className="relative py-20 md:py-28">
       <div className="mx-auto max-w-[1000px] px-5 md:px-10">
         <SectionLabel>FAQ</SectionLabel>
-        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[0.95]">
+        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.02]">
           Вопросы и <span className="text-gradient-accent italic font-medium">ответы.</span>
         </h2>
 
@@ -1319,7 +1362,7 @@ function FaqSection() {
 
 function FinalCTA() {
   return (
-    <section className="relative py-28 md:py-40 overflow-hidden bg-[#080b16]">
+    <section className="relative py-20 md:py-28 overflow-hidden bg-[#080b16]">
       {/* Composed gradient — no globe repeat */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(900px_600px_at_50%_100%,rgba(124,58,237,0.35),transparent_70%),radial-gradient(700px_500px_at_20%_20%,rgba(37,99,235,0.22),transparent_65%),radial-gradient(600px_400px_at_80%_30%,rgba(34,211,238,0.18),transparent_65%)]" />
@@ -1337,7 +1380,7 @@ function FinalCTA() {
           className="mx-auto w-24 h-24 md:w-32 md:h-32 rounded-3xl mb-8 glow-ring"
         />
 
-        <h2 className="font-display font-extrabold tracking-[-0.035em] text-[clamp(40px,7vw,104px)] leading-[0.92]">
+        <h2 className="font-display font-extrabold tracking-[-0.035em] text-[clamp(40px,7vw,104px)] leading-[1.0]">
           <MaskLine>Готовы попробовать?</MaskLine>
           <MaskLine delay={0.15}>
             <span className="text-gradient-accent italic font-medium">3 дня бесплатно.</span>
@@ -1369,7 +1412,7 @@ function FinalCTA() {
         </div>
 
         <div className="mt-8 text-[12px] uppercase tracking-[0.22em] text-text-dim">
-          3 дня · 1 устройство · 5 ГБ
+          3 дня · 1 устройство · безлимитный трафик
         </div>
       </div>
     </section>
