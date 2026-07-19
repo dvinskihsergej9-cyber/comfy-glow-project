@@ -244,7 +244,7 @@ function Hero() {
             Доступ проверен · база Mini App
           </motion.div>
 
-          <h1 className="mt-6 font-display font-extrabold tracking-[-0.045em] text-[clamp(48px,9vw,148px)] leading-[0.92] text-text">
+          <h1 className="mt-6 font-display font-extrabold tracking-[-0.045em] text-[clamp(46px,8.5vw,140px)] leading-[1.02] text-text">
             <MaskLine delay={0.05}>VPN, который</MaskLine>
             <MaskLine delay={0.15}>всегда под рукой.</MaskLine>
             <MaskLine delay={0.28}>
