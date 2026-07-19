@@ -215,7 +215,7 @@ function Hero() {
         className="absolute inset-0 will-change-transform"
       >
         <video
-          className="absolute inset-0 h-full w-full object-cover opacity-70"
+          className="absolute inset-0 h-full w-full object-cover opacity-55"
           src={A.heroVideo}
           poster={A.heroPoster}
           autoPlay
@@ -224,11 +224,12 @@ function Hero() {
           playsInline
           preload="metadata"
         />
-        {/* Vignettes */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_10%,#050711_75%)]" />
-        <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-[#050711] to-transparent" />
+        {/* Globe sits to the right, text has room on the left */}
+        <div className="absolute inset-0 bg-[radial-gradient(1000px_800px_at_75%_55%,transparent,rgba(5,7,17,0.65)_55%,#050711_85%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,#050711_0%,rgba(5,7,17,0.85)_25%,rgba(5,7,17,0.35)_55%,transparent_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#050711] to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-[#050711] to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(600px_400px_at_20%_20%,rgba(124,58,237,0.28),transparent),radial-gradient(700px_500px_at_80%_30%,rgba(37,99,235,0.24),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(500px_400px_at_15%_25%,rgba(124,58,237,0.22),transparent),radial-gradient(700px_500px_at_85%_40%,rgba(37,99,235,0.18),transparent)]" />
       </motion.div>
 
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1400px] flex-col justify-center px-5 md:px-10 pt-28 pb-16">
