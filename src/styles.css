@@ -214,6 +214,38 @@ body {
   filter: brightness(1.08);
 }
 
+/* Shine sweep on hover — works on any button */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+.btn-shine:hover::before,
+.btn-shine:focus-visible::before {
+  transform: translateX(120%);
+}
+.btn-shine > * {
+  position: relative;
+  z-index: 2;
+}
+
+
 .divider-line {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
