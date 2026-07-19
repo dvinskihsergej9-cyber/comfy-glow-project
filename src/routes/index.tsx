@@ -1313,50 +1313,37 @@ function FaqSection() {
 /* -------------------------------------------------------- */
 
 function FinalCTA() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1.15]);
-
   return (
-    <section ref={ref} className="relative py-40 md:py-52 overflow-hidden bg-[#050711]">
-      {/* Faded globe fragment */}
-      <motion.div style={{ scale }} className="absolute inset-0 opacity-40">
-        <video
-          src={A.heroVideo}
-          poster={A.heroPoster}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_10%,#050711_70%)]" />
-      </motion.div>
+    <section className="relative py-28 md:py-40 overflow-hidden bg-[#080b16]">
+      {/* Composed gradient — no globe repeat */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(900px_600px_at_50%_100%,rgba(124,58,237,0.35),transparent_70%),radial-gradient(700px_500px_at_20%_20%,rgba(37,99,235,0.22),transparent_65%),radial-gradient(600px_400px_at_80%_30%,rgba(34,211,238,0.18),transparent_65%)]" />
+        <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
+      </div>
 
       <div className="relative z-10 mx-auto max-w-[1200px] px-5 md:px-10 text-center">
         <motion.img
           src={A.logo}
           alt="DvinVPN"
-          initial={{ opacity: 0, scale: 0.6, rotate: -15 }}
-          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto w-28 h-28 md:w-36 md:h-36 rounded-3xl mb-10 glow-ring"
+          initial={{ opacity: 0, scale: 0.7 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto w-24 h-24 md:w-32 md:h-32 rounded-3xl mb-8 glow-ring"
         />
 
-        <h2 className="font-display font-extrabold tracking-[-0.035em] text-[clamp(44px,8vw,120px)] leading-[0.92]">
-          <MaskLine>Попробуйте DvinVPN</MaskLine>
+        <h2 className="font-display font-extrabold tracking-[-0.035em] text-[clamp(40px,7vw,104px)] leading-[0.92]">
+          <MaskLine>Готовы попробовать?</MaskLine>
           <MaskLine delay={0.15}>
-            <span className="text-gradient-accent italic font-medium">бесплатно.</span>
+            <span className="text-gradient-accent italic font-medium">3 дня бесплатно.</span>
           </MaskLine>
         </h2>
 
-        <p className="mt-8 text-[17px] md:text-[19px] text-text-mute max-w-[620px] mx-auto leading-[1.6]">
-          Откройте Telegram или веб-версию, получите пробный доступ на 3 дня и подключитесь по
-          инструкции.
+        <p className="mt-7 text-[16px] md:text-[18px] text-text-mute max-w-[560px] mx-auto leading-[1.6]">
+          Откройте Telegram или веб-версию и получите пробный доступ за минуту.
         </p>
 
-        <div className="mt-10 flex flex-col sm:flex-row items-stretch justify-center gap-3">
+        <div className="mt-9 flex flex-col sm:flex-row items-stretch justify-center gap-3">
           <a
             href={TG("site_final")}
             target="_blank"
@@ -1376,7 +1363,7 @@ function FinalCTA() {
           </a>
         </div>
 
-        <div className="mt-8 text-[13px] uppercase tracking-[0.2em] text-text-dim">
+        <div className="mt-8 text-[12px] uppercase tracking-[0.22em] text-text-dim">
           3 дня · 1 устройство · 5 ГБ
         </div>
       </div>
