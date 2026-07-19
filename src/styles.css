@@ -218,9 +218,8 @@ body {
 .btn-shine {
   position: relative;
   overflow: hidden;
-  isolation: isolate;
 }
-.btn-shine::before {
+.btn-shine::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -228,22 +227,17 @@ body {
   background: linear-gradient(
     115deg,
     transparent 30%,
-    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0.45) 50%,
     transparent 70%
   );
   transform: translateX(-120%);
   transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-  mix-blend-mode: overlay;
-  z-index: 1;
 }
-.btn-shine:hover::before,
-.btn-shine:focus-visible::before {
+.btn-shine:hover::after,
+.btn-shine:focus-visible::after {
   transform: translateX(120%);
 }
-.btn-shine > * {
-  position: relative;
-  z-index: 2;
-}
+
 
 
 .divider-line {
