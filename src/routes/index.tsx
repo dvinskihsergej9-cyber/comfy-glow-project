@@ -1532,9 +1532,9 @@ function Footer() {
         <FooterCol
           title="Юридическое"
           items={[
-            ["Политика", "https://shop.dvinconnect.store/privacy/"],
-            ["Оферта", "https://shop.dvinconnect.store/offer/"],
-            ["Условия", "https://shop.dvinconnect.store/terms/"],
+            ["Политика", "/privacy"],
+            ["Оферта", "/offer"],
+            ["Условия", "/terms"],
           ]}
         />
       </div>
