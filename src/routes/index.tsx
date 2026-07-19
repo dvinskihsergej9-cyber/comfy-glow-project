@@ -521,8 +521,8 @@ function MiniAppScene() {
           className="absolute inset-0 flex will-change-transform"
         >
           {SCENES.map((s, i) => (
-            <div key={i} className="w-screen h-full flex-shrink-0 flex items-center">
-              <div className="mx-auto max-w-[1400px] w-full px-5 md:px-10 pt-32 md:pt-36 pb-24 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+            <div key={i} className="w-screen h-full flex-shrink-0">
+              <div className="mx-auto max-w-[1400px] h-full w-full px-5 md:px-10 pt-[clamp(176px,22svh,280px)] pb-24 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
                 <div className="lg:col-span-6 xl:col-span-7 text-center lg:text-left max-w-[620px] mx-auto lg:mx-0">
                   <div className="font-mono text-[11px] tracking-[0.3em] uppercase text-cyan">
                     {s.tag}
@@ -541,7 +541,7 @@ function MiniAppScene() {
                 <div className="lg:col-span-6 xl:col-span-5 flex justify-center min-h-0">
                   <div className="relative">
                     <div className="absolute -inset-16 md:-inset-24 -z-10 bg-[radial-gradient(closest-side,rgba(124,58,237,0.4),transparent_70%)] blur-2xl" />
-                    <div className="relative w-[min(68vw,340px)] lg:w-[340px] xl:w-[380px] max-h-[min(60svh,740px)] aspect-[9/19.5] rounded-[38px] xl:rounded-[44px] p-[7px] xl:p-[8px] bg-gradient-to-b from-white/25 to-white/[0.03] glow-ring">
+                    <div className="relative w-[min(68vw,340px)] lg:w-[340px] xl:w-[380px] max-h-[calc(100svh-260px)] aspect-[9/19.5] rounded-[38px] xl:rounded-[44px] p-[7px] xl:p-[8px] bg-gradient-to-b from-white/25 to-white/[0.03] glow-ring">
                       <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black">
                         <img
                           src={s.img}
