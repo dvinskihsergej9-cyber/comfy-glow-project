@@ -1125,11 +1125,9 @@ function Support() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: i * 0.08 }}
-                className={`relative aspect-[9/19.5] rounded-[28px] p-[6px] bg-white/10 glow-ring ${
-                  i === 1 ? "mt-6 md:mt-10" : ""
-                }`}
+                className={i === 1 ? "mt-6 md:mt-10" : ""}
               >
-                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a] flex items-center justify-center">
+                <PhoneFrame>
                   {x.video ? (
                     <video
                       src={x.src}
@@ -1143,7 +1141,7 @@ function Support() {
                   ) : (
                     <img src={x.src} alt={x.alt} className="w-full h-full object-contain" />
                   )}
-                </div>
+                </PhoneFrame>
               </motion.div>
             ))}
           </div>
