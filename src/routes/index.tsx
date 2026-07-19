@@ -1204,25 +1204,17 @@ function WheelGames() {
           <div className="lg:col-span-7">
             <div className="grid grid-cols-2 gap-5 md:gap-8 max-w-[640px] mx-auto">
               {[A.games3Video, A.games4Video].map((src, i) => (
-                <div
-                  key={i}
-                  className="relative rounded-[38px] p-[3px] bg-gradient-to-br from-white/30 via-white/10 to-white/5 shadow-[0_30px_100px_-30px_rgba(124,58,237,0.55)]"
-                >
-                  <div className="rounded-[35px] bg-black p-[6px]">
-                    <div className="relative rounded-[30px] overflow-hidden bg-black aspect-[9/19.5]">
-                      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-[22px] bg-black rounded-full z-10" />
-                      <video
-                        src={src}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                </div>
+                <PhoneFrame key={i}>
+                  <video
+                    src={src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    className="w-full h-full object-cover"
+                  />
+                </PhoneFrame>
               ))}
             </div>
           </div>
