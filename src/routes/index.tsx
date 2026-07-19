@@ -478,7 +478,7 @@ function MiniAppScene() {
   const hueX = useTransform(scrollYProgress, [0, 1], ["15%", "75%"]);
 
   return (
-    <section id="miniapp" ref={ref} className="relative bg-[#080b16]" style={{ height: "240vh" }}>
+    <section id="miniapp" ref={ref} className="relative bg-[#080b16]" style={{ height: "170vh" }}>
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
         <motion.div
           style={{ left: hueX }}
@@ -486,7 +486,7 @@ function MiniAppScene() {
         />
         <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
 
-        <div className="relative z-10 mx-auto grid h-full max-w-[1400px] grid-cols-12 items-center gap-6 px-5 md:px-10 pt-24">
+        <div className="relative z-10 mx-auto grid h-full max-w-[1400px] grid-cols-12 items-center gap-6 px-5 md:px-10">
           {/* Left text */}
           <div className="col-span-12 lg:col-span-4">
             <SectionLabel>Mini App</SectionLabel>
