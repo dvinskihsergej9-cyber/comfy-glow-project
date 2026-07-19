@@ -394,7 +394,7 @@ function HowItWorks() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
             <SectionLabel>Как это работает</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5.5vw,76px)] leading-[0.95] max-w-[900px]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5.5vw,76px)] leading-[1.02] max-w-[900px]">
               Откройте. Проверьте. <span className="text-gradient-accent italic font-medium">Подключитесь.</span>
             </h2>
           </div>
@@ -490,7 +490,7 @@ function MiniAppScene() {
           {/* Left text */}
           <div className="col-span-12 lg:col-span-4">
             <SectionLabel>Mini App</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(32px,4vw,56px)] leading-[0.95]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(32px,4vw,56px)] leading-[1.02]">
               Один кабинет.<br />
               <span className="text-gradient-accent italic font-medium">Все действия.</span>
             </h2>
@@ -613,7 +613,7 @@ function MiniAppSceneMobile() {
   return (
     <section id="miniapp-m" className="lg:hidden py-20 px-5 bg-[#080b16] relative">
       <SectionLabel>Mini App</SectionLabel>
-      <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[38px] leading-[0.95]">
+      <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[38px] leading-[1.02]">
         Один кабинет. <span className="text-gradient-accent italic font-medium">Все действия.</span>
       </h2>
       <div className="mt-12 space-y-14">
@@ -652,7 +652,7 @@ function WebSection() {
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
             <SectionLabel>Веб-версия</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[0.95]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.02]">
               Telegram — не единственный <span className="text-gradient-accent italic font-medium">вариант.</span>
             </h2>
             <p className="mt-6 text-[17px] text-text-mute leading-[1.6] max-w-[460px]">
@@ -736,7 +736,7 @@ function WebSection() {
         <div className="mt-40 md:mt-56 grid lg:grid-cols-12 gap-10 items-end">
           <div className="lg:col-span-7">
             <SectionLabel>Устройства</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,84px)] leading-[0.92]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,84px)] leading-[1.0]">
               Одна подписка.<br />
               <span className="text-gradient-accent italic font-medium">До пяти устройств.</span>
             </h2>
@@ -772,7 +772,7 @@ function Trial() {
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-6">
             <SectionLabel>Пробный период</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,4.5vw,60px)] leading-[0.95]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,4.5vw,60px)] leading-[1.02]">
               Сначала проверьте.{" "}
               <span className="text-gradient-accent italic font-medium">Потом решайте.</span>
             </h2>
@@ -847,7 +847,7 @@ function Pricing() {
       <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <SectionLabel>Тарифы</SectionLabel>
-        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[0.95] max-w-[1100px]">
+        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[1.02] max-w-[1100px]">
           Соберите подписку <span className="text-gradient-accent italic font-medium">под себя.</span>
         </h2>
 
@@ -1070,7 +1070,7 @@ function Support() {
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
             <SectionLabel>Поддержка</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[0.95]">
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.02]">
               Помощь находится там же, где <span className="text-gradient-accent italic font-medium">подписка.</span>
             </h2>
             <p className="mt-6 text-[17px] text-text-mute leading-[1.6] max-w-[460px]">
@@ -1133,7 +1133,7 @@ function Bonuses() {
     <section className="relative py-24 md:py-36 overflow-hidden bg-[#080b16]">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <SectionLabel>Бонусы</SectionLabel>
-        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,64px)] leading-[0.95] max-w-[900px]">
+        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,64px)] leading-[1.02] max-w-[900px]">
           Больше пользы <span className="text-gradient-accent italic font-medium">внутри DvinVPN.</span>
         </h2>
 
@@ -1202,7 +1202,7 @@ function Reviews() {
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="max-w-[900px]">
           <SectionLabel>Отзывы</SectionLabel>
-          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,76px)] leading-[0.95]">
+          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,76px)] leading-[1.02]">
             Работает там, где это <span className="text-gradient-accent italic font-medium">действительно нужно.</span>
           </h2>
           <p className="mt-6 text-[16px] text-text-mute max-w-[520px]">
@@ -1272,7 +1272,7 @@ function FaqSection() {
     <section id="faq" className="relative py-28 md:py-40">
       <div className="mx-auto max-w-[1000px] px-5 md:px-10">
         <SectionLabel>FAQ</SectionLabel>
-        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[0.95]">
+        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.02]">
           Вопросы и <span className="text-gradient-accent italic font-medium">ответы.</span>
         </h2>
 
@@ -1337,7 +1337,7 @@ function FinalCTA() {
           className="mx-auto w-24 h-24 md:w-32 md:h-32 rounded-3xl mb-8 glow-ring"
         />
 
-        <h2 className="font-display font-extrabold tracking-[-0.035em] text-[clamp(40px,7vw,104px)] leading-[0.92]">
+        <h2 className="font-display font-extrabold tracking-[-0.035em] text-[clamp(40px,7vw,104px)] leading-[1.0]">
           <MaskLine>Готовы попробовать?</MaskLine>
           <MaskLine delay={0.15}>
             <span className="text-gradient-accent italic font-medium">3 дня бесплатно.</span>
