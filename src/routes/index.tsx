@@ -1488,7 +1488,7 @@ function FinalCTA() {
             href={WEB("final")}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.03] backdrop-blur-md px-7 py-4 text-[16px] font-semibold hover:bg-white/[0.06] transition"
+            className="btn-shine inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.03] backdrop-blur-md px-7 py-4 text-[16px] font-semibold hover:bg-white/[0.06] transition"
           >
             <Globe className="w-4 h-4" /> Открыть веб-версию
           </a>
