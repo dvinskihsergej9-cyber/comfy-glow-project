@@ -40,7 +40,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "DvinVPN — VPN в Telegram и браузере" },
       {
         property: "og:description",
-        content: "3 дня бесплатно, до 5 устройств, от 107,50 ₽/мес.",
+        content: "3 дня бесплатно, до 5 устройств, от 108 ₽/мес.",
       },
       { property: "og:url", content: "https://comfy-glow-project.lovable.app/" },
     ],
