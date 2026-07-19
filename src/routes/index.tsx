@@ -1136,10 +1136,10 @@ function Support() {
                       loop
                       playsInline
                       preload="metadata"
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover object-top"
                     />
                   ) : (
-                    <img src={x.src} alt={x.alt} className="w-full h-full object-contain" />
+                    <img src={x.src} alt={x.alt} className="w-full h-full object-cover object-top" />
                   )}
                 </PhoneFrame>
               </motion.div>
