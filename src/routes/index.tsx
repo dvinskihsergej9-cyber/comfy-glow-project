@@ -388,70 +388,41 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="how" className="relative py-28 md:py-40 overflow-hidden">
-      <div className="absolute inset-0 bg-grid opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+    <section id="how" className="relative py-24 md:py-32 overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
-        <SectionLabel>Как это работает</SectionLabel>
-        <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,6vw,88px)] leading-[0.95] max-w-[1100px]">
-          Откройте. Проверьте. <span className="text-gradient-accent italic font-medium">Подключитесь.</span>
-        </h2>
-
-        <div className="relative mt-20">
-          {/* Connecting line */}
-          <svg
-            className="absolute inset-0 w-full h-full pointer-events-none hidden md:block"
-            viewBox="0 0 1200 340"
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <linearGradient id="steps-line" x1="0" x2="1" y1="0" y2="0">
-                <stop offset="0%" stopColor="#22d3ee" />
-                <stop offset="50%" stopColor="#5b5cf6" />
-                <stop offset="100%" stopColor="#7c3aed" />
-              </linearGradient>
-            </defs>
-            <motion.path
-              d="M 60 80 C 300 20, 500 200, 700 100 S 1100 240, 1140 160"
-              stroke="url(#steps-line)"
-              strokeWidth="1.5"
-              fill="none"
-              strokeDasharray="4 6"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 2, ease: "easeInOut" }}
-            />
-          </svg>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-4">
-            {STEPS.map((s, i) => (
-              <motion.div
-                key={s.n}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.7, delay: i * 0.08 }}
-                className={`relative ${i % 2 === 1 ? "md:mt-16" : ""}`}
-              >
-                <div className="relative">
-                  <div className="font-display font-black text-[120px] leading-none text-white/[0.04] select-none">
-                    {s.n}
-                  </div>
-                  <div className="absolute top-4 left-0">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet to-electric flex items-center justify-center shadow-lg shadow-violet/30">
-                      <s.icon className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                </div>
-                <h3 className="mt-4 font-display text-[22px] font-bold tracking-tight">
-                  {s.title}
-                </h3>
-                <p className="mt-2 text-[15px] text-text-mute leading-[1.55] max-w-[260px]">
-                  {s.text}
-                </p>
-              </motion.div>
-            ))}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <SectionLabel>Как это работает</SectionLabel>
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5.5vw,76px)] leading-[0.95] max-w-[900px]">
+              Откройте. Проверьте. <span className="text-gradient-accent italic font-medium">Подключитесь.</span>
+            </h2>
           </div>
+          <p className="text-[15px] text-text-mute max-w-[320px] md:text-right">
+            Четыре шага от установки до защищённого соединения — всё внутри Telegram.
+          </p>
+        </div>
+
+        <div className="relative mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {STEPS.map((s, i) => (
+            <motion.div
+              key={s.n}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, delay: i * 0.06 }}
+              className="relative rounded-2xl border border-white/8 bg-white/[0.02] p-6 hover:border-white/15 transition"
+            >
+              <div className="flex items-center justify-between">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet to-electric flex items-center justify-center shadow-lg shadow-violet/30">
+                  <s.icon className="w-5 h-5 text-white" />
+                </div>
+                <div className="font-mono text-[12px] tracking-widest text-text-dim">{s.n}</div>
+              </div>
+              <h3 className="mt-6 font-display text-[20px] font-bold tracking-tight">{s.title}</h3>
+              <p className="mt-2 text-[14px] text-text-mute leading-[1.6]">{s.text}</p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
