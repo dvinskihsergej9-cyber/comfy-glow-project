@@ -1175,7 +1175,7 @@ function WheelGames() {
             </div>
 
             <a
-              href={ctaLinks.games}
+              href={TG("site_games")}
               target="_blank"
               rel="noreferrer"
               className="mt-8 inline-flex items-center gap-3 rounded-full px-7 py-4 text-[15px] font-semibold text-white bg-gradient-to-r from-violet to-electric hover:opacity-95 transition"
