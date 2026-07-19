@@ -59,6 +59,37 @@ const WEB = (medium: string) =>
   `https://shop.dvinconnect.store/?utm_source=landing&utm_medium=${medium}&utm_campaign=website`;
 
 /* -------------------------------------------------------- */
+/*  PhoneFrame — единая iPhone-рамка на всём сайте           */
+/* -------------------------------------------------------- */
+
+function PhoneFrame({
+  children,
+  className = "",
+  notch = true,
+  glow = true,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  notch?: boolean;
+  glow?: boolean;
+}) {
+  return (
+    <div
+      className={`relative aspect-[9/19.5] rounded-[14%/6.5%] p-[3.2%] bg-gradient-to-b from-white/25 via-white/[0.08] to-white/[0.04] ${
+        glow ? "shadow-[0_30px_90px_-30px_rgba(124,58,237,0.55)]" : ""
+      } ${className}`}
+    >
+      <div className="relative w-full h-full rounded-[12%/5.6%] overflow-hidden bg-black">
+        {children}
+        {notch && (
+          <div className="absolute top-[1.6%] left-1/2 -translate-x-1/2 w-[32%] h-[3.2%] bg-black rounded-full z-20 ring-1 ring-white/5" />
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------- */
 /*  Header                                                   */
 /* -------------------------------------------------------- */
 
@@ -541,16 +572,13 @@ function MiniAppScene() {
                 <div className="lg:col-span-6 xl:col-span-5 flex justify-center min-h-0">
                   <div className="relative">
                     <div className="absolute -inset-16 md:-inset-24 -z-10 bg-[radial-gradient(closest-side,rgba(124,58,237,0.4),transparent_70%)] blur-2xl" />
-                    <div className="relative w-[min(68vw,340px)] lg:w-[340px] xl:w-[380px] max-h-[calc(100svh-260px)] aspect-[9/19.5] rounded-[38px] xl:rounded-[44px] p-[7px] xl:p-[8px] bg-gradient-to-b from-white/25 to-white/[0.03] glow-ring">
-                      <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black">
-                        <img
-                          src={s.img}
-                          alt={s.title}
-                          className="absolute inset-0 w-full h-full object-contain"
-                        />
-                      </div>
-                      <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl" />
-                    </div>
+                    <PhoneFrame className="w-[min(68vw,340px)] lg:w-[340px] xl:w-[380px] max-h-[calc(100svh-260px)]">
+                      <img
+                        src={s.img}
+                        alt={s.title}
+                        className="absolute inset-0 w-full h-full object-contain"
+                      />
+                    </PhoneFrame>
                   </div>
                 </div>
               </div>
@@ -620,11 +648,9 @@ function MiniAppSceneMobile() {
             <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-cyan">{s.tag}</div>
             <h3 className="mt-2 font-display text-[24px] font-bold">{s.title}</h3>
             <p className="mt-2 text-[15px] text-text-mute leading-[1.6]">{s.text}</p>
-            <div className="mt-5 relative w-full max-w-[320px] mx-auto aspect-[9/19.5] rounded-[36px] p-[8px] bg-white/10 glow-ring">
-              <div className="w-full h-full rounded-[30px] overflow-hidden bg-black flex items-center justify-center">
-                <img src={s.img} alt={s.title} className="w-full h-full object-contain" />
-              </div>
-            </div>
+            <PhoneFrame className="mt-5 w-full max-w-[320px] mx-auto">
+              <img src={s.img} alt={s.title} className="w-full h-full object-contain" />
+            </PhoneFrame>
           </motion.div>
         ))}
       </div>
@@ -697,11 +723,11 @@ function WebSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.9, delay: 0.2 }}
-              className="hidden md:block absolute -bottom-16 -right-4 w-[190px] aspect-[9/19.5] rounded-[32px] p-[7px] bg-white/10 glow-ring"
+              className="hidden md:block absolute -bottom-16 -right-4 w-[190px]"
             >
-              <div className="w-full h-full rounded-[26px] overflow-hidden bg-black">
+              <PhoneFrame>
                 <img src={A.miniappHome} alt="" className="w-full h-full object-cover object-top" />
-              </div>
+              </PhoneFrame>
             </motion.div>
 
             {/* Connection line */}
@@ -1099,11 +1125,9 @@ function Support() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: i * 0.08 }}
-                className={`relative aspect-[9/19.5] rounded-[28px] p-[6px] bg-white/10 glow-ring ${
-                  i === 1 ? "mt-6 md:mt-10" : ""
-                }`}
+                className={i === 1 ? "mt-6 md:mt-10" : ""}
               >
-                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a] flex items-center justify-center">
+                <PhoneFrame>
                   {x.video ? (
                     <video
                       src={x.src}
@@ -1117,7 +1141,7 @@ function Support() {
                   ) : (
                     <img src={x.src} alt={x.alt} className="w-full h-full object-contain" />
                   )}
-                </div>
+                </PhoneFrame>
               </motion.div>
             ))}
           </div>
@@ -1180,25 +1204,17 @@ function WheelGames() {
           <div className="lg:col-span-7">
             <div className="grid grid-cols-2 gap-5 md:gap-8 max-w-[640px] mx-auto">
               {[A.games3Video, A.games4Video].map((src, i) => (
-                <div
-                  key={i}
-                  className="relative rounded-[38px] p-[3px] bg-gradient-to-br from-white/30 via-white/10 to-white/5 shadow-[0_30px_100px_-30px_rgba(124,58,237,0.55)]"
-                >
-                  <div className="rounded-[35px] bg-black p-[6px]">
-                    <div className="relative rounded-[30px] overflow-hidden bg-black aspect-[9/19.5]">
-                      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-[22px] bg-black rounded-full z-10" />
-                      <video
-                        src={src}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                </div>
+                <PhoneFrame key={i}>
+                  <video
+                    src={src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    className="w-full h-full object-cover"
+                  />
+                </PhoneFrame>
               ))}
             </div>
           </div>
@@ -1243,10 +1259,10 @@ function Bonuses() {
                 +3 дня.
               </p>
             </div>
-            <div className="shrink-0 w-[220px] aspect-[9/19.5] rounded-[32px] p-[7px] bg-gradient-to-b from-white/25 to-white/[0.03] glow-ring">
-              <div className="w-full h-full rounded-[26px] overflow-hidden bg-black">
+            <div className="shrink-0 w-[220px]">
+              <PhoneFrame>
                 <img src={A.referral} alt="Реферальная программа" className="w-full h-full object-contain" />
-              </div>
+              </PhoneFrame>
             </div>
           </motion.div>
 
@@ -1269,10 +1285,10 @@ function Bonuses() {
                 профиля.
               </p>
             </div>
-            <div className="shrink-0 w-[220px] aspect-[9/19.5] rounded-[32px] p-[7px] bg-gradient-to-b from-white/25 to-white/[0.03] glow-ring">
-              <div className="w-full h-full rounded-[26px] overflow-hidden bg-black">
+            <div className="shrink-0 w-[220px]">
+              <PhoneFrame>
                 <img src={A.games1} alt="Ежедневные игры" className="w-full h-full object-contain" />
-              </div>
+              </PhoneFrame>
             </div>
           </motion.div>
         </div>
