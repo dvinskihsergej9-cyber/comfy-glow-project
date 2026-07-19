@@ -296,8 +296,8 @@ function Hero() {
             {[
               ["3 дня", "бесплатно"],
               ["до 5", "устройств"],
-              ["от 107,50 ₽", "в месяц"],
-              ["5 ГБ", "в trial"],
+              ["от 108 ₽", "в месяц"],
+              ["∞", "трафика"],
             ].map(([big, small]) => (
               <div key={big as string} className="min-w-0">
                 <div className="font-display text-[26px] md:text-[32px] font-bold tracking-tight text-text">
