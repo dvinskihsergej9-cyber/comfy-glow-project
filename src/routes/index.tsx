@@ -554,7 +554,7 @@ function MiniAppScene() {
               style={prm ? {} : { y: phoneY }}
               className="relative"
             >
-              <div className="relative w-[360px] xl:w-[400px] aspect-[9/19.5] rounded-[48px] p-[10px] bg-gradient-to-b from-white/20 to-white/[0.03] glow-ring">
+              <div className="relative w-[300px] xl:w-[340px] aspect-[9/19.5] rounded-[44px] p-[8px] bg-gradient-to-b from-white/20 to-white/[0.03] glow-ring">
                 <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black">
                   <AnimatePresence mode="popLayout">
                     <motion.img
