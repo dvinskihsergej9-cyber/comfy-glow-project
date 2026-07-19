@@ -65,7 +65,7 @@ const WEB = (medium: string) =>
 function PhoneFrame({
   children,
   className = "",
-  notch = true,
+  notch = false,
   glow = true,
 }: {
   children: React.ReactNode;
@@ -576,7 +576,7 @@ function MiniAppScene() {
                       <img
                         src={s.img}
                         alt={s.title}
-                        className="absolute inset-0 w-full h-full object-contain"
+                        className="absolute inset-0 w-full h-full object-cover object-top"
                       />
                     </PhoneFrame>
                   </div>
@@ -649,7 +649,7 @@ function MiniAppSceneMobile() {
             <h3 className="mt-2 font-display text-[24px] font-bold">{s.title}</h3>
             <p className="mt-2 text-[15px] text-text-mute leading-[1.6]">{s.text}</p>
             <PhoneFrame className="mt-5 w-full max-w-[320px] mx-auto">
-              <img src={s.img} alt={s.title} className="w-full h-full object-contain" />
+              <img src={s.img} alt={s.title} className="w-full h-full object-cover object-top" />
             </PhoneFrame>
           </motion.div>
         ))}
@@ -1261,7 +1261,7 @@ function Bonuses() {
             </div>
             <div className="shrink-0 w-[220px]">
               <PhoneFrame>
-                <img src={A.referral} alt="Реферальная программа" className="w-full h-full object-contain" />
+                <img src={A.referral} alt="Реферальная программа" className="w-full h-full object-cover object-top" />
               </PhoneFrame>
             </div>
           </motion.div>
@@ -1287,7 +1287,7 @@ function Bonuses() {
             </div>
             <div className="shrink-0 w-[220px]">
               <PhoneFrame>
-                <img src={A.games1} alt="Ежедневные игры" className="w-full h-full object-contain" />
+                <img src={A.games1} alt="Ежедневные игры" className="w-full h-full object-cover object-top" />
               </PhoneFrame>
             </div>
           </motion.div>
