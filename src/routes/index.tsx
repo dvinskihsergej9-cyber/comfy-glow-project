@@ -1373,7 +1373,7 @@ const FAQ = [
 ];
 
 function FaqSection() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | null>(null);
   return (
     <section id="faq" className="relative py-14 md:py-20">
       <div className="mx-auto max-w-[1000px] px-5 md:px-10">
