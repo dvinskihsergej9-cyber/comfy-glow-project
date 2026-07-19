@@ -1136,8 +1136,160 @@ function Support() {
 }
 
 /* -------------------------------------------------------- */
+/*  Wheel & Daily Games                                      */
+/* -------------------------------------------------------- */
+
+function WheelGames() {
+  const [spinning, setSpinning] = useState(false);
+  const [rot, setRot] = useState(0);
+  const segments = [
+    { label: "+1 день", color: "#7c3aed" },
+    { label: "Спин", color: "#0891b2" },
+    { label: "-10%", color: "#d9468f" },
+    { label: "+2 дня", color: "#0f766e" },
+    { label: "Фон", color: "#2563eb" },
+    { label: "Почти", color: "#64748b" },
+    { label: "+7 дней", color: "#9333ea" },
+    { label: "Арктика", color: "#06b6d4" },
+  ];
+  const step = 360 / segments.length;
+  const spin = () => {
+    if (spinning) return;
+    setSpinning(true);
+    const target = rot + 360 * 5 + Math.floor(Math.random() * 360);
+    setRot(target);
+    setTimeout(() => setSpinning(false), 4200);
+  };
+
+  return (
+    <section className="relative py-16 md:py-24 overflow-hidden bg-[#050711]">
+      <div className="absolute inset-0 bg-[radial-gradient(700px_500px_at_20%_40%,rgba(124,58,237,0.18),transparent),radial-gradient(600px_500px_at_85%_60%,rgba(34,211,238,0.14),transparent)]" />
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          <div className="lg:col-span-5">
+            <SectionLabel>Ежедневные игры</SectionLabel>
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.05] pb-[0.08em]">
+              Крути колесо. <br />
+              <span className="text-gradient-accent italic font-medium">Забирай бонусы.</span>
+            </h2>
+            <p className="mt-6 text-[17px] text-text-mute leading-[1.6] max-w-[480px]">
+              Колесо фортуны, «Угадай слово», 21 очко, минёр, больше-меньше и морской бой. До 30
+              ежедневных игр — за дни подписки, промокоды и оформление профиля.
+            </p>
+
+            <div className="mt-8 grid grid-cols-2 gap-3 max-w-[440px]">
+              {[
+                "1 спин в день",
+                "Спин за 10 ₽",
+                "Дни подписки",
+                "Промокоды",
+                "Фоны профиля",
+                "6 игр в кабинете",
+              ].map((t, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-[13.5px] font-medium"
+                >
+                  {t}
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={spin}
+              disabled={spinning}
+              className="mt-8 inline-flex items-center gap-3 rounded-full px-7 py-4 text-[15px] font-semibold text-white bg-gradient-to-r from-violet to-electric hover:opacity-95 transition disabled:opacity-70"
+            >
+              <Sparkles className="w-4 h-4" />
+              {spinning ? "Крутится…" : "Крутить колесо"}
+            </button>
+          </div>
+
+          <div className="lg:col-span-7 relative">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6 items-center">
+              {/* Interactive wheel mock */}
+              <div className="md:col-span-3 relative flex items-center justify-center aspect-square max-w-[520px] mx-auto w-full">
+                <div className="absolute inset-0 rounded-full bg-[radial-gradient(closest-side,rgba(124,58,237,0.35),transparent_70%)] blur-2xl" />
+                <div className="relative w-full h-full rounded-full p-[6px] bg-gradient-to-br from-white/25 to-white/5 shadow-[0_30px_120px_-30px_rgba(124,58,237,0.6)]">
+                  <motion.div
+                    animate={{ rotate: rot }}
+                    transition={{ duration: 4, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative w-full h-full rounded-full overflow-hidden"
+                    style={{
+                      background: `conic-gradient(${segments
+                        .map((s, i) => `${s.color} ${i * step}deg ${(i + 1) * step}deg`)
+                        .join(",")})`,
+                    }}
+                  >
+                    {segments.map((s, i) => {
+                      const angle = i * step + step / 2;
+                      return (
+                        <div
+                          key={i}
+                          className="absolute left-1/2 top-1/2 origin-[0_0] text-[11px] md:text-[13px] font-semibold text-white/95 font-mono uppercase tracking-wider whitespace-nowrap"
+                          style={{
+                            transform: `rotate(${angle}deg) translate(38%, -50%)`,
+                          }}
+                        >
+                          {s.label}
+                        </div>
+                      );
+                    })}
+                    <div className="absolute inset-[18%] rounded-full bg-[#0a0d1a] border border-white/10 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-cyan">Спин</div>
+                        <div className="mt-1 font-display font-extrabold text-[22px] md:text-[28px]">10 ₽</div>
+                      </div>
+                    </div>
+                  </motion.div>
+                  {/* Pointer */}
+                  <div className="absolute top-[-6px] left-1/2 -translate-x-1/2 z-10">
+                    <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[18px] border-l-transparent border-r-transparent border-b-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Game previews */}
+              <div className="md:col-span-2 flex flex-col gap-4">
+                <div className="rounded-3xl overflow-hidden aspect-[9/16] bg-black glow-ring p-[4px] bg-white/10">
+                  <div className="w-full h-full rounded-[22px] overflow-hidden bg-black flex items-center justify-center">
+                    <video
+                      src={A.games3Video}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </div>
+                <div className="rounded-3xl overflow-hidden aspect-[9/16] bg-black glow-ring p-[4px] bg-white/10">
+                  <div className="w-full h-full rounded-[22px] overflow-hidden bg-black flex items-center justify-center">
+                    <video
+                      src={A.games4Video}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------- */
 /*  Bonuses                                                  */
 /* -------------------------------------------------------- */
+
 
 function Bonuses() {
   return (
