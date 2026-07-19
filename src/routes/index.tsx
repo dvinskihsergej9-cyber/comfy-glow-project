@@ -144,7 +144,7 @@ function Header() {
             href={WEB("header")}
             target="_blank"
             rel="noreferrer"
-            className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 text-[14px] text-text-mute hover:text-text transition rounded-full border border-white/10 hover:border-white/20"
+            className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 text-[14px] text-text-mute btn-shine hover:text-text transition rounded-full border border-white/10 hover:border-white/20"
           >
             <Globe className="w-4 h-4" />
             Веб-версия
@@ -153,7 +153,7 @@ function Header() {
             href={TG("site_header")}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 btn-primary-glow rounded-full px-4 py-2 text-[14px] font-semibold text-white"
+            className="inline-flex items-center gap-1.5 btn-primary-glow btn-shine rounded-full px-4 py-2 text-[14px] font-semibold text-white"
           >
             <Send className="w-4 h-4" />
             Telegram
@@ -204,7 +204,7 @@ function Header() {
                 href={WEB("header_mobile")}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-6 inline-flex items-center justify-center gap-2 rounded-full border border-white/15 py-3.5 text-[15px]"
+                className="mt-6 inline-flex items-center justify-center gap-2 btn-shine rounded-full border border-white/15 py-3.5 text-[15px]"
               >
                 <Globe className="w-4 h-4" /> Веб-версия
               </a>
@@ -212,7 +212,7 @@ function Header() {
                 href={TG("site_header_mobile")}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-2 inline-flex items-center justify-center gap-2 btn-primary-glow rounded-full py-3.5 text-[15px] font-semibold"
+                className="mt-2 inline-flex items-center justify-center gap-2 btn-primary-glow btn-shine rounded-full py-3.5 text-[15px] font-semibold"
               >
                 <Send className="w-4 h-4" /> Открыть в Telegram
               </a>
@@ -313,7 +313,7 @@ function Hero() {
               href={WEB("hero")}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.03] backdrop-blur-md px-6 py-3.5 text-[15px] font-semibold text-text hover:bg-white/[0.06] transition"
+              className="inline-flex items-center justify-center gap-2 btn-shine rounded-full border border-white/15 bg-white/[0.03] backdrop-blur-md px-6 py-3.5 text-[15px] font-semibold text-text hover:bg-white/[0.06] transition"
             >
               <Globe className="w-4 h-4" /> Открыть веб-версию
             </a>
@@ -684,7 +684,7 @@ function WebSection() {
               href={WEB("web_section")}
               target="_blank"
               rel="noreferrer"
-              className="mt-8 inline-flex items-center gap-2 btn-primary-glow rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
+              className="mt-8 inline-flex items-center gap-2 btn-primary-glow btn-shine rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
             >
               <Globe className="w-4 h-4" /> Открыть веб-версию
               <ArrowUpRight className="w-4 h-4 opacity-70" />
@@ -801,7 +801,7 @@ function Trial() {
               href={TG("site_trial")}
               target="_blank"
               rel="noreferrer"
-              className="mt-7 inline-flex items-center gap-2 btn-primary-glow rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
+              className="mt-7 inline-flex items-center gap-2 btn-primary-glow btn-shine rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
             >
               <Send className="w-4 h-4" /> Получить 3 дня бесплатно
               <ArrowUpRight className="w-4 h-4 opacity-70" />
@@ -1035,7 +1035,7 @@ function Pricing() {
                       href={WEB("pricing")}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.02] px-6 py-4 text-[15px] font-semibold text-text hover:bg-white/[0.05] transition"
+                      className="inline-flex items-center justify-center gap-2 btn-shine rounded-full border border-white/15 bg-white/[0.02] px-6 py-4 text-[15px] font-semibold text-text hover:bg-white/[0.05] transition"
                     >
                       <Globe className="w-4 h-4" /> Открыть веб-кабинет
                     </a>
