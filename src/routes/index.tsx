@@ -464,99 +464,130 @@ const SCENES = [
 function MiniAppScene() {
   const [active, setActive] = useState(0);
   const total = SCENES.length;
+  const blockRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        // Pick the entry with the largest intersection ratio that's actually visible.
+        let best: { idx: number; ratio: number } | null = null;
+        entries.forEach((e) => {
+          const idx = Number((e.target as HTMLElement).dataset.idx);
+          if (e.isIntersecting && (!best || e.intersectionRatio > best.ratio)) {
+            best = { idx, ratio: e.intersectionRatio };
+          }
+        });
+        if (best) setActive((prev) => (prev === best!.idx ? prev : best!.idx));
+      },
+      {
+        // Trigger when the block crosses the vertical middle of the viewport.
+        rootMargin: "-45% 0px -45% 0px",
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+    blockRefs.current.forEach((el) => el && obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  const scrollToScene = (i: number) => {
+    blockRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
 
   return (
     <section
       id="miniapp"
-      className="relative bg-[#080b16] overflow-hidden hidden lg:block py-24"
+      className="relative bg-[#080b16] overflow-hidden hidden lg:block"
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[900px] w-[900px] rounded-full bg-[radial-gradient(closest-side,rgba(124,58,237,0.28),transparent_70%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-grid opacity-20 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
+      <div className="absolute inset-0 bg-grid opacity-20 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)] pointer-events-none" />
 
       <div className="relative z-10 mx-auto max-w-[1400px] w-full px-5 md:px-10">
-        <div className="grid grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Left text */}
-          <div className="col-span-12 lg:col-span-5">
-            <SectionLabel>Mini App</SectionLabel>
-            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,4.5vw,64px)] leading-[1.02] pb-[0.08em]">
-              Один кабинет.<br />
-              <span className="text-gradient-accent italic font-medium">Все действия.</span>
-            </h2>
+        {/* Section header */}
+        <div className="pt-24 pb-10 max-w-[720px]">
+          <SectionLabel>Mini App</SectionLabel>
+          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,4.5vw,64px)] leading-[1.02] pb-[0.08em]">
+            Один кабинет.{" "}
+            <span className="text-gradient-accent italic font-medium">Все действия.</span>
+          </h2>
+        </div>
 
-            <div className="mt-8 relative min-h-[140px]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={active}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.35 }}
-                >
-                  <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-cyan">
-                    {SCENES[active].tag}
-                  </div>
-                  <h3 className="mt-3 font-display text-[24px] md:text-[30px] font-bold tracking-tight">
-                    {SCENES[active].title}
-                  </h3>
-                  <p className="mt-3 text-[15px] text-text-mute leading-[1.6] max-w-[420px]">
-                    {SCENES[active].text}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+        <div className="grid grid-cols-12 gap-8 lg:gap-16">
+          {/* Left: scrolling text blocks */}
+          <div className="col-span-7">
+            {SCENES.map((s, i) => (
+              <div
+                key={i}
+                ref={(el) => {
+                  blockRefs.current[i] = el;
+                }}
+                data-idx={i}
+                className="min-h-screen flex flex-col justify-center py-16"
+              >
+                <div className="font-mono text-[11px] tracking-[0.25em] uppercase text-cyan">
+                  {s.tag}
+                </div>
+                <h3 className="mt-4 font-display text-[40px] xl:text-[52px] font-bold tracking-[-0.02em] leading-[1.05]">
+                  {s.title}
+                </h3>
+                <p className="mt-5 text-[17px] text-text-mute leading-[1.6] max-w-[520px]">
+                  {s.text}
+                </p>
 
-            <div className="mt-8 space-y-2 max-w-[420px]">
-              {SCENES.map((s, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActive(i)}
-                  className={`w-full flex items-center gap-3 py-2 text-left transition ${
-                    i === active ? "opacity-100" : "opacity-40 hover:opacity-70"
-                  }`}
-                >
-                  <span className="text-[13px] font-medium flex-shrink-0 w-[130px] truncate">
-                    {s.title}
-                  </span>
-                  <div className="flex-1 h-[2px] rounded-full bg-white/10 overflow-hidden">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-violet to-cyan"
-                      animate={{ scaleX: i === active ? 1 : 0 }}
-                      transition={{ duration: 0.5 }}
-                      style={{ transformOrigin: "left" }}
-                    />
-                  </div>
-                  <span className="text-[12px] font-mono uppercase tracking-widest text-text-mute w-8 text-right">
-                    0{i + 1}
-                  </span>
-                </button>
-              ))}
-            </div>
+                {/* Tab strip (only under the currently-visible block for context) */}
+                <div className="mt-10 space-y-2 max-w-[460px]">
+                  {SCENES.map((sc, j) => (
+                    <button
+                      key={j}
+                      onClick={() => scrollToScene(j)}
+                      className={`w-full flex items-center gap-3 py-1.5 text-left transition ${
+                        j === active ? "opacity-100" : "opacity-35 hover:opacity-70"
+                      }`}
+                    >
+                      <span className="text-[12px] font-medium flex-shrink-0 w-[140px] truncate">
+                        {sc.title}
+                      </span>
+                      <div className="flex-1 h-[2px] rounded-full bg-white/10 overflow-hidden">
+                        <motion.div
+                          className="h-full bg-gradient-to-r from-violet to-cyan"
+                          animate={{ scaleX: j === active ? 1 : 0 }}
+                          transition={{ duration: 0.5 }}
+                          style={{ transformOrigin: "left" }}
+                        />
+                      </div>
+                      <span className="text-[11px] font-mono uppercase tracking-widest text-text-mute w-8 text-right">
+                        0{j + 1}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
-          {/* Phone center */}
-          <div className="col-span-12 lg:col-span-7 flex items-center justify-center relative">
-            <div className="relative">
-              <div className="relative w-[280px] sm:w-[320px] xl:w-[360px] aspect-[9/19.5] rounded-[44px] p-[8px] bg-gradient-to-b from-white/20 to-white/[0.03] glow-ring">
-                <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black flex items-center justify-center">
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={active}
-                      src={SCENES[active].img}
-                      alt={SCENES[active].title}
-                      initial={{ opacity: 0, y: 24, scale: 1.02 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -24, scale: 0.98 }}
-                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      className="absolute inset-0 w-full h-full object-contain"
-                    />
-                  </AnimatePresence>
+          {/* Right: sticky phone */}
+          <div className="col-span-5">
+            <div className="sticky top-0 h-screen flex items-center justify-center">
+              <div className="relative">
+                <div className="absolute -inset-24 -z-10 bg-[radial-gradient(closest-side,rgba(124,58,237,0.35),transparent_70%)] blur-2xl" />
+                <div className="relative w-[300px] xl:w-[360px] aspect-[9/19.5] rounded-[44px] p-[8px] bg-gradient-to-b from-white/20 to-white/[0.03] glow-ring">
+                  <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black">
+                    <AnimatePresence mode="wait">
+                      <motion.img
+                        key={active}
+                        src={SCENES[active].img}
+                        alt={SCENES[active].title}
+                        initial={{ opacity: 0, y: 24, scale: 1.02 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -24, scale: 0.98 }}
+                        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                        className="absolute inset-0 w-full h-full object-contain"
+                      />
+                    </AnimatePresence>
+                  </div>
+                  <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl" />
                 </div>
-                <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl" />
-              </div>
-              <div className="absolute -inset-16 -z-10 bg-[radial-gradient(closest-side,rgba(91,92,246,0.4),transparent)] blur-2xl" />
-
-              <div className="absolute -top-4 -right-4 font-mono text-[11px] tracking-[0.2em] uppercase text-text-mute">
-                {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+                <div className="absolute -top-6 -right-2 font-mono text-[11px] tracking-[0.25em] uppercase text-text-mute">
+                  {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+                </div>
               </div>
             </div>
           </div>
@@ -565,6 +596,7 @@ function MiniAppScene() {
     </section>
   );
 }
+
 
 
 
