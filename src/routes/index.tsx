@@ -576,7 +576,7 @@ function MiniAppScene() {
                       <img
                         src={s.img}
                         alt={s.title}
-                        className="absolute inset-0 w-full h-full object-cover object-top"
+                        className="block w-full h-auto"
                       />
                     </PhoneFrame>
                   </div>
