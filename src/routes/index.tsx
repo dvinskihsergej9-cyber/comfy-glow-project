@@ -388,7 +388,7 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="how" className="relative py-24 md:py-32 overflow-hidden">
+    <section id="how" className="relative py-16 md:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
@@ -555,7 +555,7 @@ function MiniAppScene() {
               className="relative"
             >
               <div className="relative w-[300px] xl:w-[340px] aspect-[9/19.5] rounded-[44px] p-[8px] bg-gradient-to-b from-white/20 to-white/[0.03] glow-ring">
-                <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black">
+                <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-black flex items-center justify-center">
                   <AnimatePresence mode="popLayout">
                     <motion.img
                       key={active}
@@ -565,7 +565,7 @@ function MiniAppScene() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.98 }}
                       transition={{ duration: 0.55 }}
-                      className="absolute inset-0 w-full h-full object-cover object-top"
+                      className="absolute inset-0 w-full h-full object-contain"
                     />
                   </AnimatePresence>
                 </div>
@@ -597,7 +597,7 @@ function MiniAppScene() {
                 <img
                   src={s.img}
                   alt={s.title}
-                  className="w-full h-full object-cover object-top rounded-[18px]"
+                  className="w-full h-full object-contain rounded-[18px] bg-black"
                 />
               </motion.button>
             ))}
@@ -629,8 +629,8 @@ function MiniAppSceneMobile() {
             <h3 className="mt-2 font-display text-[24px] font-bold">{s.title}</h3>
             <p className="mt-2 text-[15px] text-text-mute leading-[1.6]">{s.text}</p>
             <div className="mt-5 relative w-full max-w-[320px] mx-auto aspect-[9/19.5] rounded-[36px] p-[8px] bg-white/10 glow-ring">
-              <div className="w-full h-full rounded-[30px] overflow-hidden bg-black">
-                <img src={s.img} alt={s.title} className="w-full h-full object-cover object-top" />
+              <div className="w-full h-full rounded-[30px] overflow-hidden bg-black flex items-center justify-center">
+                <img src={s.img} alt={s.title} className="w-full h-full object-contain" />
               </div>
             </div>
           </motion.div>
@@ -646,7 +646,7 @@ function MiniAppSceneMobile() {
 
 function WebSection() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden bg-[#050711]">
+    <section className="relative py-14 md:py-20 overflow-hidden bg-[#050711]">
       <div className="absolute inset-0 bg-aurora opacity-40" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
@@ -766,7 +766,7 @@ function WebSection() {
 
 function Trial() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden border-y border-white/5">
+    <section className="relative py-14 md:py-20 overflow-hidden border-y border-white/5">
       <div className="absolute inset-0 bg-[radial-gradient(700px_400px_at_50%_50%,rgba(34,211,238,0.12),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
@@ -842,7 +842,7 @@ function Pricing() {
   );
 
   return (
-    <section id="pricing" className="relative py-20 md:py-28 overflow-hidden bg-[#080b16]">
+    <section id="pricing" className="relative py-14 md:py-20 overflow-hidden bg-[#080b16]">
       <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <SectionLabel>Тарифы</SectionLabel>
@@ -1064,7 +1064,7 @@ function AnimatedNumber({ value, decimals = 0 }: { value: number; decimals?: num
 
 function Support() {
   return (
-    <section id="features" className="relative py-20 md:py-28 overflow-hidden">
+    <section id="features" className="relative py-14 md:py-20 overflow-hidden">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
@@ -1111,7 +1111,7 @@ function Support() {
                   i === 1 ? "mt-6 md:mt-10" : ""
                 }`}
               >
-                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a]">
+                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a] flex items-center justify-center">
                   {x.video ? (
                     <video
                       src={x.src}
@@ -1120,10 +1120,10 @@ function Support() {
                       loop
                       playsInline
                       preload="metadata"
-                      className="w-full h-full object-cover object-top"
+                      className="w-full h-full object-contain"
                     />
                   ) : (
-                    <img src={x.src} alt={x.alt} className="w-full h-full object-cover object-top" />
+                    <img src={x.src} alt={x.alt} className="w-full h-full object-contain" />
                   )}
                 </div>
               </motion.div>
@@ -1136,12 +1136,164 @@ function Support() {
 }
 
 /* -------------------------------------------------------- */
+/*  Wheel & Daily Games                                      */
+/* -------------------------------------------------------- */
+
+function WheelGames() {
+  const [spinning, setSpinning] = useState(false);
+  const [rot, setRot] = useState(0);
+  const segments = [
+    { label: "+1 день", color: "#7c3aed" },
+    { label: "Спин", color: "#0891b2" },
+    { label: "-10%", color: "#d9468f" },
+    { label: "+2 дня", color: "#0f766e" },
+    { label: "Фон", color: "#2563eb" },
+    { label: "Почти", color: "#64748b" },
+    { label: "+7 дней", color: "#9333ea" },
+    { label: "Арктика", color: "#06b6d4" },
+  ];
+  const step = 360 / segments.length;
+  const spin = () => {
+    if (spinning) return;
+    setSpinning(true);
+    const target = rot + 360 * 5 + Math.floor(Math.random() * 360);
+    setRot(target);
+    setTimeout(() => setSpinning(false), 4200);
+  };
+
+  return (
+    <section className="relative py-16 md:py-24 overflow-hidden bg-[#050711]">
+      <div className="absolute inset-0 bg-[radial-gradient(700px_500px_at_20%_40%,rgba(124,58,237,0.18),transparent),radial-gradient(600px_500px_at_85%_60%,rgba(34,211,238,0.14),transparent)]" />
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          <div className="lg:col-span-5">
+            <SectionLabel>Ежедневные игры</SectionLabel>
+            <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.05] pb-[0.08em]">
+              Крути колесо. <br />
+              <span className="text-gradient-accent italic font-medium">Забирай бонусы.</span>
+            </h2>
+            <p className="mt-6 text-[17px] text-text-mute leading-[1.6] max-w-[480px]">
+              Колесо фортуны, «Угадай слово», 21 очко, минёр, больше-меньше и морской бой. До 30
+              ежедневных игр — за дни подписки, промокоды и оформление профиля.
+            </p>
+
+            <div className="mt-8 grid grid-cols-2 gap-3 max-w-[440px]">
+              {[
+                "1 спин в день",
+                "Спин за 10 ₽",
+                "Дни подписки",
+                "Промокоды",
+                "Фоны профиля",
+                "6 игр в кабинете",
+              ].map((t, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-[13.5px] font-medium"
+                >
+                  {t}
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={spin}
+              disabled={spinning}
+              className="mt-8 inline-flex items-center gap-3 rounded-full px-7 py-4 text-[15px] font-semibold text-white bg-gradient-to-r from-violet to-electric hover:opacity-95 transition disabled:opacity-70"
+            >
+              <Sparkles className="w-4 h-4" />
+              {spinning ? "Крутится…" : "Крутить колесо"}
+            </button>
+          </div>
+
+          <div className="lg:col-span-7 relative">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6 items-center">
+              {/* Interactive wheel mock */}
+              <div className="md:col-span-3 relative flex items-center justify-center aspect-square max-w-[520px] mx-auto w-full">
+                <div className="absolute inset-0 rounded-full bg-[radial-gradient(closest-side,rgba(124,58,237,0.35),transparent_70%)] blur-2xl" />
+                <div className="relative w-full h-full rounded-full p-[6px] bg-gradient-to-br from-white/25 to-white/5 shadow-[0_30px_120px_-30px_rgba(124,58,237,0.6)]">
+                  <motion.div
+                    animate={{ rotate: rot }}
+                    transition={{ duration: 4, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative w-full h-full rounded-full overflow-hidden"
+                    style={{
+                      background: `conic-gradient(${segments
+                        .map((s, i) => `${s.color} ${i * step}deg ${(i + 1) * step}deg`)
+                        .join(",")})`,
+                    }}
+                  >
+                    {segments.map((s, i) => {
+                      const angle = i * step + step / 2;
+                      return (
+                        <div
+                          key={i}
+                          className="absolute left-1/2 top-1/2 origin-[0_0] text-[11px] md:text-[13px] font-semibold text-white/95 font-mono uppercase tracking-wider whitespace-nowrap"
+                          style={{
+                            transform: `rotate(${angle}deg) translate(38%, -50%)`,
+                          }}
+                        >
+                          {s.label}
+                        </div>
+                      );
+                    })}
+                    <div className="absolute inset-[18%] rounded-full bg-[#0a0d1a] border border-white/10 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-cyan">Спин</div>
+                        <div className="mt-1 font-display font-extrabold text-[22px] md:text-[28px]">10 ₽</div>
+                      </div>
+                    </div>
+                  </motion.div>
+                  {/* Pointer */}
+                  <div className="absolute top-[-6px] left-1/2 -translate-x-1/2 z-10">
+                    <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[18px] border-l-transparent border-r-transparent border-b-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Game previews */}
+              <div className="md:col-span-2 flex flex-col gap-4">
+                <div className="rounded-3xl overflow-hidden aspect-[9/16] bg-black glow-ring p-[4px] bg-white/10">
+                  <div className="w-full h-full rounded-[22px] overflow-hidden bg-black flex items-center justify-center">
+                    <video
+                      src={A.games3Video}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </div>
+                <div className="rounded-3xl overflow-hidden aspect-[9/16] bg-black glow-ring p-[4px] bg-white/10">
+                  <div className="w-full h-full rounded-[22px] overflow-hidden bg-black flex items-center justify-center">
+                    <video
+                      src={A.games4Video}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------- */
 /*  Bonuses                                                  */
 /* -------------------------------------------------------- */
 
+
 function Bonuses() {
   return (
-    <section className="relative py-24 md:py-36 overflow-hidden bg-[#080b16]">
+    <section className="relative py-16 md:py-24 overflow-hidden bg-[#080b16]">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <SectionLabel>Бонусы</SectionLabel>
         <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,64px)] leading-[1.02] max-w-[900px]">
@@ -1207,28 +1359,28 @@ function Bonuses() {
 /* -------------------------------------------------------- */
 
 const REVIEWS = [
-  { author: "Паша Кирпич", handle: "@pashak", text: "Отличный VPN, пользуюсь уже месяц. Скорость супер — видео в 4K грузятся без лагов, а пинг в играх почти не вырос. Приложение удобное, подключается за пару секунд. За свои деньги — просто топ." },
-  { author: "Anastasia", handle: "@anastasia", text: "В поисках стабильного VPN, который будет работать и с мобильным интернетом. Легко и быстро подключилась, всё работает, всё летает." },
-  { author: "Даниил", handle: "@daniil", text: "Отличный впн, работает без нареканий." },
-  { author: "Zetop", handle: "@zetop", text: "Хм, ну норм. Пользуюсь уже пару недель — стабильно, к скорости вопросов нет." },
-  { author: "Артём", handle: "@artem_k", text: "Настроил Happ за минуту по инструкции из бота. Пробный период дал спокойно проверить всё до оплаты." },
-  { author: "Марина", handle: "@marina", text: "Подключила себе и мужу с одной подписки, докупили второе устройство. Управлять из Telegram реально удобно." },
+  { author: "Паша", handle: "Пользователь DvinVPN", text: "Отличный VPN, пользуюсь уже месяц. Скорость супер — видео в 4K грузятся без лагов, а пинг в играх почти не вырос. Приложение удобное, подключается за пару секунд. За свои деньги — просто топ." },
+  { author: "Anastasia", handle: "Пользователь DvinVPN", text: "В поисках стабильного VPN, который будет работать и с мобильным интернетом. Легко и быстро подключилась, всё работает, всё летает." },
+  { author: "Даниил", handle: "Пользователь DvinVPN", text: "Отличный впн, работает без нареканий." },
+  { author: "Zetop", handle: "Пользователь DvinVPN", text: "Хм, ну норм. Пользуюсь уже пару недель — стабильно, к скорости вопросов нет." },
+  { author: "Артём", handle: "Пользователь DvinVPN", text: "Настроил Happ за минуту по инструкции из бота. Пробный период дал спокойно проверить всё до оплаты." },
+  { author: "Марина", handle: "Пользователь DvinVPN", text: "Подключила себе и мужу с одной подписки, докупили второе устройство. Управлять из Telegram реально удобно." },
 ];
 
 function Reviews() {
   const row1 = REVIEWS;
   const row2 = [...REVIEWS].reverse();
   return (
-    <section id="reviews" className="relative py-24 md:py-32 overflow-hidden">
+    <section id="reviews" className="relative py-16 md:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(600px_500px_at_20%_30%,rgba(124,58,237,0.15),transparent),radial-gradient(500px_400px_at_80%_60%,rgba(34,211,238,0.12),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="max-w-[900px]">
           <SectionLabel>Отзывы</SectionLabel>
-          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,76px)] leading-[1.02]">
+          <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,76px)] leading-[1.05] pb-[0.08em]">
             Работает там, где это <span className="text-gradient-accent italic font-medium">действительно нужно.</span>
           </h2>
           <p className="mt-6 text-[16px] text-text-mute max-w-[520px]">
-            Реальные отзывы пользователей DvinVPN из Telegram-сообщества.
+            Реальные отзывы пользователей DvinVPN.
           </p>
         </div>
       </div>
@@ -1236,18 +1388,6 @@ function Reviews() {
       <div className="relative mt-14 space-y-5 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
         <Marquee items={row1} duration={55} />
         <Marquee items={row2} duration={70} reverse />
-      </div>
-
-      <div className="mt-12 text-center">
-        <a
-          href="https://t.me/DvinVPNchat/190"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.02] px-6 py-3 text-[15px] font-medium hover:bg-white/[0.05] transition"
-        >
-          <Send className="w-4 h-4" /> Читать в Telegram
-          <ArrowUpRight className="w-4 h-4 opacity-70" />
-        </a>
       </div>
     </section>
   );
@@ -1312,7 +1452,7 @@ const FAQ = [
 function FaqSection() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section id="faq" className="relative py-20 md:py-28">
+    <section id="faq" className="relative py-14 md:py-20">
       <div className="mx-auto max-w-[1000px] px-5 md:px-10">
         <SectionLabel>FAQ</SectionLabel>
         <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.02]">
@@ -1362,7 +1502,7 @@ function FaqSection() {
 
 function FinalCTA() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden bg-[#080b16]">
+    <section className="relative py-14 md:py-20 overflow-hidden bg-[#080b16]">
       {/* Composed gradient — no globe repeat */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(900px_600px_at_50%_100%,rgba(124,58,237,0.35),transparent_70%),radial-gradient(700px_500px_at_20%_20%,rgba(37,99,235,0.22),transparent_65%),radial-gradient(600px_400px_at_80%_30%,rgba(34,211,238,0.18),transparent_65%)]" />
@@ -1520,6 +1660,7 @@ function LandingPage() {
         <Trial />
         <Pricing />
         <Support />
+        <WheelGames />
         <Bonuses />
         <Reviews />
         <FaqSection />
