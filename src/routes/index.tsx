@@ -420,7 +420,7 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="how" className="relative py-16 md:py-24 overflow-hidden">
+    <section id="how" className="relative py-12 md:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
@@ -631,7 +631,7 @@ function MiniAppScene() {
 /* Mobile scenes - non-pinned */
 function MiniAppSceneMobile() {
   return (
-    <section id="miniapp-m" className="sm:hidden py-16 px-5 bg-[#080b16] relative">
+    <section id="miniapp-m" className="sm:hidden py-10 px-5 bg-[#080b16] relative">
       <SectionLabel>Mini App</SectionLabel>
       <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[38px] leading-[1.02]">
         Один кабинет. <span className="text-gradient-accent italic font-medium">Все действия.</span>
@@ -664,7 +664,7 @@ function MiniAppSceneMobile() {
 
 function WebSection() {
   return (
-    <section className="relative py-14 md:py-20 overflow-hidden bg-[#050711]">
+    <section className="relative py-10 md:py-20 overflow-hidden bg-[#050711]">
       <div className="absolute inset-0 bg-aurora opacity-40" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
@@ -784,7 +784,7 @@ function WebSection() {
 
 function Trial() {
   return (
-    <section className="relative py-14 md:py-20 overflow-hidden border-y border-white/5">
+    <section className="relative py-10 md:py-20 overflow-hidden border-y border-white/5">
       <div className="absolute inset-0 bg-[radial-gradient(700px_400px_at_50%_50%,rgba(34,211,238,0.12),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
@@ -860,7 +860,7 @@ function Pricing() {
   );
 
   return (
-    <section id="pricing" className="relative py-14 md:py-20 overflow-hidden bg-[#080b16]">
+    <section id="pricing" className="relative py-10 md:py-20 overflow-hidden bg-[#080b16]">
       <div className="absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <SectionLabel>Тарифы</SectionLabel>
@@ -1082,7 +1082,7 @@ function AnimatedNumber({ value, decimals = 0 }: { value: number; decimals?: num
 
 function Support() {
   return (
-    <section id="features" className="relative py-14 md:py-20 overflow-hidden">
+    <section id="features" className="relative py-10 md:py-20 overflow-hidden">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
@@ -1157,7 +1157,7 @@ function Support() {
 
 function WheelGames() {
   return (
-    <section className="relative py-16 md:py-24 overflow-hidden bg-[#050711]">
+    <section className="relative py-12 md:py-24 overflow-hidden bg-[#050711]">
       <div className="absolute inset-0 bg-[radial-gradient(700px_500px_at_20%_40%,rgba(124,58,237,0.18),transparent),radial-gradient(600px_500px_at_85%_60%,rgba(34,211,238,0.14),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
@@ -1232,7 +1232,7 @@ function WheelGames() {
 
 function Bonuses() {
   return (
-    <section className="relative py-16 md:py-24 overflow-hidden bg-[#080b16]">
+    <section className="relative py-12 md:py-24 overflow-hidden bg-[#080b16]">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <SectionLabel>Бонусы</SectionLabel>
         <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(34px,5vw,64px)] leading-[1.02] max-w-[900px]">
@@ -1314,7 +1314,7 @@ function Reviews() {
   const row1 = REVIEWS;
   const row2 = [...REVIEWS].reverse();
   return (
-    <section id="reviews" className="relative py-16 md:py-24 overflow-hidden">
+    <section id="reviews" className="relative py-12 md:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(600px_500px_at_20%_30%,rgba(124,58,237,0.15),transparent),radial-gradient(500px_400px_at_80%_60%,rgba(34,211,238,0.12),transparent)]" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 relative">
         <div className="max-w-[900px]">
@@ -1395,7 +1395,7 @@ const FAQ = [
 function FaqSection() {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section id="faq" className="relative py-14 md:py-20">
+    <section id="faq" className="relative py-10 md:py-20">
       <div className="mx-auto max-w-[1000px] px-5 md:px-10">
         <SectionLabel>FAQ</SectionLabel>
         <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[clamp(36px,5vw,72px)] leading-[1.02]">
@@ -1445,7 +1445,7 @@ function FaqSection() {
 
 function FinalCTA() {
   return (
-    <section className="relative py-14 md:py-20 overflow-hidden bg-[#080b16]">
+    <section className="relative py-10 md:py-20 overflow-hidden bg-[#080b16]">
       {/* Composed gradient — no globe repeat */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(900px_600px_at_50%_100%,rgba(124,58,237,0.35),transparent_70%),radial-gradient(700px_500px_at_20%_20%,rgba(37,99,235,0.22),transparent_65%),radial-gradient(600px_400px_at_80%_30%,rgba(34,211,238,0.18),transparent_65%)]" />
@@ -1508,7 +1508,7 @@ function FinalCTA() {
 
 function Footer() {
   return (
-    <footer className="relative border-t border-white/5 bg-[#050711] py-16 px-5 md:px-10">
+    <footer className="relative border-t border-white/5 bg-[#050711] py-10 md:py-16 px-5 md:px-10">
       <div className="mx-auto max-w-[1400px] grid gap-12 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2.5">
