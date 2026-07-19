@@ -1112,8 +1112,8 @@ function Support() {
                   i === 1 ? "mt-8 md:mt-12" : ""
                 }`}
               >
-                <div className="w-full h-full rounded-[22px] overflow-hidden bg-black">
-                  <img src={x.src} alt={x.alt} className="w-full h-full object-cover object-top" />
+                <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#0a0d1a] flex items-start justify-center">
+                  <img src={x.src} alt={x.alt} className="w-full h-auto" />
                 </div>
               </motion.div>
             ))}
