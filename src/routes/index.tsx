@@ -1096,16 +1096,27 @@ function Support() {
               ))}
             </div>
           </div>
-          <div className="lg:col-span-7 grid grid-cols-2 gap-4">
-            <div className="card-glass rounded-3xl p-2 col-span-2">
-              <img src={A.supportTicket} alt="Поддержка" className="w-full rounded-2xl object-cover" />
-            </div>
-            <div className="card-glass rounded-3xl p-2">
-              <img src={A.faq} alt="FAQ" className="w-full rounded-2xl object-cover" />
-            </div>
-            <div className="card-glass rounded-3xl p-2">
-              <img src={A.payments} alt="Платежи" className="w-full rounded-2xl object-cover" />
-            </div>
+          <div className="lg:col-span-7 grid grid-cols-3 gap-3 md:gap-4">
+            {[
+              { src: A.supportTicket, alt: "Обращение в поддержку" },
+              { src: A.faq, alt: "FAQ внутри Mini App" },
+              { src: A.payments, alt: "История платежей" },
+            ].map((x, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                className={`relative aspect-[9/19.5] rounded-[28px] p-[6px] bg-white/10 glow-ring ${
+                  i === 1 ? "mt-8 md:mt-12" : ""
+                }`}
+              >
+                <div className="w-full h-full rounded-[22px] overflow-hidden bg-black">
+                  <img src={x.src} alt={x.alt} className="w-full h-full object-cover object-top" />
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
