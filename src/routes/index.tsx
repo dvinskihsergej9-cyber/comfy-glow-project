@@ -608,6 +608,38 @@ function MiniAppScene() {
   );
 }
 
+/* Mobile scenes - non-pinned */
+function MiniAppSceneMobile() {
+  return (
+    <section id="miniapp-m" className="lg:hidden py-20 px-5 bg-[#080b16] relative">
+      <SectionLabel>Mini App</SectionLabel>
+      <h2 className="mt-4 font-display font-extrabold tracking-[-0.03em] text-[38px] leading-[0.95]">
+        Один кабинет. <span className="text-gradient-accent italic font-medium">Все действия.</span>
+      </h2>
+      <div className="mt-12 space-y-14">
+        {SCENES.map((s, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-cyan">{s.tag}</div>
+            <h3 className="mt-2 font-display text-[24px] font-bold">{s.title}</h3>
+            <p className="mt-2 text-[15px] text-text-mute leading-[1.6]">{s.text}</p>
+            <div className="mt-5 relative w-full max-w-[320px] mx-auto aspect-[9/19.5] rounded-[36px] p-[8px] bg-white/10 glow-ring">
+              <div className="w-full h-full rounded-[30px] overflow-hidden bg-black">
+                <img src={s.img} alt={s.title} className="w-full h-full object-cover object-top" />
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* -------------------------------------------------------- */
 /*  Web + Devices                                            */
 /* -------------------------------------------------------- */
