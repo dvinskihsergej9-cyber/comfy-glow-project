@@ -65,7 +65,7 @@ function LoginPreview() {
           >
             <motion.div
               className="lp-logo-stage"
-              style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+              style={{ rotateX, rotateY, transformStyle: "preserve-3d", ["--logo-mask" as any]: `url(${A.logoTransparent})` }}
             >
               <motion.div
                 className="lp-logo-halo"
@@ -80,7 +80,7 @@ function LoginPreview() {
                 style={{ transform: "translateZ(-20px)" }}
               />
               <motion.img
-                src={A.logo}
+                src={A.logoTransparent}
                 alt="DvinVPN"
                 className="lp-logo"
                 draggable={false}
@@ -332,12 +332,11 @@ function LoginPreviewStyles() {
       }
       .lp-logo-glare {
         position: absolute; inset: 0;
-        border-radius: 24%;
         mix-blend-mode: screen;
         pointer-events: none;
-        opacity: 0.9;
-        -webkit-mask: radial-gradient(circle at 50% 50%, #000 55%, transparent 72%);
-                mask: radial-gradient(circle at 50% 50%, #000 55%, transparent 72%);
+        opacity: 0.85;
+        -webkit-mask: var(--logo-mask) center/contain no-repeat;
+                mask: var(--logo-mask) center/contain no-repeat;
       }
       .lp-title {
         font-size: clamp(30px, 5vw, 40px);
