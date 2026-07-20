@@ -80,7 +80,7 @@ function LoginPreview() {
                 style={{ transform: "translateZ(-20px)" }}
               />
               <motion.img
-                src={A.logo}
+                src={A.logoTransparent}
                 alt="DvinVPN"
                 className="lp-logo"
                 draggable={false}
