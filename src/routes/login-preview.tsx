@@ -296,6 +296,14 @@ function LoginPreviewStyles() {
         display: grid; place-items: center;
         margin-bottom: 18px;
       }
+      .lp-logo-3d { perspective: 900px; cursor: grab; }
+      .lp-logo-stage {
+        position: relative;
+        width: 100%; height: 100%;
+        transform-style: preserve-3d;
+        will-change: transform;
+        display: grid; place-items: center;
+      }
       .lp-logo-halo {
         position: absolute; inset: -18%;
         background: radial-gradient(circle at 50% 50%,
@@ -303,6 +311,14 @@ function LoginPreviewStyles() {
           rgba(37,99,235,0.35) 35%,
           transparent 70%);
         filter: blur(28px);
+        border-radius: 999px;
+      }
+      .lp-logo-shadow {
+        position: absolute;
+        left: 10%; right: 10%; bottom: -14%;
+        height: 22px;
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0.55), transparent 70%);
+        filter: blur(10px);
         border-radius: 999px;
       }
       .lp-logo {
@@ -313,6 +329,15 @@ function LoginPreviewStyles() {
         filter:
           drop-shadow(0 20px 40px rgba(91,92,246,0.45))
           drop-shadow(0 6px 14px rgba(34,211,238,0.25));
+      }
+      .lp-logo-glare {
+        position: absolute; inset: 0;
+        border-radius: 24%;
+        mix-blend-mode: screen;
+        pointer-events: none;
+        opacity: 0.9;
+        -webkit-mask: radial-gradient(circle at 50% 50%, #000 55%, transparent 72%);
+                mask: radial-gradient(circle at 50% 50%, #000 55%, transparent 72%);
       }
       .lp-title {
         font-size: clamp(30px, 5vw, 40px);
