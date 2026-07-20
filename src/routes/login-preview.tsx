@@ -65,7 +65,7 @@ function LoginPreview() {
           >
             <motion.div
               className="lp-logo-stage"
-              style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+              style={{ rotateX, rotateY, transformStyle: "preserve-3d", ["--logo-mask" as any]: `url(${A.logoTransparent})` }}
             >
               <motion.div
                 className="lp-logo-halo"
