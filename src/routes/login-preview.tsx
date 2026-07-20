@@ -17,6 +17,28 @@ export const Route = createFileRoute("/login-preview")({
 function LoginPreview() {
   const [tab, setTab] = useState<"login" | "signup">("login");
 
+  // 3D tilt for the logo — mouse tracking with springs
+  const logoRef = useRef<HTMLDivElement>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 140, damping: 14, mass: 0.6 });
+  const sy = useSpring(my, { stiffness: 140, damping: 14, mass: 0.6 });
+  const rotateY = useTransform(sx, [-0.5, 0.5], [-22, 22]);
+  const rotateX = useTransform(sy, [-0.5, 0.5], [18, -18]);
+  const glareX = useTransform(sx, [-0.5, 0.5], ["25%", "75%"]);
+  const glareY = useTransform(sy, [-0.5, 0.5], ["25%", "75%"]);
+
+  const onMove = (e: React.MouseEvent) => {
+    const r = logoRef.current?.getBoundingClientRect();
+    if (!r) return;
+    mx.set((e.clientX - r.left) / r.width - 0.5);
+    my.set((e.clientY - r.top) / r.height - 0.5);
+  };
+  const onLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
+
   return (
     <main className="lp-root">
       {/* Decorative background — kept separate from the form */}
@@ -32,26 +54,55 @@ function LoginPreview() {
         {/* Brand block: logo + name + tagline */}
         <div className="lp-brand">
           <motion.div
-            className="lp-logo-wrap"
+            ref={logoRef}
+            className="lp-logo-wrap lp-logo-3d"
+            onMouseMove={onMove}
+            onMouseLeave={onLeave}
             initial={{ opacity: 0, y: 12, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            style={{ perspective: 900 }}
           >
             <motion.div
-              className="lp-logo-halo"
-              animate={{ opacity: [0.55, 0.9, 0.55] }}
-              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-              aria-hidden
-            />
-            <motion.img
-              src={A.logo}
-              alt="DvinVPN"
-              className="lp-logo"
-              draggable={false}
-              animate={{ y: [0, -8, 0], rotate: [-2, 2, -2] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            />
+              className="lp-logo-stage"
+              style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+            >
+              <motion.div
+                className="lp-logo-halo"
+                style={{ transform: "translateZ(-40px)" }}
+                animate={{ opacity: [0.55, 0.9, 0.55] }}
+                transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+                aria-hidden
+              />
+              <motion.div
+                className="lp-logo-shadow"
+                aria-hidden
+                style={{ transform: "translateZ(-20px)" }}
+              />
+              <motion.img
+                src={A.logo}
+                alt="DvinVPN"
+                className="lp-logo"
+                draggable={false}
+                style={{ transform: "translateZ(60px)" }}
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div
+                className="lp-logo-glare"
+                aria-hidden
+                style={{
+                  transform: "translateZ(80px)",
+                  background: useTransform(
+                    [glareX, glareY],
+                    ([x, y]) =>
+                      `radial-gradient(circle at ${x} ${y}, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 25%, transparent 55%)`,
+                  ) as any,
+                }}
+              />
+            </motion.div>
           </motion.div>
+
 
           <motion.h1
             className="lp-title font-display"
