@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OfferRouteImport } from './routes/offer'
+import { Route as LoginPreviewRouteImport } from './routes/login-preview'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TermsRoute = TermsRouteImport.update({
@@ -29,6 +30,11 @@ const OfferRoute = OfferRouteImport.update({
   path: '/offer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginPreviewRoute = LoginPreviewRouteImport.update({
+  id: '/login-preview',
+  path: '/login-preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login-preview': typeof LoginPreviewRoute
   '/offer': typeof OfferRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login-preview': typeof LoginPreviewRoute
   '/offer': typeof OfferRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/login-preview': typeof LoginPreviewRoute
   '/offer': typeof OfferRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/offer' | '/privacy' | '/terms'
+  fullPaths: '/' | '/login-preview' | '/offer' | '/privacy' | '/terms'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/offer' | '/privacy' | '/terms'
-  id: '__root__' | '/' | '/offer' | '/privacy' | '/terms'
+  to: '/' | '/login-preview' | '/offer' | '/privacy' | '/terms'
+  id: '__root__' | '/' | '/login-preview' | '/offer' | '/privacy' | '/terms'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginPreviewRoute: typeof LoginPreviewRoute
   OfferRoute: typeof OfferRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OfferRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login-preview': {
+      id: '/login-preview'
+      path: '/login-preview'
+      fullPath: '/login-preview'
+      preLoaderRoute: typeof LoginPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginPreviewRoute: LoginPreviewRoute,
   OfferRoute: OfferRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
