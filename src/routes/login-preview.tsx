@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Mail } from "lucide-react";
 import { A } from "@/lib/assets";
 
@@ -17,6 +17,28 @@ export const Route = createFileRoute("/login-preview")({
 function LoginPreview() {
   const [tab, setTab] = useState<"login" | "signup">("login");
 
+  // 3D tilt for the logo — mouse tracking with springs
+  const logoRef = useRef<HTMLDivElement>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 140, damping: 14, mass: 0.6 });
+  const sy = useSpring(my, { stiffness: 140, damping: 14, mass: 0.6 });
+  const rotateY = useTransform(sx, [-0.5, 0.5], [-22, 22]);
+  const rotateX = useTransform(sy, [-0.5, 0.5], [18, -18]);
+  const glareX = useTransform(sx, [-0.5, 0.5], ["25%", "75%"]);
+  const glareY = useTransform(sy, [-0.5, 0.5], ["25%", "75%"]);
+
+  const onMove = (e: React.MouseEvent) => {
+    const r = logoRef.current?.getBoundingClientRect();
+    if (!r) return;
+    mx.set((e.clientX - r.left) / r.width - 0.5);
+    my.set((e.clientY - r.top) / r.height - 0.5);
+  };
+  const onLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
+
   return (
     <main className="lp-root">
       {/* Decorative background — kept separate from the form */}
@@ -32,26 +54,55 @@ function LoginPreview() {
         {/* Brand block: logo + name + tagline */}
         <div className="lp-brand">
           <motion.div
-            className="lp-logo-wrap"
+            ref={logoRef}
+            className="lp-logo-wrap lp-logo-3d"
+            onMouseMove={onMove}
+            onMouseLeave={onLeave}
             initial={{ opacity: 0, y: 12, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            style={{ perspective: 900 }}
           >
             <motion.div
-              className="lp-logo-halo"
-              animate={{ opacity: [0.55, 0.9, 0.55] }}
-              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-              aria-hidden
-            />
-            <motion.img
-              src={A.logo}
-              alt="DvinVPN"
-              className="lp-logo"
-              draggable={false}
-              animate={{ y: [0, -8, 0], rotate: [-2, 2, -2] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            />
+              className="lp-logo-stage"
+              style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+            >
+              <motion.div
+                className="lp-logo-halo"
+                style={{ transform: "translateZ(-40px)" }}
+                animate={{ opacity: [0.55, 0.9, 0.55] }}
+                transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+                aria-hidden
+              />
+              <motion.div
+                className="lp-logo-shadow"
+                aria-hidden
+                style={{ transform: "translateZ(-20px)" }}
+              />
+              <motion.img
+                src={A.logo}
+                alt="DvinVPN"
+                className="lp-logo"
+                draggable={false}
+                style={{ transform: "translateZ(60px)" }}
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div
+                className="lp-logo-glare"
+                aria-hidden
+                style={{
+                  transform: "translateZ(80px)",
+                  background: useTransform(
+                    [glareX, glareY],
+                    ([x, y]) =>
+                      `radial-gradient(circle at ${x} ${y}, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 25%, transparent 55%)`,
+                  ) as any,
+                }}
+              />
+            </motion.div>
           </motion.div>
+
 
           <motion.h1
             className="lp-title font-display"
@@ -245,6 +296,14 @@ function LoginPreviewStyles() {
         display: grid; place-items: center;
         margin-bottom: 18px;
       }
+      .lp-logo-3d { perspective: 900px; cursor: grab; }
+      .lp-logo-stage {
+        position: relative;
+        width: 100%; height: 100%;
+        transform-style: preserve-3d;
+        will-change: transform;
+        display: grid; place-items: center;
+      }
       .lp-logo-halo {
         position: absolute; inset: -18%;
         background: radial-gradient(circle at 50% 50%,
@@ -252,6 +311,14 @@ function LoginPreviewStyles() {
           rgba(37,99,235,0.35) 35%,
           transparent 70%);
         filter: blur(28px);
+        border-radius: 999px;
+      }
+      .lp-logo-shadow {
+        position: absolute;
+        left: 10%; right: 10%; bottom: -14%;
+        height: 22px;
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0.55), transparent 70%);
+        filter: blur(10px);
         border-radius: 999px;
       }
       .lp-logo {
@@ -262,6 +329,15 @@ function LoginPreviewStyles() {
         filter:
           drop-shadow(0 20px 40px rgba(91,92,246,0.45))
           drop-shadow(0 6px 14px rgba(34,211,238,0.25));
+      }
+      .lp-logo-glare {
+        position: absolute; inset: 0;
+        border-radius: 24%;
+        mix-blend-mode: screen;
+        pointer-events: none;
+        opacity: 0.9;
+        -webkit-mask: radial-gradient(circle at 50% 50%, #000 55%, transparent 72%);
+                mask: radial-gradient(circle at 50% 50%, #000 55%, transparent 72%);
       }
       .lp-title {
         font-size: clamp(30px, 5vw, 40px);
