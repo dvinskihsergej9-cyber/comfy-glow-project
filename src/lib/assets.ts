@@ -1,6 +1,7 @@
 import heroVideo from "@/assets/hero-globe.mp4.asset.json";
 import heroPoster from "@/assets/hero-globe-poster.jpg.asset.json";
 import logo from "@/assets/dvinvpn-logo.png.asset.json";
+import logoTransparent from "@/assets/dvinvpn-logo-transparent.png.asset.json";
 import miniappHome from "@/assets/miniapp-home.jpg.asset.json";
 import devicesAdd from "@/assets/devices-add.jpg.asset.json";
 import devicesList from "@/assets/devices-list.jpg.asset.json";
