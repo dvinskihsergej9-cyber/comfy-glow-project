@@ -304,7 +304,7 @@ function Hero() {
               href={TG("site_hero")}
               target="_blank"
               rel="noreferrer"
-              className="btn-primary-glow inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
+              className="btn-primary-glow btn-shine inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
             >
               <Send className="w-4 h-4" /> Открыть в Telegram
               <ArrowUpRight className="w-4 h-4 opacity-70" />
@@ -1194,7 +1194,7 @@ function WheelGames() {
               href={TG("site_games")}
               target="_blank"
               rel="noreferrer"
-              className="mt-8 inline-flex items-center gap-3 rounded-full px-7 py-4 text-[15px] font-semibold text-white bg-gradient-to-r from-violet to-electric hover:opacity-95 transition"
+              className="btn-shine mt-8 inline-flex items-center gap-3 rounded-full px-7 py-4 text-[15px] font-semibold text-white bg-gradient-to-r from-violet to-electric hover:opacity-95 transition"
             >
               <Sparkles className="w-4 h-4" />
               Играть в DvinVPN
