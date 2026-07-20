@@ -304,7 +304,7 @@ function Hero() {
               href={TG("site_hero")}
               target="_blank"
               rel="noreferrer"
-              className="btn-primary-glow inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
+              className="btn-primary-glow btn-shine inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-semibold text-white"
             >
               <Send className="w-4 h-4" /> Открыть в Telegram
               <ArrowUpRight className="w-4 h-4 opacity-70" />
