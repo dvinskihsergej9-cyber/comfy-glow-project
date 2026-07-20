@@ -24,6 +24,7 @@ export const A = {
   heroVideo: heroVideo.url,
   heroPoster: heroPoster.url,
   logo: logo.url,
+  logoTransparent: logoTransparent.url,
   miniappHome: miniappHome.url,
   devicesAdd: devicesAdd.url,
   devicesList: devicesList.url,
