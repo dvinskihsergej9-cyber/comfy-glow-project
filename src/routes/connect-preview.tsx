@@ -168,7 +168,7 @@ function ConnectPreviewStyles() {
         width: 100%;
         overflow-x: hidden;
         color: #ece9ff;
-        background: #0f0a24;
+        background: #1a0f2e;
         padding: 48px 20px 72px;
         font-family: 'Manrope', 'Inter', system-ui, -apple-system, sans-serif;
       }
@@ -181,25 +181,25 @@ function ConnectPreviewStyles() {
       .cp-orb {
         position: absolute;
         border-radius: 999px;
-        filter: blur(110px);
-        opacity: 0.55;
+        filter: blur(140px);
+        opacity: 0.35;
       }
       .cp-orb-a {
         width: 560px; height: 560px;
         left: -180px; top: -160px;
-        background: radial-gradient(circle at 40% 40%, #7c3aed 0%, transparent 65%);
+        background: radial-gradient(circle at 40% 40%, #5b21b6 0%, transparent 65%);
       }
       .cp-orb-b {
         width: 620px; height: 620px;
         right: -220px; top: 4%;
-        background: radial-gradient(circle at 60% 40%, #38bdf8 0%, transparent 65%);
-        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #6d28d9 0%, transparent 65%);
+        opacity: 0.28;
       }
       .cp-orb-c {
         width: 500px; height: 500px;
         left: 30%; bottom: -240px;
-        background: radial-gradient(circle at 50% 50%, #6366f1 0%, transparent 65%);
-        opacity: 0.4;
+        background: radial-gradient(circle at 50% 50%, #4c1d95 0%, transparent 65%);
+        opacity: 0.3;
       }
 
       .cp-shell {
