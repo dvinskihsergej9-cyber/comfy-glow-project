@@ -392,6 +392,8 @@ function ConnectPreviewStyles() {
         background: rgba(255,255,255,0.06);
         border: 1px solid rgba(255,255,255,0.12);
         cursor: pointer;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
         transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
       }
       .cp-btn:hover {
