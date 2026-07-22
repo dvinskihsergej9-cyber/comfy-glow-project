@@ -16,6 +16,13 @@ import { Route as LoginPreviewRouteImport } from './routes/login-preview'
 import { Route as ConnectPreviewRouteImport } from './routes/connect-preview'
 import { Route as AppPreviewRouteImport } from './routes/app-preview'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppPreviewIndexRouteImport } from './routes/app-preview.index'
+import { Route as AppPreviewSupportRouteImport } from './routes/app-preview.support'
+import { Route as AppPreviewSubscriptionRouteImport } from './routes/app-preview.subscription'
+import { Route as AppPreviewReferralsRouteImport } from './routes/app-preview.referrals'
+import { Route as AppPreviewPaymentsRouteImport } from './routes/app-preview.payments'
+import { Route as AppPreviewDevicesRouteImport } from './routes/app-preview.devices'
+import { Route as AppPreviewDashboardRouteImport } from './routes/app-preview.dashboard'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -52,34 +59,89 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppPreviewIndexRoute = AppPreviewIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppPreviewRoute,
+} as any)
+const AppPreviewSupportRoute = AppPreviewSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => AppPreviewRoute,
+} as any)
+const AppPreviewSubscriptionRoute = AppPreviewSubscriptionRouteImport.update({
+  id: '/subscription',
+  path: '/subscription',
+  getParentRoute: () => AppPreviewRoute,
+} as any)
+const AppPreviewReferralsRoute = AppPreviewReferralsRouteImport.update({
+  id: '/referrals',
+  path: '/referrals',
+  getParentRoute: () => AppPreviewRoute,
+} as any)
+const AppPreviewPaymentsRoute = AppPreviewPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AppPreviewRoute,
+} as any)
+const AppPreviewDevicesRoute = AppPreviewDevicesRouteImport.update({
+  id: '/devices',
+  path: '/devices',
+  getParentRoute: () => AppPreviewRoute,
+} as any)
+const AppPreviewDashboardRoute = AppPreviewDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppPreviewRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/app-preview': typeof AppPreviewRoute
+  '/app-preview': typeof AppPreviewRouteWithChildren
   '/connect-preview': typeof ConnectPreviewRoute
   '/login-preview': typeof LoginPreviewRoute
   '/offer': typeof OfferRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/app-preview/dashboard': typeof AppPreviewDashboardRoute
+  '/app-preview/devices': typeof AppPreviewDevicesRoute
+  '/app-preview/payments': typeof AppPreviewPaymentsRoute
+  '/app-preview/referrals': typeof AppPreviewReferralsRoute
+  '/app-preview/subscription': typeof AppPreviewSubscriptionRoute
+  '/app-preview/support': typeof AppPreviewSupportRoute
+  '/app-preview/': typeof AppPreviewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/app-preview': typeof AppPreviewRoute
   '/connect-preview': typeof ConnectPreviewRoute
   '/login-preview': typeof LoginPreviewRoute
   '/offer': typeof OfferRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/app-preview/dashboard': typeof AppPreviewDashboardRoute
+  '/app-preview/devices': typeof AppPreviewDevicesRoute
+  '/app-preview/payments': typeof AppPreviewPaymentsRoute
+  '/app-preview/referrals': typeof AppPreviewReferralsRoute
+  '/app-preview/subscription': typeof AppPreviewSubscriptionRoute
+  '/app-preview/support': typeof AppPreviewSupportRoute
+  '/app-preview': typeof AppPreviewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/app-preview': typeof AppPreviewRoute
+  '/app-preview': typeof AppPreviewRouteWithChildren
   '/connect-preview': typeof ConnectPreviewRoute
   '/login-preview': typeof LoginPreviewRoute
   '/offer': typeof OfferRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/app-preview/dashboard': typeof AppPreviewDashboardRoute
+  '/app-preview/devices': typeof AppPreviewDevicesRoute
+  '/app-preview/payments': typeof AppPreviewPaymentsRoute
+  '/app-preview/referrals': typeof AppPreviewReferralsRoute
+  '/app-preview/subscription': typeof AppPreviewSubscriptionRoute
+  '/app-preview/support': typeof AppPreviewSupportRoute
+  '/app-preview/': typeof AppPreviewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,15 +153,28 @@ export interface FileRouteTypes {
     | '/offer'
     | '/privacy'
     | '/terms'
+    | '/app-preview/dashboard'
+    | '/app-preview/devices'
+    | '/app-preview/payments'
+    | '/app-preview/referrals'
+    | '/app-preview/subscription'
+    | '/app-preview/support'
+    | '/app-preview/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/app-preview'
     | '/connect-preview'
     | '/login-preview'
     | '/offer'
     | '/privacy'
     | '/terms'
+    | '/app-preview/dashboard'
+    | '/app-preview/devices'
+    | '/app-preview/payments'
+    | '/app-preview/referrals'
+    | '/app-preview/subscription'
+    | '/app-preview/support'
+    | '/app-preview'
   id:
     | '__root__'
     | '/'
@@ -109,11 +184,18 @@ export interface FileRouteTypes {
     | '/offer'
     | '/privacy'
     | '/terms'
+    | '/app-preview/dashboard'
+    | '/app-preview/devices'
+    | '/app-preview/payments'
+    | '/app-preview/referrals'
+    | '/app-preview/subscription'
+    | '/app-preview/support'
+    | '/app-preview/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AppPreviewRoute: typeof AppPreviewRoute
+  AppPreviewRoute: typeof AppPreviewRouteWithChildren
   ConnectPreviewRoute: typeof ConnectPreviewRoute
   LoginPreviewRoute: typeof LoginPreviewRoute
   OfferRoute: typeof OfferRoute
@@ -172,12 +254,85 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app-preview/': {
+      id: '/app-preview/'
+      path: '/'
+      fullPath: '/app-preview/'
+      preLoaderRoute: typeof AppPreviewIndexRouteImport
+      parentRoute: typeof AppPreviewRoute
+    }
+    '/app-preview/support': {
+      id: '/app-preview/support'
+      path: '/support'
+      fullPath: '/app-preview/support'
+      preLoaderRoute: typeof AppPreviewSupportRouteImport
+      parentRoute: typeof AppPreviewRoute
+    }
+    '/app-preview/subscription': {
+      id: '/app-preview/subscription'
+      path: '/subscription'
+      fullPath: '/app-preview/subscription'
+      preLoaderRoute: typeof AppPreviewSubscriptionRouteImport
+      parentRoute: typeof AppPreviewRoute
+    }
+    '/app-preview/referrals': {
+      id: '/app-preview/referrals'
+      path: '/referrals'
+      fullPath: '/app-preview/referrals'
+      preLoaderRoute: typeof AppPreviewReferralsRouteImport
+      parentRoute: typeof AppPreviewRoute
+    }
+    '/app-preview/payments': {
+      id: '/app-preview/payments'
+      path: '/payments'
+      fullPath: '/app-preview/payments'
+      preLoaderRoute: typeof AppPreviewPaymentsRouteImport
+      parentRoute: typeof AppPreviewRoute
+    }
+    '/app-preview/devices': {
+      id: '/app-preview/devices'
+      path: '/devices'
+      fullPath: '/app-preview/devices'
+      preLoaderRoute: typeof AppPreviewDevicesRouteImport
+      parentRoute: typeof AppPreviewRoute
+    }
+    '/app-preview/dashboard': {
+      id: '/app-preview/dashboard'
+      path: '/dashboard'
+      fullPath: '/app-preview/dashboard'
+      preLoaderRoute: typeof AppPreviewDashboardRouteImport
+      parentRoute: typeof AppPreviewRoute
+    }
   }
 }
 
+interface AppPreviewRouteChildren {
+  AppPreviewDashboardRoute: typeof AppPreviewDashboardRoute
+  AppPreviewDevicesRoute: typeof AppPreviewDevicesRoute
+  AppPreviewPaymentsRoute: typeof AppPreviewPaymentsRoute
+  AppPreviewReferralsRoute: typeof AppPreviewReferralsRoute
+  AppPreviewSubscriptionRoute: typeof AppPreviewSubscriptionRoute
+  AppPreviewSupportRoute: typeof AppPreviewSupportRoute
+  AppPreviewIndexRoute: typeof AppPreviewIndexRoute
+}
+
+const AppPreviewRouteChildren: AppPreviewRouteChildren = {
+  AppPreviewDashboardRoute: AppPreviewDashboardRoute,
+  AppPreviewDevicesRoute: AppPreviewDevicesRoute,
+  AppPreviewPaymentsRoute: AppPreviewPaymentsRoute,
+  AppPreviewReferralsRoute: AppPreviewReferralsRoute,
+  AppPreviewSubscriptionRoute: AppPreviewSubscriptionRoute,
+  AppPreviewSupportRoute: AppPreviewSupportRoute,
+  AppPreviewIndexRoute: AppPreviewIndexRoute,
+}
+
+const AppPreviewRouteWithChildren = AppPreviewRoute._addFileChildren(
+  AppPreviewRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AppPreviewRoute: AppPreviewRoute,
+  AppPreviewRoute: AppPreviewRouteWithChildren,
   ConnectPreviewRoute: ConnectPreviewRoute,
   LoginPreviewRoute: LoginPreviewRoute,
   OfferRoute: OfferRoute,
