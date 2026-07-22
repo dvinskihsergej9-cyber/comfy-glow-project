@@ -404,7 +404,7 @@ function ConnectPreviewStyles() {
         box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.45);
       }
       .cp-btn-primary {
-        background: linear-gradient(135deg, #7c3aed 0%, #5b5cf6 55%, #38bdf8 100%);
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
         border-color: transparent;
         box-shadow: 0 16px 40px -14px rgba(124, 58, 237, 0.7);
         padding: 15px 22px;
