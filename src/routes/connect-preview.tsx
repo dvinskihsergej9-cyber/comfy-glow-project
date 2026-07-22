@@ -2,19 +2,24 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import happIconAsset from "@/assets/happ-icon.png.asset.json";
 import incyIconAsset from "@/assets/incy-icon.png.asset.json";
+import flclashIconAsset from "@/assets/flclash-icon.png.asset.json";
+import koalaIconAsset from "@/assets/koala-icon.png.asset.json";
+import prizrakIconAsset from "@/assets/prizrak-icon.png.asset.json";
+import shadowrocketIconAsset from "@/assets/shadowrocket-icon.jpg.asset.json";
+import stashIconAsset from "@/assets/stash-icon.jpg.asset.json";
 
 export const Route = createFileRoute("/connect-preview")({
   head: () => ({
     meta: [
       { title: "Выберите приложение — DvinVPN" },
       { name: "robots", content: "noindex, nofollow" },
-      { name: "description", content: "Установка Happ или INCY для подключения к DvinVPN." },
+      { name: "description", content: "Установка клиента для подключения к DvinVPN." },
     ],
   }),
   component: ConnectPreview,
 });
 
-type AppId = "happ" | "incy";
+type AppId = "happ" | "incy" | "flclashx" | "koala" | "prizrak" | "shadowrocket" | "stash";
 
 const APPS: Record<AppId, {
   id: AppId;
@@ -22,7 +27,6 @@ const APPS: Record<AppId, {
   recommended?: boolean;
   tagline: string;
   icon: string;
-  ring: string;
   storeRu: string;
   storeGlobal: string;
   scheme: string;
@@ -33,7 +37,6 @@ const APPS: Record<AppId, {
     recommended: true,
     tagline: "Рекомендуемый клиент. Быстрая настройка и стабильное соединение.",
     icon: happIconAsset.url,
-    ring: "167, 139, 250",
     storeRu: "#",
     storeGlobal: "#",
     scheme: "happ://add/",
@@ -43,12 +46,61 @@ const APPS: Record<AppId, {
     name: "INCY",
     tagline: "Минималистичный клиент. Простой интерфейс и фокус на приватность.",
     icon: incyIconAsset.url,
-    ring: "56, 189, 248",
     storeRu: "#",
     storeGlobal: "#",
     scheme: "incy://add/",
   },
+  flclashx: {
+    id: "flclashx",
+    name: "FlClashX",
+    recommended: true,
+    tagline: "Мультиплатформенный клиент на базе ClashMeta. Простой и без рекламы.",
+    icon: flclashIconAsset.url,
+    storeRu: "#",
+    storeGlobal: "#",
+    scheme: "clash://install-config?url=",
+  },
+  koala: {
+    id: "koala",
+    name: "Koala Clash",
+    recommended: true,
+    tagline: "Гибкий клиент с продуманной маршрутизацией и правилами.",
+    icon: koalaIconAsset.url,
+    storeRu: "#",
+    storeGlobal: "#",
+    scheme: "clash://install-config?url=",
+  },
+  prizrak: {
+    id: "prizrak",
+    name: "Prizrak-Box",
+    recommended: true,
+    tagline: "Российский клиент с встроенным сплит-туннелингом.",
+    icon: prizrakIconAsset.url,
+    storeRu: "#",
+    storeGlobal: "#",
+    scheme: "clash://install-config?url=",
+  },
+  shadowrocket: {
+    id: "shadowrocket",
+    name: "Shadowrocket",
+    tagline: "Продвинутый прокси-клиент для iOS с гибкими правилами.",
+    icon: shadowrocketIconAsset.url,
+    storeRu: "#",
+    storeGlobal: "#",
+    scheme: "shadowrocket://add/",
+  },
+  stash: {
+    id: "stash",
+    name: "Stash",
+    tagline: "Аккуратный rule-based клиент для iOS и macOS.",
+    icon: stashIconAsset.url,
+    storeRu: "#",
+    storeGlobal: "#",
+    scheme: "stash://install-config?url=",
+  },
 };
+
+const APP_ORDER: AppId[] = ["happ", "incy", "flclashx", "koala", "prizrak", "shadowrocket", "stash"];
 
 function ConnectPreview() {
   const [active, setActive] = useState<AppId>("happ");
@@ -65,9 +117,8 @@ function ConnectPreview() {
       <div className="cp-shell">
         <h1 className="cp-title">Выберите приложение</h1>
 
-        {/* App cards */}
         <div className="cp-apps" role="radiogroup" aria-label="Выбор приложения">
-          {(Object.keys(APPS) as AppId[]).map((id) => {
+          {APP_ORDER.map((id) => {
             const a = APPS[id];
             const isActive = id === active;
             return (
@@ -78,9 +129,7 @@ function ConnectPreview() {
                 aria-checked={isActive}
                 onClick={() => setActive(id)}
                 className={`cp-app ${isActive ? "is-active" : ""}`}
-                style={{ ["--cp-ring" as string]: a.ring }}
               >
-                <span className="cp-app-glow" aria-hidden />
                 <img
                   src={a.icon}
                   alt=""
@@ -104,7 +153,6 @@ function ConnectPreview() {
           })}
         </div>
 
-        {/* Instruction blocks */}
         <section className="cp-steps" aria-live="polite">
           <article className="cp-step">
             <header className="cp-step-head">
@@ -240,47 +288,33 @@ function ConnectPreviewStyles() {
         gap: 16px;
         padding: 18px 20px;
         border-radius: 20px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-        border: 1px solid rgba(255,255,255,0.08);
+        background: linear-gradient(180deg, rgba(139, 92, 246, 0.08), rgba(124, 58, 237, 0.03));
+        border: 1px solid rgba(167, 139, 250, 0.14);
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
         color: inherit;
         text-align: left;
         cursor: pointer;
-        transition: transform .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease;
+        transition: transform .25s ease, border-color .25s ease, background .25s ease;
       }
       .cp-app:hover {
         transform: translateY(-2px);
-        border-color: rgba(255,255,255,0.16);
+        border-color: rgba(167, 139, 250, 0.28);
       }
       .cp-app:focus-visible {
         outline: none;
-        border-color: rgba(var(--cp-ring), 0.8);
-        box-shadow: 0 0 0 4px rgba(var(--cp-ring), 0.25);
+        border-color: rgba(167, 139, 250, 0.7);
       }
       .cp-app.is-active {
-        border-color: rgba(var(--cp-ring), 0.7);
-        background: linear-gradient(180deg, rgba(var(--cp-ring), 0.14), rgba(255,255,255,0.03));
-        box-shadow:
-          0 0 0 1px rgba(var(--cp-ring), 0.4) inset,
-          0 20px 60px -20px rgba(var(--cp-ring), 0.55);
+        border-color: rgba(167, 139, 250, 0.65);
+        background: linear-gradient(180deg, rgba(139, 92, 246, 0.18), rgba(124, 58, 237, 0.06));
       }
-      .cp-app-glow {
-        position: absolute; inset: -1px;
-        border-radius: inherit;
-        pointer-events: none;
-        opacity: 0;
-        background: radial-gradient(60% 100% at 50% 0%, rgba(var(--cp-ring), 0.35), transparent 70%);
-        transition: opacity .3s ease;
-      }
-      .cp-app.is-active .cp-app-glow { opacity: 1; }
 
       .cp-app-icon {
         width: 64px; height: 64px;
         border-radius: 16px;
         display: block;
         object-fit: contain;
-        filter: drop-shadow(0 12px 24px rgba(0,0,0,0.35));
       }
 
       .cp-app-body {
@@ -298,8 +332,9 @@ function ConnectPreviewStyles() {
         border-radius: 999px;
         font-size: 11px; font-weight: 700;
         letter-spacing: 0.02em;
-        color: #0f0a24;
-        background: linear-gradient(135deg, #c4b5fd, #a78bfa);
+        color: #ece9ff;
+        background: rgba(139, 92, 246, 0.25);
+        border: 1px solid rgba(167, 139, 250, 0.35);
       }
       .cp-app-tag {
         font-size: 13px;
@@ -310,23 +345,22 @@ function ConnectPreviewStyles() {
       .cp-radio {
         width: 22px; height: 22px;
         border-radius: 50%;
-        border: 1.5px solid rgba(255,255,255,0.25);
+        border: 1.5px solid rgba(167, 139, 250, 0.35);
         display: inline-flex; align-items: center; justify-content: center;
         transition: border-color .25s ease, background .25s ease;
         flex-shrink: 0;
       }
       .cp-radio.is-on {
-        border-color: rgba(var(--cp-ring), 0.9);
-        background: rgba(var(--cp-ring), 0.15);
+        border-color: rgba(167, 139, 250, 0.9);
+        background: rgba(139, 92, 246, 0.2);
       }
       .cp-radio-dot {
         width: 10px; height: 10px; border-radius: 50%;
         background: transparent;
-        transition: background .25s ease, transform .25s ease;
+        transition: background .25s ease;
       }
       .cp-radio.is-on .cp-radio-dot {
-        background: linear-gradient(135deg, #ffffff, rgba(255,255,255,0.75));
-        box-shadow: 0 0 10px rgba(var(--cp-ring), 0.8);
+        background: #ffffff;
       }
 
       /* ===== Steps ===== */
@@ -337,8 +371,8 @@ function ConnectPreviewStyles() {
         position: relative;
         padding: 22px 24px;
         border-radius: 20px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
-        border: 1px solid rgba(255,255,255,0.08);
+        background: linear-gradient(180deg, rgba(139, 92, 246, 0.06), rgba(124, 58, 237, 0.02));
+        border: 1px solid rgba(167, 139, 250, 0.12);
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
       }
@@ -352,8 +386,7 @@ function ConnectPreviewStyles() {
         border-radius: 50%;
         font-size: 13px; font-weight: 700;
         color: #fff;
-        background: linear-gradient(135deg, #7c3aed, #38bdf8);
-        box-shadow: 0 6px 16px -6px rgba(124, 58, 237, 0.7);
+        background: #7c3aed;
         flex-shrink: 0;
       }
       .cp-step-title {
@@ -388,33 +421,34 @@ function ConnectPreviewStyles() {
         border-radius: 12px;
         font-size: 14px; font-weight: 600;
         text-decoration: none;
-        color: #fff;
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(255,255,255,0.12);
+        color: #ece9ff;
+        background: rgba(139, 92, 246, 0.14);
+        border: 1px solid rgba(167, 139, 250, 0.28);
         cursor: pointer;
         outline: none;
         -webkit-tap-highlight-color: transparent;
-        transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+        transition: transform .2s ease, background .2s ease, border-color .2s ease;
       }
       .cp-btn:hover {
         transform: translateY(-1px);
-        background: rgba(255,255,255,0.1);
-        border-color: rgba(255,255,255,0.22);
+        background: rgba(139, 92, 246, 0.22);
+        border-color: rgba(167, 139, 250, 0.42);
       }
+      .cp-btn:focus { outline: none; }
       .cp-btn:focus-visible {
         outline: none;
-        box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.45);
+        border-color: rgba(167, 139, 250, 0.7);
       }
       .cp-btn-primary {
-        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        color: #fff;
+        background: #7c3aed;
         border-color: transparent;
-        box-shadow: 0 16px 40px -14px rgba(124, 58, 237, 0.7);
         padding: 15px 22px;
         font-size: 15px;
       }
       .cp-btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 22px 50px -14px rgba(124, 58, 237, 0.85);
+        transform: translateY(-1px);
+        background: #6d28d9;
       }
 
       @media (max-width: 480px) {
@@ -425,7 +459,7 @@ function ConnectPreviewStyles() {
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .cp-app, .cp-btn, .cp-radio, .cp-radio-dot, .cp-app-glow {
+        .cp-app, .cp-btn, .cp-radio, .cp-radio-dot {
           transition: none !important;
         }
         .cp-app:hover, .cp-btn:hover { transform: none !important; }
