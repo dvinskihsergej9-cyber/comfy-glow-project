@@ -13,6 +13,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OfferRouteImport } from './routes/offer'
 import { Route as LoginPreviewRouteImport } from './routes/login-preview'
+import { Route as ConnectPreviewRouteImport } from './routes/connect-preview'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TermsRoute = TermsRouteImport.update({
@@ -35,6 +36,11 @@ const LoginPreviewRoute = LoginPreviewRouteImport.update({
   path: '/login-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConnectPreviewRoute = ConnectPreviewRouteImport.update({
+  id: '/connect-preview',
+  path: '/connect-preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,6 +49,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/connect-preview': typeof ConnectPreviewRoute
   '/login-preview': typeof LoginPreviewRoute
   '/offer': typeof OfferRoute
   '/privacy': typeof PrivacyRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/connect-preview': typeof ConnectPreviewRoute
   '/login-preview': typeof LoginPreviewRoute
   '/offer': typeof OfferRoute
   '/privacy': typeof PrivacyRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/connect-preview': typeof ConnectPreviewRoute
   '/login-preview': typeof LoginPreviewRoute
   '/offer': typeof OfferRoute
   '/privacy': typeof PrivacyRoute
@@ -65,14 +74,34 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login-preview' | '/offer' | '/privacy' | '/terms'
+  fullPaths:
+    | '/'
+    | '/connect-preview'
+    | '/login-preview'
+    | '/offer'
+    | '/privacy'
+    | '/terms'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login-preview' | '/offer' | '/privacy' | '/terms'
-  id: '__root__' | '/' | '/login-preview' | '/offer' | '/privacy' | '/terms'
+  to:
+    | '/'
+    | '/connect-preview'
+    | '/login-preview'
+    | '/offer'
+    | '/privacy'
+    | '/terms'
+  id:
+    | '__root__'
+    | '/'
+    | '/connect-preview'
+    | '/login-preview'
+    | '/offer'
+    | '/privacy'
+    | '/terms'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConnectPreviewRoute: typeof ConnectPreviewRoute
   LoginPreviewRoute: typeof LoginPreviewRoute
   OfferRoute: typeof OfferRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -109,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/connect-preview': {
+      id: '/connect-preview'
+      path: '/connect-preview'
+      fullPath: '/connect-preview'
+      preLoaderRoute: typeof ConnectPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -121,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConnectPreviewRoute: ConnectPreviewRoute,
   LoginPreviewRoute: LoginPreviewRoute,
   OfferRoute: OfferRoute,
   PrivacyRoute: PrivacyRoute,
@@ -129,13 +166,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
